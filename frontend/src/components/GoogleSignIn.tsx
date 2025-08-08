@@ -19,17 +19,30 @@ export default function GoogleSignIn({ returnUrl }: GoogleSignInProps) {
       setIsLoading(true);
       console.log('returnUrl', returnUrl);
       
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
+          // Build callback URL using current origin (will be 3100 under toolbar)
           redirectTo: `${window.location.origin}/auth/callback${
-            returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : ''
+            returnUrl ? `?next=${encodeURIComponent(returnUrl)}` : ''
           }`,
+          // Request URL back so we can force top-level navigation when inside iframe
+          queryParams: { prompt: 'consent' },
+          skipBrowserRedirect: true,
         },
       });
 
       if (error) {
         throw error;
+      }
+
+      // Force top-level navigation (outside iframe) to satisfy Google login requirements
+      if (data?.url) {
+        if (window.top) {
+          (window.top as Window).location.href = data.url;
+        } else {
+          window.location.href = data.url;
+        }
       }
     } catch (error: any) {
       console.error('Google sign-in error:', error);

@@ -134,9 +134,12 @@ async def log_requests_middleware(request: Request, call_next):
 allowed_origins = ["https://www.suna.so", "https://suna.so"]
 allow_origin_regex = None
 
-# Add staging-specific origins
+# Add local development origins
 if config.ENV_MODE == EnvMode.LOCAL:
+    # Frontend default dev server
     allowed_origins.append("http://localhost:3000")
+    # Stagewise toolbar proxy origin
+    allowed_origins.append("http://localhost:3100")
 
 # Add staging-specific origins
 if config.ENV_MODE == EnvMode.STAGING:
