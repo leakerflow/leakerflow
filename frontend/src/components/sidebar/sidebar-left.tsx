@@ -117,7 +117,8 @@ export function SidebarLeft({
             <KortixLogo />
           </Link>
           {state !== 'collapsed' && (
-            <div className="ml-2 transition-all duration-200 ease-in-out whitespace-nowrap">
+            <div className="ml-2 transition-all duration-200 ease-in-out whitespace-nowrap text-sm font-medium text-primary">
+              Leaker Flow
             </div>
           )}
           <div className="ml-auto flex items-center gap-2">

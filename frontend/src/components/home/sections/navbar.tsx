@@ -99,11 +99,7 @@ export function Navbar() {
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
   const handleOverlayClick = () => setIsDrawerOpen(false);
 
-  const logoSrc = !mounted
-    ? '/kortix-logo.svg'
-    : resolvedTheme === 'dark'
-      ? '/kortix-logo-white.svg'
-      : '/kortix-logo.svg';
+  const logoSrc = '/leakerflow.png';
 
   return (
     <header
@@ -125,16 +121,20 @@ export function Navbar() {
               : 'shadow-none px-7',
           )}
         >
-          <div className="flex h-[56px] items-center justify-between p-4">
-            <Link href="/" className="flex items-center gap-3">
-              <Image
-                src={logoSrc}
-                alt="Leaker Flow Logo"
-                width={140}
-                height={22}
-                priority
-              /> 
-            </Link>
+            <div className="flex h-[56px] items-center justify-between p-4">
+              <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
+                <Image
+                  src={logoSrc}
+                  alt="Leaker Flow Logo"
+                  width={40}
+                  height={6}
+                  className="shrink-0"
+                  priority
+                />
+                <span className="hidden md:inline-block text-primary font-medium text-sm leading-none whitespace-nowrap shrink-0">
+                  Leaker Flow
+                </span>
+              </Link>
 
             <NavMenu />
 
@@ -205,12 +205,12 @@ export function Navbar() {
               {/* Mobile menu content */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <Link href="/" className="flex items-center gap-3">
+                  <Link href="/" className="flex items-center gap-2">
                     <Image
                       src={logoSrc}
                       alt="Leaker Flow Logo"
-                      width={120}
-                      height={22}
+                      width={40}
+                      height={6}
                       priority
                     />
                     <span className="font-medium text-primary text-sm">

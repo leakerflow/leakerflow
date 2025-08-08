@@ -19,11 +19,7 @@ export function FooterSection() {
     setMounted(true);
   }, []);
 
-  const logoSrc = !mounted
-    ? '/kortix-logo.svg'
-    : resolvedTheme === 'dark'
-      ? '/kortix-logo-white.svg'
-      : '/kortix-logo.svg';
+  const logoSrc = '/leakerflow.png';
 
   return (
     <footer id="footer" className="w-full pb-0">
@@ -33,10 +29,13 @@ export function FooterSection() {
             <Image
               src={logoSrc}
               alt="Leaker Flow Logo"
-              width={122}
-              height={22}
+              width={40}
+              height={6}
               priority
             />
+            <span className="ml-2 text-primary font-medium text-sm leading-none">
+              Leaker Flow
+            </span>
           </Link>
           <p className="tracking-tight text-muted-foreground font-medium">
             {siteConfig.hero.description}

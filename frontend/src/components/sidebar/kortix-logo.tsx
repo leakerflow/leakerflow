@@ -8,25 +8,13 @@ interface KortixLogoProps {
   size?: number;
 }
 export function KortixLogo({ size = 24 }: KortixLogoProps) {
-  const { theme, systemTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  // After mount, we can access the theme
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const shouldInvert = mounted && (
-    theme === 'dark' || (theme === 'system' && systemTheme === 'dark')
-  );
-
   return (
     <Image
-        src="/kortix-symbol.svg"
-        alt="Leaker Flow"
-        width={size}
-        height={size}
-        className={`${shouldInvert ? 'invert' : ''} flex-shrink-0`}
-      />
+      src="/leakerflow.png"
+      alt="Leaker Flow"
+      width={size}
+      height={size}
+      className="flex-shrink-0"
+    />
   );
 }
