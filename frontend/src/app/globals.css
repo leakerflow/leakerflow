@@ -584,28 +584,66 @@
   display: inline-block; /* avoid block overlay */
 }
 
-/* Apply brand gradient to primary/secondary CTA-like elements without editing each component */
+/* Primary/secondary buttons without gradient. Light: black, Dark: white */
 /* Buttons (shadcn/ui sets data-slot="button") */
 [data-slot="button"].bg-primary,
 [data-slot="button"].bg-secondary {
-  background-image: var(--brand-gradient);
-  background-color: transparent;
+  background-image: none !important;
+  background-color: #000 !important; /* light theme */
+  color: #fff !important;
 }
 [data-slot="button"].bg-primary:hover,
-[data-slot="button"].bg-secondary:hover { filter: brightness(1.03); }
+[data-slot="button"].bg-secondary:hover { 
+  background-image: none !important; 
+  background-color: #000 !important; 
+  filter: brightness(0.95);
+}
+.dark [data-slot="button"].bg-primary,
+.dark [data-slot="button"].bg-secondary {
+  background-image: none !important;
+  background-color: #fff !important; /* dark theme */
+  color: #000 !important;
+}
+.dark [data-slot="button"].bg-primary:hover,
+.dark [data-slot="button"].bg-secondary:hover { 
+  background-image: none !important; 
+  background-color: #fff !important; 
+  filter: brightness(0.98);
+}
 
 /* Links styled as buttons (common CTAs use bg-secondary) */
 a.bg-primary,
 a.bg-secondary,
 button.bg-primary,
 button.bg-secondary {
-  background-image: var(--brand-gradient);
-  background-color: transparent;
+  background-image: none !important;
+  background-color: #000 !important; /* light theme */
+  color: #fff !important;
 }
 a.bg-primary:hover,
 a.bg-secondary:hover,
 button.bg-primary:hover,
-button.bg-secondary:hover { filter: brightness(1.03); }
+button.bg-secondary:hover { 
+  background-image: none !important; 
+  background-color: #000 !important; 
+  filter: brightness(0.95);
+}
+.dark a.bg-primary,
+.dark a.bg-secondary,
+.dark button.bg-primary,
+.dark button.bg-secondary {
+  background-image: none !important;
+  background-color: #fff !important; /* dark theme */
+  color: #000 !important;
+}
+.dark a.bg-primary:hover,
+.dark a.bg-secondary:hover,
+.dark button.bg-primary:hover,
+.dark button.bg-secondary:hover { 
+  background-image: none !important; 
+  background-color: #fff !important; 
+  filter: brightness(0.98);
+}
 
 .bg-pattern-grid {
   background-image: 
