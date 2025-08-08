@@ -27,7 +27,12 @@ export function KortixProcessModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="sm" className="w-full text-xs">
+        <Button
+          variant="default"
+          size="sm"
+          className="w-full text-xs bg-white text-black hover:bg-white/90"
+          style={{ backgroundImage: 'none' }}
+        >
           Learn More
         </Button>
       </DialogTrigger>
