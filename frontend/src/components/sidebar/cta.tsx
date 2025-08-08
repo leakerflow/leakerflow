@@ -7,10 +7,10 @@ export function CTACard() {
     <div className="rounded-xl bg-brand-gradient shadow-sm border border-transparent p-4 transition-all">
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col">
-          <span className="text-sm font-medium text-foreground">
+          <span className="text-sm font-medium text-white">
             Enterprise Demo
           </span>
-          <span className="text-xs text-muted-foreground mt-0.5">
+          <span className="text-xs text-white mt-0.5">
             AI employees for your company
           </span>
         </div>
