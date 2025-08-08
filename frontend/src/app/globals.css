@@ -238,10 +238,10 @@
 }
 
 :root {
-  /* Leaker Flow brand gradient tokens */
-  --brand-from: #8B5CF6; /* purple */
-  --brand-via: #3B82F6;  /* blue */
-  --brand-to:  #22D3EE;  /* cyan */
+  /* Leaker Flow brand gradient tokens (matched to logo: violet-600, blue-600, cyan-500) */
+  --brand-from: #7C3AED; /* purple/violet */
+  --brand-via: #2563EB;  /* blue */
+  --brand-to:  #06B6D4;  /* cyan */
   --brand-gradient: linear-gradient(45deg, var(--brand-from) 0%, var(--brand-via) 50%, var(--brand-to) 100%);
   --background: oklch(0.9741 0 129.63);
   --foreground: oklch(0.2277 0.0034 67.65);
@@ -279,10 +279,10 @@
 }
 
 .dark {
-  /* Keep same gradient in dark; tweak here if needed */
-  --brand-from: #8B5CF6;
-  --brand-via: #3B82F6;
-  --brand-to:  #22D3EE;
+  /* Keep same gradient in dark to match logo */
+  --brand-from: #7C3AED;
+  --brand-via: #2563EB;
+  --brand-to:  #06B6D4;
   --brand-gradient: linear-gradient(45deg, var(--brand-from) 0%, var(--brand-via) 50%, var(--brand-to) 100%);
   --background: oklch(0.185 0.005 285.823);
   --foreground: oklch(0.985 0 0);
