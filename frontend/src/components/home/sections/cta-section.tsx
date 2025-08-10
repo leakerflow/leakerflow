@@ -9,7 +9,7 @@ export function CTASection() {
   return (
     <section
       id="cta"
-      className="flex flex-col items-center justify-center w-full pt-12 pb-12"
+      className="flex flex-col items-center justify-center w-full pt-12 pb-12 px-6"
     >
       <div className="w-full max-w-6xl mx-auto px-6">
         <div className="h-[400px] md:h-[400px] overflow-hidden shadow-xl w-full border border-border rounded-xl bg-brand-gradient relative z-20">
@@ -26,6 +26,7 @@ export function CTASection() {
               </Link>
               <span className="text-white text-sm">{ctaSection.subtext}</span>
             </div>
+          </div>
           </div>
         </div>
       </div>

@@ -20,6 +20,9 @@ import {
   BookOpen,
   MessageCircleQuestion,
   CheckCircle2,
+  Table2,
+  ListTodo,
+  List,
 } from 'lucide-react';
 
 // Flag to control whether tool result messages are rendered
@@ -109,6 +112,12 @@ export const getToolIcon = (toolName: string): ElementType => {
     case 'edit-file':
       return FileEdit;
 
+    // Task operations
+    case 'create-tasks':
+      return List;
+    case 'update-tasks':
+      return ListTodo;
+
     // Shell commands
     case 'execute-command':
       return Terminal;
@@ -132,6 +141,15 @@ export const getToolIcon = (toolName: string): ElementType => {
       return Network;
     case 'execute-data-provider-call':
       return Network;
+
+    // Sheets tools
+    case 'create-sheet':
+    case 'update-sheet':
+    case 'view-sheet':
+    case 'analyze-sheet':
+    case 'visualize-sheet':
+    case 'format-sheet':
+      return Table2;
 
     // Code operations
     case 'delete-file':
@@ -298,8 +316,11 @@ const TOOL_DISPLAY_NAMES = new Map([
   ['full-file-rewrite', 'Rewriting File'],
   ['str-replace', 'Editing Text'],
   ['str_replace', 'Editing Text'],
-  ['edit_file', 'AI File Edit'],
-  ['edit-file', 'AI File Edit'],
+  ['edit_file', 'Editing File'],
+  ['edit-file', 'Editing File'],
+
+  ['create-tasks', 'Creating Tasks'],
+  ['update-tasks', 'Updating Tasks'],
   
   ['browser-click-element', 'Clicking Element'],
   ['browser-close-tab', 'Closing Tab'],
@@ -329,6 +350,13 @@ const TOOL_DISPLAY_NAMES = new Map([
   ['scrape-webpage', 'Scraping Website'],
   ['web-search', 'Searching Web'],
   ['see-image', 'Viewing Image'],
+
+  ['create-sheet', 'Creating Sheet'],
+  ['update-sheet', 'Updating Sheet'],
+  ['view-sheet', 'Viewing Sheet'],
+  ['analyze-sheet', 'Analyzing Sheet'],
+  ['visualize-sheet', 'Visualizing Sheet'],
+  ['format-sheet', 'Formatting Sheet'],
   
 
   ['update-agent', 'Updating Agent'],
@@ -351,7 +379,7 @@ const TOOL_DISPLAY_NAMES = new Map([
   ['delete_file', 'Deleting File'],
   ['full_file_rewrite', 'Rewriting File'],
   ['str_replace', 'Editing Text'],
-  ['edit_file', 'AI File Edit'],
+  ['edit_file', 'Editing File'],
   
   ['browser_click_element', 'Clicking Element'],
   ['browser_close_tab', 'Closing Tab'],

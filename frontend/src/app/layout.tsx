@@ -9,6 +9,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
+import { PostHogIdentify } from '@/components/posthog-identify';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description:
-    'Leaker Flow é um assistente de IA open source que ajuda você a executar tarefas do mundo real com facilidade. Através de conversas naturais, o Leaker Flow torna-se seu companheiro digital para pesquisa, análise de dados e desafios do dia a dia.',
+    'Leaker Flowis a fully open source AI assistant that helps you accomplish real-world tasks with ease. Through natural conversation, Kortix becomes your digital companion for research, data analysis, and everyday challenges.',
   keywords: [
     'AI',
     'artificial intelligence',
@@ -150,6 +151,7 @@ export default function RootLayout({
           <Analytics />
           <GoogleAnalytics gaId="G-6ETJFB3PT3" />
           <SpeedInsights />
+          <PostHogIdentify />
         </ThemeProvider>
       </body>
     </html>
