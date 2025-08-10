@@ -5,7 +5,6 @@ import asyncio
 from utils.logger import logger
 from typing import List, Any
 from utils.retry import retry
-from redis.asyncio.connection import SSLConnection
 
 # Redis client and connection pool
 client: redis.Redis | None = None
@@ -28,7 +27,6 @@ def initialize():
     redis_host = os.getenv("REDIS_HOST", "redis")
     redis_port = int(os.getenv("REDIS_PORT", 6379))
     redis_password = os.getenv("REDIS_PASSWORD", "")
-    use_ssl = os.getenv("REDIS_SSL", "false").lower() == "true"
     
     # Connection pool configuration - optimized for production
     max_connections = 128            # Reasonable limit for production
@@ -39,7 +37,7 @@ def initialize():
     logger.info(f"Initializing Redis connection pool to {redis_host}:{redis_port} with max {max_connections} connections")
 
     # Create connection pool with production-optimized settings
-    pool_kwargs = dict(
+    pool = redis.ConnectionPool(
         host=redis_host,
         port=redis_port,
         password=redis_password,
@@ -51,12 +49,6 @@ def initialize():
         health_check_interval=30,
         max_connections=max_connections,
     )
-
-    # Use SSLConnection for TLS when REDIS_SSL=true (compatible with older redis-py)
-    if use_ssl:
-        pool_kwargs["connection_class"] = SSLConnection
-
-    pool = redis.ConnectionPool(**pool_kwargs)
 
     # Create Redis client from connection pool
     client = redis.Redis(connection_pool=pool)
