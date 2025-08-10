@@ -8,7 +8,7 @@ import { usePipedreamApps, usePipedreamPopularApps } from '@/hooks/react-query/p
 import { usePipedreamProfiles } from '@/hooks/react-query/pipedream/use-pipedream-profiles';
 import { useAgent } from '@/hooks/react-query/agents/use-agents';
 import { PipedreamConnector } from './pipedream-connector';
-import { ToolsManager } from '../mcp/tools-manager';
+import { AgentPipedreamToolsManager } from './agent-pipedream-tools-manager';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
@@ -397,8 +397,7 @@ export const PipedreamRegistry: React.FC<PipedreamRegistryProps> = ({
       )}
       
       {selectedToolsProfile && currentAgentId && (
-        <ToolsManager
-          mode="pipedream"
+        <AgentPipedreamToolsManager
           agentId={currentAgentId}
           profileId={selectedToolsProfile.profileId}
           appName={selectedToolsProfile.appName}
@@ -413,9 +412,6 @@ export const PipedreamRegistry: React.FC<PipedreamRegistryProps> = ({
           onToolsUpdate={(enabledTools) => {
             queryClient.invalidateQueries({ queryKey: ['agent', currentAgentId] });
           }}
-          versionData={effectiveVersionData}
-          // Don't pass versionId for existing integrations - we want current configuration
-          versionId={undefined}
         />
       )}
     </div>
