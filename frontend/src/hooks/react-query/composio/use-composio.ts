@@ -1,12 +1,14 @@
 'use client';
 
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { 
   composioApi, 
   type ComposioToolkitsResponse,
   type CompositoCategoriesResponse,
   type CreateComposioProfileRequest,
   type CreateComposioProfileResponse,
+  type DetailedComposioToolkitResponse,
+  type ComposioToolsResponse,
 } from './utils';
 import { composioKeys } from './keys';
 import { toast } from 'sonner';
@@ -37,6 +39,23 @@ export const useComposioToolkits = (search?: string, category?: string) => {
   });
 };
 
+export const useComposioToolkitsInfinite = (search?: string, category?: string) => {
+  return useInfiniteQuery({
+    queryKey: ['composio', 'toolkits', 'infinite', search, category],
+    queryFn: async ({ pageParam }): Promise<ComposioToolkitsResponse> => {
+      const result = await composioApi.getToolkits(search, category, pageParam);
+      console.log('🔍 Composio Toolkits Infinite:', result);
+      return result;
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => {
+      return lastPage.next_cursor || undefined;
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: 2,
+  });
+};
+
 export const useComposioToolkitIcon = (toolkitSlug: string, options?: { enabled?: boolean }) => {
   return useQuery({
     queryKey: ['composio', 'toolkit-icon', toolkitSlug],
@@ -47,6 +66,33 @@ export const useComposioToolkitIcon = (toolkitSlug: string, options?: { enabled?
     },
     enabled: options?.enabled !== undefined ? options.enabled : !!toolkitSlug,
     staleTime: 60 * 60 * 1000,
+    retry: 2,
+  });
+};
+
+export const useComposioToolkitDetails = (toolkitSlug: string, options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ['composio', 'toolkit-details', toolkitSlug],
+    queryFn: async (): Promise<DetailedComposioToolkitResponse> => {
+      const result = await composioApi.getToolkitDetails(toolkitSlug);
+      console.log(`🔍 Composio Toolkit Details for ${toolkitSlug}:`, result);
+      return result;
+    },
+    enabled: options?.enabled !== undefined ? options.enabled : !!toolkitSlug,
+    staleTime: 10 * 60 * 1000,
+    retry: 2,
+  });
+};
+
+export const useComposioTools = (toolkitSlug: string, options?: { enabled?: boolean; limit?: number }) => {
+  return useQuery({
+    queryKey: ['composio', 'tools', toolkitSlug, options?.limit],
+    queryFn: async (): Promise<ComposioToolsResponse> => {
+      const result = await composioApi.getTools(toolkitSlug, options?.limit);
+      return result;
+    },
+    enabled: (options?.enabled ?? true) && !!toolkitSlug,
+    staleTime: 10 * 60 * 1000,
     retry: 2,
   });
 };
