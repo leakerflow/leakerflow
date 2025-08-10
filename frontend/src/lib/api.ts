@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/client';
 import { handleApiError } from './error-handler';
+import posthog from 'posthog-js';
 
 // Get backend URL from environment variables
 const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || '';
@@ -55,6 +56,36 @@ export class AgentRunLimitError extends Error {
 
     // Set the prototype explicitly.
     Object.setPrototypeOf(this, AgentRunLimitError.prototype);
+  }
+}
+
+export class AgentCountLimitError extends Error {
+  status: number;
+  detail: { 
+    message: string;
+    current_count: number;
+    limit: number;
+    tier_name: string;
+    error_code: string;
+  };
+
+  constructor(
+    status: number,
+    detail: { 
+      message: string;
+      current_count: number;
+      limit: number;
+      tier_name: string;
+      error_code: string;
+      [key: string]: any;
+    },
+    message?: string,
+  ) {
+    super(message || detail.message || `Agent Count Limit Exceeded: ${status}`);
+    this.name = 'AgentCountLimitError';
+    this.status = status;
+    this.detail = detail;
+    Object.setPrototypeOf(this, AgentCountLimitError.prototype);
   }
 }
 
@@ -837,6 +868,8 @@ export const stopAgent = async (agentRunId: string): Promise<void> => {
     // Add cache: 'no-store' to prevent caching
     cache: 'no-store',
   });
+
+  posthog.capture('task_abandoned', { agentRunId });
 
   if (!response.ok) {
     const stopError = new Error(`Error stopping agent: ${response.statusText}`);

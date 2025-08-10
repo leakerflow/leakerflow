@@ -4,8 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Search, Zap, X, Settings, ChevronDown, ChevronUp } from 'lucide-react';
-import { useComposioToolkits, useComposioCategories } from '@/hooks/react-query/composio/use-composio';
+import { Search, Zap, X, Settings, ChevronDown, ChevronUp, Loader2, Server } from 'lucide-react';
+import { useComposioCategories, useComposioToolkitsInfinite } from '@/hooks/react-query/composio/use-composio';
 import { useComposioProfiles } from '@/hooks/react-query/composio/use-composio-profiles';
 import { useAgent, useUpdateAgent } from '@/hooks/react-query/agents/use-agents';
 import { ComposioConnector } from './composio-connector';
@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { AgentSelector } from '../../thread/chat-input/agent-selector';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Switch } from '@/components/ui/switch';
+import { CustomMCPDialog } from '../mcp/custom-mcp-dialog';
 
 const CATEGORY_EMOJIS: Record<string, string> = {
   'popular': '🔥',
@@ -50,7 +50,6 @@ interface ComposioRegistryProps {
   onAgentChange?: (agentId: string | undefined) => void;
 }
 
-// Helper function to get agent-specific connected apps
 const getAgentConnectedApps = (
   agent: any,
   profiles: ComposioProfile[],
@@ -61,11 +60,9 @@ const getAgentConnectedApps = (
   const connectedApps: ConnectedApp[] = [];
   
   agent.custom_mcps.forEach((mcpConfig: any) => {
-    // Check if this is a Composio MCP by looking for profile_id in config
     if (mcpConfig.config?.profile_id) {
       const profile = profiles.find(p => p.profile_id === mcpConfig.config.profile_id);
       const toolkit = toolkits.find(t => t.slug === profile?.toolkit_slug);
-      
       if (profile && toolkit) {
         connectedApps.push({
           toolkit,
@@ -79,7 +76,6 @@ const getAgentConnectedApps = (
   return connectedApps;
 };
 
-// Helper function to check if an app is connected to the agent
 const isAppConnectedToAgent = (
   agent: any,
   appSlug: string,
@@ -292,14 +288,27 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
   const [showConnectedApps, setShowConnectedApps] = useState(true);
   const [showToolsManager, setShowToolsManager] = useState(false);
   const [selectedConnectedApp, setSelectedConnectedApp] = useState<ConnectedApp | null>(null);
+  const [showCustomMCPDialog, setShowCustomMCPDialog] = useState(false);
   
   const [internalSelectedAgentId, setInternalSelectedAgentId] = useState<string | undefined>(selectedAgentId);
   const queryClient = useQueryClient();
   
   const { data: categoriesData, isLoading: isLoadingCategories } = useComposioCategories();
-  const { data: toolkits, isLoading } = useComposioToolkits(search, selectedCategory);
+  const {
+    data: toolkitsInfiniteData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError
+  } = useComposioToolkitsInfinite(search, selectedCategory);
   const { data: profiles, isLoading: isLoadingProfiles } = useComposioProfiles();
   
+  const allToolkits = useMemo(() => {
+    if (!toolkitsInfiniteData?.pages) return [];
+    return toolkitsInfiniteData.pages.flatMap(page => page.toolkits || []);
+  }, [toolkitsInfiniteData]);
+
   const currentAgentId = selectedAgentId ?? internalSelectedAgentId;
   const { data: agent, isLoading: isLoadingAgent } = useAgent(currentAgentId || '');
   const { mutate: updateAgent, isPending: isUpdatingAgent } = useUpdateAgent();
@@ -327,15 +336,15 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
 
   const connectedApps = useMemo(() => {
     if (!currentAgentId || !agent) return [];
-    return getAgentConnectedApps(agent, profiles || [], toolkits?.toolkits || []);
-  }, [agent, profiles, toolkits, currentAgentId]);
+    return getAgentConnectedApps(agent, profiles || [], allToolkits);
+  }, [agent, profiles, allToolkits, currentAgentId]);
 
   const isLoadingConnectedApps = currentAgentId && (isLoadingAgent || isLoadingProfiles || isLoading);
 
   const filteredToolkits = useMemo(() => {
-    if (!toolkits?.toolkits) return [];
-    return toolkits.toolkits;
-  }, [toolkits]);
+    if (!allToolkits) return [];
+    return allToolkits;
+  }, [allToolkits]);
 
   const handleConnect = (app: ComposioToolkit) => {
     if (mode !== 'profile-only' && !currentAgentId && showAgentSelector) {
@@ -389,16 +398,52 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
   const handleConnectionComplete = (profileId: string, appName: string, appSlug: string) => {
     setShowConnector(false);
     queryClient.invalidateQueries({ queryKey: ['composio', 'profiles'] });
+    
     if (onToolsSelected) {
       onToolsSelected(profileId, [], appName, appSlug);
     }
+  };
+
+  const handleCustomMCPSave = async (customConfig: any): Promise<void> => {
+    if (!currentAgentId) {
+      throw new Error('Please select an agent first');
+    }
+
+    // Create MCP configuration for agent
+    const mcpConfig = {
+      name: customConfig.name || 'Custom MCP',
+      type: customConfig.type || 'sse',
+      config: customConfig.config || {},
+      enabledTools: customConfig.enabledTools || [],
+    };
+
+    // Get current custom MCPs from agent
+    const currentCustomMcps = agent?.custom_mcps || [];
+    const updatedCustomMcps = [...currentCustomMcps, mcpConfig];
+
+    // Return a promise that resolves/rejects based on the mutation result
+    return new Promise((resolve, reject) => {
+      updateAgent({
+        agentId: currentAgentId,
+        custom_mcps: updatedCustomMcps
+      }, {
+        onSuccess: () => {
+          toast.success(`Custom MCP "${customConfig.name}" added successfully`);
+          queryClient.invalidateQueries({ queryKey: ['agent', currentAgentId] });
+          resolve();
+        },
+        onError: (error: any) => {
+          reject(new Error(error.message || 'Failed to add custom MCP'));
+        }
+      });
+    });
   };
 
   const categories = categoriesData?.categories || [];
 
   return (
     <div className="h-full w-full overflow-hidden flex">
-      <div className="w-64 h-full overflow-hidden border-r bg-muted/20">
+      {/*<div className="w-64 h-full overflow-hidden border-r bg-muted/20">
         <div className="h-full flex flex-col">
           <div className="flex-shrink-0 p-4 border-b">
             <h3 className="text-sm font-medium text-muted-foreground">Categories</h3>
@@ -450,8 +495,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
             </ScrollArea>
           </div>
         </div>
-      </div>
-
+      </div>*/}
       <div className="flex-1 h-full overflow-hidden">
         <div className="h-full flex flex-col">
           <div className="flex-shrink-0 border-b p-6">
@@ -474,6 +518,17 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                     onAgentSelect={handleAgentSelect}
                     isSunaAgent={agent?.metadata?.is_suna_default}
                   />
+                )}
+                {mode !== 'profile-only' && currentAgentId && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setShowCustomMCPDialog(true)}
+                    className="flex items-center gap-2"
+                  >
+                    <Server className="h-4 w-4" />
+                    Add Custom MCP
+                  </Button>
                 )}
               </div>
             </div>
@@ -531,7 +586,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-4">
                       {isLoadingConnectedApps ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                           {Array.from({ length: 3 }).map((_, i) => (
                             <ConnectedAppSkeleton key={i} />
                           ))}
@@ -545,7 +600,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                           <p className="text-xs">Connect apps below to manage tools for this agent.</p>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-4">
                           {connectedApps.map((connectedApp) => (
                             <ConnectedAppCard
                               key={connectedApp.profile.profile_id}
@@ -567,7 +622,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                   </h3>
                   
                   {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {Array.from({ length: 12 }).map((_, i) => (
                         <AppCardSkeleton key={i} />
                       ))}
@@ -583,19 +638,40 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                       </p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {filteredToolkits.map((app) => (
-                        <AppCard
-                          key={app.slug}
-                          app={app}
-                          profiles={profilesByToolkit[app.slug] || []}
-                          onConnect={() => handleConnect(app)}
-                          onConfigure={(profile) => handleConfigure(app, profile)}
-                          isConnectedToAgent={isAppConnectedToAgent(agent, app.slug, profiles || [])}
-                          currentAgentId={currentAgentId}
-                          mode={mode}
-                        />
-                      ))}
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {filteredToolkits.map((app) => (
+                          <AppCard
+                            key={app.slug}
+                            app={app}
+                            profiles={profilesByToolkit[app.slug] || []}
+                            onConnect={() => handleConnect(app)}
+                            onConfigure={(profile) => handleConfigure(app, profile)}
+                            isConnectedToAgent={isAppConnectedToAgent(agent, app.slug, profiles || [])}
+                            currentAgentId={currentAgentId}
+                            mode={mode}
+                          />
+                        ))}
+                      </div>
+                      {hasNextPage && (
+                        <div className="flex justify-center pt-4">
+                          <Button
+                            variant="outline"
+                            onClick={() => fetchNextPage()}
+                            disabled={isFetchingNextPage}
+                            className="px-8"
+                          >
+                            {isFetchingNextPage ? (
+                              <>
+                                <Loader2 className="animate-spin h-4 w-4 " />
+                                Loading more...
+                              </>
+                            ) : (
+                              'Load More Apps'
+                            )}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -633,6 +709,11 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
           }}
         />
       )}
+      <CustomMCPDialog
+        open={showCustomMCPDialog}
+        onOpenChange={setShowCustomMCPDialog}
+        onSave={handleCustomMCPSave}
+      />
     </div>
   );
 }; 

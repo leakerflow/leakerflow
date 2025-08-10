@@ -27,8 +27,11 @@ import { UnifiedMessage, ApiMessageType, ToolCallInput, Project } from '../_type
 import { useThreadData, useToolCalls, useBilling, useKeyboardShortcuts } from '../_hooks';
 import { ThreadError, UpgradeDialog, ThreadLayout } from '../_components';
 import { useVncPreloader } from '@/hooks/useVncPreloader';
-import { useThreadAgent } from '@/hooks/react-query/agents/use-agents';
+import { useThreadAgent, useAgents } from '@/hooks/react-query/agents/use-agents';
 import { AgentRunLimitDialog } from '@/components/thread/agent-run-limit-dialog';
+import { useAgentSelection } from '@/lib/stores/agent-selection-store';
+import { useQueryClient } from '@tanstack/react-query';
+import { threadKeys } from '@/hooks/react-query/threads/keys';
 
 export default function ThreadPage({
   params,
@@ -42,6 +45,7 @@ export default function ThreadPage({
   const { projectId, threadId } = unwrappedParams;
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   // State
   const [newMessage, setNewMessage] = useState('');
@@ -52,7 +56,17 @@ export default function ThreadPage({
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [initialPanelOpenAttempted, setInitialPanelOpenAttempted] = useState(false);
-  const [selectedAgentId, setSelectedAgentId] = useState<string | undefined>(undefined);
+  // Use Zustand store for agent selection persistence
+  const { 
+    selectedAgentId, 
+    setSelectedAgent, 
+    initializeFromAgents,
+    getCurrentAgent,
+    isSunaAgent 
+  } = useAgentSelection();
+  
+  const { data: agentsResponse } = useAgents();
+  const agents = agentsResponse?.agents || [];
   const [isSidePanelAnimating, setIsSidePanelAnimating] = useState(false);
   const [userInitiatedRun, setUserInitiatedRun] = useState(false);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
@@ -61,7 +75,7 @@ export default function ThreadPage({
     runningCount: number;
     runningThreadIds: string[];
   } | null>(null);
-  
+
 
   // Refs - simplified for flex-column-reverse
   const latestMessageRef = useRef<HTMLDivElement>(null);
@@ -134,19 +148,23 @@ export default function ThreadPage({
   const agent = threadAgentData?.agent;
   const workflowId = threadQuery.data?.metadata?.workflow_id;
 
-  // Set initial selected agent from thread data
   useEffect(() => {
-    if (threadAgentData?.agent && !selectedAgentId) {
-      setSelectedAgentId(threadAgentData.agent.agent_id);
+    queryClient.invalidateQueries({ queryKey: threadKeys.agentRuns(threadId) });
+    queryClient.invalidateQueries({ queryKey: threadKeys.messages(threadId) });
+  }, [threadId, queryClient]);
+
+  useEffect(() => {
+    if (agents.length > 0) {
+      const threadAgentId = threadAgentData?.agent?.agent_id;
+      initializeFromAgents(agents, threadAgentId);
     }
-  }, [threadAgentData, selectedAgentId]);
+  }, [threadAgentData, agents, initializeFromAgents]);
 
   const { data: subscriptionData } = useSubscription();
   const subscriptionStatus: SubscriptionStatus = subscriptionData?.status === 'active'
     ? 'active'
     : 'no_subscription';
 
-  // Memoize project for VNC preloader to prevent re-preloading on every render
   const memoizedProject = useMemo(() => project, [project?.id, project?.sandbox?.vnc_preview, project?.sandbox?.pass]);
 
   useVncPreloader(memoizedProject);
@@ -184,14 +202,14 @@ export default function ThreadPage({
       } else {
         // If this is a user message, replace any optimistic user message with temp ID
         if (message.type === 'user') {
-          const optimisticIndex = prev.findIndex(m => 
-            m.type === 'user' && 
+          const optimisticIndex = prev.findIndex(m =>
+            m.type === 'user' &&
             m.message_id?.startsWith('temp-') &&
             m.content === message.content
           );
           if (optimisticIndex !== -1) {
             // Replace the optimistic message with the real one
-            return prev.map((m, index) => 
+            return prev.map((m, index) =>
               index === optimisticIndex ? message : m
             );
           }
@@ -329,7 +347,7 @@ export default function ThreadPage({
           if (error instanceof AgentRunLimitError) {
             console.log("Caught AgentRunLimitError:", error.detail);
             const { running_thread_ids, running_count } = error.detail;
-            
+
             // Show the dialog with limit information
             setAgentLimitData({
               runningCount: running_count,
@@ -460,13 +478,13 @@ export default function ThreadPage({
   }, [initialPanelOpenAttempted, messages, toolCalls, initialLoadCompleted, setIsSidePanelOpen, setCurrentToolIndex]);
 
   useEffect(() => {
-    console.log('[STREAM STUFF] Stream effect triggered:', { 
-      agentRunId, 
-      currentHookRunId, 
-      initialLoadCompleted, 
-      userInitiatedRun 
+    console.log('[STREAM STUFF] Stream effect triggered:', {
+      agentRunId,
+      currentHookRunId,
+      initialLoadCompleted,
+      userInitiatedRun
     });
-    
+
     // Start streaming if user initiated a run (don't wait for initialLoadCompleted for first-time users)
     if (agentRunId && agentRunId !== currentHookRunId && userInitiatedRun) {
       console.log('[STREAM STUFF] User-initiated stream starting for agentRunId:', agentRunId);
@@ -575,12 +593,12 @@ export default function ThreadPage({
   useEffect(() => {
     const handleScroll = () => {
       if (!scrollContainerRef.current) return;
-      
+
       const scrollTop = scrollContainerRef.current.scrollTop;
       const scrollHeight = scrollContainerRef.current.scrollHeight;
       const clientHeight = scrollContainerRef.current.clientHeight;
       const threshold = 100;
-      
+
       // With flex-column-reverse, scrollTop becomes NEGATIVE when scrolling up
       // Show button when scrollTop < -threshold (scrolled up enough from bottom)
       const shouldShow = scrollTop < -threshold && scrollHeight > clientHeight;
@@ -592,7 +610,7 @@ export default function ThreadPage({
       scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
       // Check initial state
       setTimeout(() => handleScroll(), 100);
-      
+
       return () => {
         scrollContainer.removeEventListener('scroll', handleScroll);
       };
@@ -735,7 +753,7 @@ export default function ThreadPage({
               messages={messages}
               agentName={agent && agent.name}
               selectedAgentId={selectedAgentId}
-              onAgentSelect={setSelectedAgentId}
+              onAgentSelect={setSelectedAgent}
               toolCalls={toolCalls}
               toolCallIndex={currentToolIndex}
               showToolPreview={!isSidePanelOpen && toolCalls.length > 0}
