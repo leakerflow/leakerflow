@@ -669,8 +669,8 @@ class SetupWizard:
             f"Visit {Colors.GREEN}https://app.daytona.io/dashboard/snapshots{Colors.ENDC}{Colors.CYAN} to create a snapshot."
         )
         print_info("Create a snapshot with these exact settings:")
-        print_info(f"   - Name:\t\t{Colors.GREEN}kortix/suna:0.1.3{Colors.ENDC}")
-        print_info(f"   - Snapshot name:\t{Colors.GREEN}kortix/suna:0.1.3{Colors.ENDC}")
+        print_info(f"   - Name:\t\t{Colors.GREEN}kortix/suna:0.1.3.1{Colors.ENDC}")
+        print_info(f"   - Snapshot name:\t{Colors.GREEN}kortix/suna:0.1.3.1{Colors.ENDC}")
         print_info(
             f"   - Entrypoint:\t{Colors.GREEN}/usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf{Colors.ENDC}"
         )
@@ -755,7 +755,7 @@ class SetupWizard:
         # Set a default model if not already set
         if not self.env_vars["llm"].get("MODEL_TO_USE"):
             if self.env_vars["llm"].get("OPENAI_API_KEY"):
-                self.env_vars["llm"]["MODEL_TO_USE"] = "openai/gpt-4o"
+                self.env_vars["llm"]["MODEL_TO_USE"] = "openai/gpt-5"
             elif self.env_vars["llm"].get("ANTHROPIC_API_KEY"):
                 self.env_vars["llm"][
                     "MODEL_TO_USE"

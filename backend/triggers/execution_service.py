@@ -478,7 +478,7 @@ class WorkflowExecutor:
         tool_mapping = {
             'sb_shell_tool': ['execute_command'],
             'sb_files_tool': ['create_file', 'str_replace', 'full_file_rewrite', 'delete_file'],
-            'sb_browser_tool': ['browser_navigate_to', 'browser_take_screenshot'],
+            'browser_tool': ['browser_navigate_to', 'browser_screenshot'],
             'sb_vision_tool': ['see_image'],
             'sb_deploy_tool': ['deploy'],
             'sb_expose_tool': ['expose_port'],
@@ -529,7 +529,11 @@ class WorkflowExecutor:
     ) -> None:
         client = await self._db.client
         
-        message_content = f"Execute workflow: {workflow_config['name']}\n\nInput: {json.dumps(workflow_input) if workflow_input else 'None'}"
+        message_content = (
+            f"**Execute workflow:** {workflow_config['name']}\n\n"
+            f"**Inputs:**\n"
+            + ("\n".join(f"- **{k.replace('_',' ').title()}:** {v}" for k, v in workflow_input.items()) if workflow_input else "- None")
+        )
         
         await client.table('messages').insert({
             "message_id": str(uuid.uuid4()),
