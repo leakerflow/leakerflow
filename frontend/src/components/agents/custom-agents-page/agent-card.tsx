@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import type { MarketplaceTemplate } from '@/components/agents/installation/types';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 
 export type AgentCardMode = 'marketplace' | 'template' | 'agent';
 

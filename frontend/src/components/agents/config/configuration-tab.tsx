@@ -8,7 +8,7 @@ import { AgentPlaybooksConfiguration } from '../playbooks/agent-playbooks-config
 import { AgentTriggersConfiguration } from '../triggers/agent-triggers-configuration';
 import { AgentModelSelector } from './model-selector';
 import { toast } from 'sonner';
-import { KortixLogo } from '../../sidebar/kortix-logo';
+import { KortixLogo } from '../../sidebar/leakerflow-logo';
 
 interface ConfigurationTabProps {
   agentId: string;

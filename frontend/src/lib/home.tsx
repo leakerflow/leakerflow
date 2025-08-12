@@ -58,17 +58,17 @@ export interface PricingTier {
 }
 
 export const siteConfig = {
-  name: 'Kortix Suna',
-  description: 'The Generalist AI Worker that can act on your behalf.',
+  name: 'LeakerFlow — GTA 6',
+  description: 'GTA 6 news, leaks, mods and guides for creators, streamers and players.',
   cta: 'Start Free',
   url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-  keywords: ['AI Worker', 'Generalist AI', 'Open Source AI', 'Autonomous Agent'],
+  keywords: ['GTA 6', 'GTA VI', 'Grand Theft Auto 6', 'GTA 6 leaks', 'GTA 6 news', 'GTA 6 mods', 'Rockstar Games'],
   links: {
     email: 'support@kortix.ai',
-    twitter: 'https://x.com/kortixai',
+    twitter: 'https://x.com/leakerflow',
     // discord: 'https://discord.gg/kortixai',
-    github: 'https://github.com/Kortix-ai/Suna',
-    instagram: 'https://instagram.com/kortixai',
+    github: 'https://github.com/leakerflow/',
+    instagram: 'https://instagram.com/leakerflow',
   },
   nav: {
     links: [
@@ -108,11 +108,11 @@ export const siteConfig = {
       </svg>
     ),
     badge: '100% OPEN SOURCE',
-    githubUrl: 'https://github.com/kortix-ai/suna',
-    title: 'Kortix – Build, manage and train your AI Workforce.',
+    githubUrl: 'https://github.com/leakerflow/',
+    title: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
     description:
-      'Kortix – open-source platform to build, manage and train your AI Workforce.',
-    inputPlaceholder: 'Ask Suna to...',
+      'Create videos, build mods, publish news — join the world’s largest gaming community on LeakerFlow.',
+    inputPlaceholder: 'Search GTA 6 news, leaks or mods...'
   },
   cloudPricingItems: [
     {
@@ -1225,21 +1225,21 @@ export const siteConfig = {
   },
   ctaSection: {
     id: 'cta',
-    title: 'Launch Your First AI Worker Today',
+    title: 'Start creating GTA 6 content today',
     backgroundImage: '/holo.png',
     button: {
       text: 'Get Started for free',
       href: '/auth',
     },
-    subtext: 'Build, manage and train your AI Workforce',
+    subtext: 'GTA 6 news, leaks, mods and guides with LeakerFlow.',
   },
   footerLinks: [
     {
-      title: 'Kortix',
+      title: 'LeakerFlow',
       links: [
-        { id: 1, title: 'About', url: 'https://kortix.ai' },
+        { id: 1, title: 'About', url: '/' },
         { id: 3, title: 'Contact', url: 'mailto:hey@kortix.ai' },
-        { id: 4, title: 'Careers', url: 'https://kortix.ai/careers' },
+        { id: 4, title: 'Careers', url: '/' },
       ],
     },
     {
@@ -1248,10 +1248,10 @@ export const siteConfig = {
         {
           id: 5,
           title: 'Documentation',
-          url: 'https://github.com/Kortix-ai/Suna',
+          url: 'https://github.com/leakerflow/',
         },
         { id: 7, title: 'Discord', url: 'https://discord.gg/Py6pCBUUPw' },
-        { id: 8, title: 'GitHub', url: 'https://github.com/Kortix-ai/Suna' },
+        { id: 8, title: 'GitHub', url: 'https://github.com/leakerflow/' },
       ],
     },
     {
@@ -1260,17 +1260,17 @@ export const siteConfig = {
         {
           id: 9,
           title: 'Privacy Policy',
-          url: 'https://suna.so/legal?tab=privacy',
+          url: '/legal?tab=privacy',
         },
         {
           id: 10,
           title: 'Terms of Service',
-          url: 'https://suna.so/legal?tab=terms',
+          url: '/legal?tab=terms',
         },
         {
           id: 11,
           title: 'License Apache 2.0',
-          url: 'https://github.com/Kortix-ai/Suna/blob/main/LICENSE',
+          url: 'https://github.com/leakerflow/',
         },
       ],
     },

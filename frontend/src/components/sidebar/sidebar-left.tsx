@@ -6,7 +6,7 @@ import { Bot, Menu, Store, Plus, Zap, Plug, ChevronRight, Loader2 } from 'lucide
 
 import { NavAgents } from '@/components/sidebar/nav-agents';
 import { NavUserWithTeams } from '@/components/sidebar/nav-user-with-teams';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { CTACard } from '@/components/sidebar/cta';
 import {
   Sidebar,

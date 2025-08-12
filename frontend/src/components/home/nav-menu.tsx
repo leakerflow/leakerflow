@@ -10,7 +10,10 @@ interface NavItem {
   href: string;
 }
 
-const navs: NavItem[] = siteConfig.nav.links;
+// Temporarily hide the Enterprise nav item
+const navs: NavItem[] = siteConfig.nav.links.filter(
+  (item) => item.name !== 'Enterprise' && item.href !== '/enterprise'
+);
 
 export function NavMenu() {
   const ref = useRef<HTMLUListElement>(null);
