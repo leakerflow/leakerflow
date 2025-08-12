@@ -260,7 +260,7 @@ export function HeroSection() {
               <span className="bg-brand-gradient bg-clip-text text-transparent">AI Workforce.</span>
             </h1>
             <p className="text-base md:text-lg text-center text-muted-foreground font-medium text-balance leading-relaxed tracking-tight max-w-2xl px-2">
-            Kortix – the simplest way to migrate from human to AI.
+            Leaker – the simplest way to migrate from human to AI.
             </p>
           </div>
 

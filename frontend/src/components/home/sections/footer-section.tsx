@@ -148,7 +148,7 @@ export function FooterSection() {
         {/* Centered headline replacing grid text */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <span className="font-extrabold tracking-tight text-muted-foreground/80 select-none text-[40px] md:text-[72px] leading-none">
-            {tablet ? 'Agents' : 'Agents Agents Agents'}
+            {tablet ? 'GTA 6' : 'GTA 6 GTA 6 GTA 6'}
           </span>
         </div>
       </Link>
