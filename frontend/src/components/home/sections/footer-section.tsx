@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { FlickeringGrid } from '@/components/home/ui/flickering-grid';
+import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { siteConfig } from '@/lib/home';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
@@ -137,20 +137,19 @@ export function FooterSection() {
         href="https://www.youtube.com/watch?v=nuf5BF1jvjQ"
         target="_blank"
         rel="noopener noreferrer"
-        className="block w-full h-48 md:h-64 relative mt-24 z-0 cursor-pointer"
+        className="block w-full h-48 md:h-64 relative mt-24 z-0 cursor-pointer overflow-hidden rounded-xl"
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-10 from-40%" />
-        <div className="absolute inset-0 ">
-          <FlickeringGrid
-            text={tablet ? 'Agents' : 'Agents Agents Agents'}
-            fontSize={tablet ? 60 : 90}
-            className="h-full w-full"
-            squareSize={2}
-            gridGap={tablet ? 2 : 3}
-            color="#6B7280"
-            maxOpacity={0.3}
-            flickerChance={0.1}
-          />
+        {/* Fade overlay to blend into background */}
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-20 from-40%" />
+
+        {/* Background animated beams */}
+        <BackgroundBeams className="z-0 opacity-80 pointer-events-none" />
+
+        {/* Centered headline replacing grid text */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <span className="font-extrabold tracking-tight text-muted-foreground/80 select-none text-[40px] md:text-[72px] leading-none">
+            {tablet ? 'Agents' : 'Agents Agents Agents'}
+          </span>
         </div>
       </Link>
     </footer>

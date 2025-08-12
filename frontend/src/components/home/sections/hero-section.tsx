@@ -1,11 +1,10 @@
-'use client';
+"use client";
 import { HeroVideoSection } from '@/components/home/sections/hero-video-section';
 import { siteConfig } from '@/lib/home';
 import { ArrowRight, Github, X, AlertCircle, Square } from 'lucide-react';
-import { FlickeringGrid } from '@/components/home/ui/flickering-grid';
+import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useState, useEffect, useRef, FormEvent } from 'react';
-import { useScroll } from 'motion/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthProvider';
@@ -54,11 +53,7 @@ const PENDING_PROMPT_KEY = 'pendingAgentPrompt';
 export function HeroSection() {
   const { hero } = siteConfig;
   const tablet = useMediaQuery('(max-width: 1024px)');
-  const [mounted, setMounted] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
-  const { scrollY } = useScroll();
   const [inputValue, setInputValue] = useState('');
   const [selectedAgentId, setSelectedAgentId] = useState<string | undefined>();
   const router = useRouter();
@@ -102,33 +97,7 @@ export function HeroSection() {
   // Auth dialog state
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Detect when scrolling is active to reduce animation complexity
-  useEffect(() => {
-    const unsubscribe = scrollY.on('change', () => {
-      setIsScrolling(true);
-
-      // Clear any existing timeout
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-
-      // Set a new timeout
-      scrollTimeout.current = setTimeout(() => {
-        setIsScrolling(false);
-      }, 300); // Wait 300ms after scroll stops
-    });
-
-    return () => {
-      unsubscribe();
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current);
-      }
-    };
-  }, [scrollY]);
+  // No-op: removed flickering grid scroll optimization
 
   useEffect(() => {
     if (authDialogOpen && inputValue.trim()) {
@@ -234,51 +203,18 @@ export function HeroSection() {
   return (
     <section id="hero" className="w-full relative overflow-hidden">
       <div className="relative flex flex-col items-center w-full px-4 sm:px-6">
-        {/* Left side flickering grid with gradient fades */}
-        <div className="hidden sm:block absolute left-0 top-0 h-[500px] sm:h-[600px] md:h-[800px] w-1/4 sm:w-1/3 -z-10 overflow-hidden">
-          {/* Horizontal fade from left to right */}
+        {/* Background beams (replaces flickering grid) */}
+        <div className="absolute inset-x-0 top-0 h-[500px] sm:h-[600px] md:h-[800px] -z-10 overflow-hidden">
+          {/* Horizontal fade from sides to background */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background z-10" />
-
           {/* Vertical fade from top */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-
           {/* Vertical fade to bottom */}
           <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-          {mounted && (
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={tablet ? 2 : 2.5}
-              gridGap={tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={tablet ? 0.2 : 0.4}
-              flickerChance={isScrolling ? 0.005 : (tablet ? 0.015 : 0.03)} // Lower performance impact on mobile
-            />
-          )}
+          <BackgroundBeams className="opacity-80 pointer-events-none" />
         </div>
 
-        {/* Right side flickering grid with gradient fades */}
-        <div className="hidden sm:block absolute right-0 top-0 h-[500px] sm:h-[600px] md:h-[800px] w-1/4 sm:w-1/3 -z-10 overflow-hidden">
-          {/* Horizontal fade from right to left */}
-          <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background z-10" />
-
-          {/* Vertical fade from top */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-
-          {/* Vertical fade to bottom */}
-          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-          {mounted && (
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={tablet ? 2 : 2.5}
-              gridGap={tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={tablet ? 0.2 : 0.4}
-              flickerChance={isScrolling ? 0.005 : (tablet ? 0.015 : 0.03)} // Lower performance impact on mobile
-            />
-          )}
-        </div>
+        {/* Right-side grid removed; covered by BackgroundBeams */}
 
         {/* Center content background with rounded bottom */}
         <div className="absolute inset-x-0 sm:inset-x-1/6 md:inset-x-1/4 top-0 h-[500px] sm:h-[600px] md:h-[800px] -z-20 bg-background rounded-b-xl"></div>
@@ -345,8 +281,6 @@ export function HeroSection() {
                   autoFocus={false}
                 />
               </div>
-              {/* Subtle glow effect */}
-              <div className="absolute -bottom-4 inset-x-0 h-6 bg-secondary/20 blur-xl rounded-full -z-10 opacity-70"></div>
             </div>
             
             {/* Examples section - right after chat input */}
