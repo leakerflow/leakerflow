@@ -97,8 +97,8 @@ export const metadata: Metadata = {
     ],
   },
   icons: {
-    icon: [{ url: '/favicon.png', sizes: 'any' }],
-    shortcut: '/favicon.png',
+    icon: [{ url: '/leakerflow.ico', sizes: 'any' }],
+    shortcut: '/leakerflow.ico',
   },
   // manifest: "/manifest.json",
   alternates: {
@@ -129,7 +129,7 @@ export default function RootLayout({
             '@type': 'Organization',
             name: 'LeakerFlow',
             url: siteConfig.url,
-            logo: `${siteConfig.url}favicon.png`,
+            logo: `${siteConfig.url}leakerflow.png`,
             sameAs: [
               siteConfig.links.twitter,
               siteConfig.links.github,

@@ -9,7 +9,7 @@ import { getAgentAvatar } from '../../lib/utils/get-agent-style';
 import { useCreateTemplate, useUnpublishTemplate } from '@/hooks/react-query/secure-mcp/use-secure-mcp';
 import { toast } from 'sonner';
 import { AgentCard } from './custom-agents-page/agent-card';
-import { KortixLogo } from '../sidebar/kortix-logo';
+import { KortixLogo } from '../sidebar/leakerflow-logo';
 
 interface Agent {
   agent_id: string;

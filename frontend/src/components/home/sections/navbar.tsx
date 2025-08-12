@@ -9,6 +9,7 @@ import { Menu, X, Github } from 'lucide-react';
 import { AnimatePresence, motion, useScroll } from 'motion/react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/components/AuthProvider';
@@ -104,11 +105,7 @@ export function Navbar() {
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
   const handleOverlayClick = () => setIsDrawerOpen(false);
 
-  const logoSrc = !mounted
-    ? '/kortix-logo.svg'
-    : resolvedTheme === 'dark'
-      ? '/kortix-logo-white.svg'
-      : '/kortix-logo.svg';
+  const logoSrc = '/leakerflow.png';
 
   return (
     <header
@@ -134,14 +131,7 @@ export function Navbar() {
             {/* Left Section - Logo */}
             <div className="flex items-center justify-start flex-shrink-0 w-auto md:w-[200px]">
               <Link href="/" className="flex items-center gap-3">
-                <Image
-                  src={logoSrc}
-                  alt="Kortix Logo"
-                  width={80}
-                  height={14}
-                  className="md:w-[100px] md:h-[18px]"
-                  priority
-                /> 
+                <LeakerFlowLogo size={28} showText text="Leaker Flow" textClassName="font-semibold tracking-tight text-base md:text-lg" />
               </Link>
             </div>
 

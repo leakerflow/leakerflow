@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EditableText } from '@/components/ui/editable';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 

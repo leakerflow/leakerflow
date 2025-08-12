@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAgent } from '@/hooks/react-query/agents/use-agents';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface AgentAvatarProps {

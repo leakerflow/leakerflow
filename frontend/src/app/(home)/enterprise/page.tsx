@@ -21,7 +21,7 @@ import {
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { KortixEnterpriseModal } from '@/components/sidebar/kortix-enterprise-modal';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 
 // Hero Section Component
 const CustomHeroSection = () => {
