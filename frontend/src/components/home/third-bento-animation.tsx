@@ -123,7 +123,7 @@ export function AITaskExecution({
           </div>
           {/* Pulsing ring */}
           <motion.div
-            className="absolute inset-0 border-2 border-secondary rounded-full"
+            className="absolute inset-0 rounded-full p-[2px] bg-brand-gradient"
             animate={{
               scale: [1, 1.3, 1],
               opacity: [0.5, 0, 0.5],
@@ -133,7 +133,9 @@ export function AITaskExecution({
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-          />
+          >
+            <div className="w-full h-full rounded-full bg-background" />
+          </motion.div>
         </motion.div>
       </div>
 

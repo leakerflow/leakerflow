@@ -401,7 +401,7 @@ function PricingTier({
     buttonClassName =
       tier.buttonColor === 'default'
         ? 'bg-primary hover:bg-primary/90 text-white'
-        : 'bg-secondary hover:bg-secondary/90 text-white';
+        : 'bg-brand-gradient hover:opacity-90 text-white';
   }
 
   return (
@@ -424,7 +424,7 @@ function PricingTier({
         <p className="text-sm flex items-center gap-2">
           {tier.name}
           {tier.isPopular && (
-            <span className="bg-gradient-to-b from-secondary/50 from-[1.92%] to-secondary to-[100%] text-white inline-flex w-fit items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-medium shadow-[0px_6px_6px_-3px_rgba(0,0,0,0.08),0px_3px_3px_-1.5px_rgba(0,0,0,0.08),0px_1px_1px_-0.5px_rgba(0,0,0,0.08),0px_0px_0px_1px_rgba(255,255,255,0.12)_inset,0px_1px_0px_0px_rgba(255,255,255,0.12)_inset]">
+            <span className="bg-brand-gradient text-white inline-flex w-fit items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-medium shadow-[0px_6px_6px_-3px_rgba(0,0,0,0.08),0px_3px_3px_-1.5px_rgba(0,0,0,0.08),0px_1px_1px_-0.5px_rgba(0,0,0,0.08),0px_0px_0px_1px_rgba(255,255,255,0.12)_inset,0px_1px_0px_0px_rgba(255,255,255,0.12)_inset]">
               Popular
             </span>
           )}
@@ -663,12 +663,15 @@ export function PricingSection({
         </div>
       </div>
       {showInfo && (
-        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg max-w-2xl mx-auto">
-          <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
-            <strong>What are AI tokens?</strong> Tokens are units of text that AI models process. 
-            Your plan includes credits to spend on various AI models - the more complex the task, 
-            the more tokens used.
-          </p>
+        <div className="mt-4 relative overflow-hidden rounded-lg max-w-2xl mx-auto text-white shadow-md">
+          <div className="absolute inset-0 bg-brand-gradient opacity-30 rounded-lg" />
+          <div className="relative p-4">
+            <p className="text-sm text-center">
+              <strong>What are AI tokens?</strong> Tokens are units of text that AI models process. 
+              Your plan includes credits to spend on various AI models - the more complex the task, 
+              the more tokens used.
+            </p>
+          </div>
         </div>
       )}
     </section>

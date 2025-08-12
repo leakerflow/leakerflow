@@ -337,13 +337,13 @@ export function OpenSourceSection() {
                     <span>kortix-ai/suna</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary/10 border-secondary/20 text-secondary">
+                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-brand-gradient text-white border-white/20 hover:opacity-90 transition">
                       TypeScript
                     </span>
-                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary/10 border-secondary/20 text-secondary">
+                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-brand-gradient text-white border-white/20 hover:opacity-90 transition">
                       Python
                     </span>
-                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary/10 border-secondary/20 text-secondary">
+                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-brand-gradient text-white border-white/20 hover:opacity-90 transition">
                       Apache 2.0 License
                     </span>
                   </div>
@@ -353,14 +353,14 @@ export function OpenSourceSection() {
               {item.showFeatures && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <div className="rounded-full bg-secondary/10 p-2 mt-0.5">
+                    <div className="rounded-full bg-brand-gradient p-2 mt-0.5 text-white">
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-secondary"
+                        className="text-white"
                       >
                         <path
                           d="M9.75 12.75L11.25 14.25L14.25 9.75"
@@ -386,14 +386,14 @@ export function OpenSourceSection() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="rounded-full bg-secondary/10 p-2 mt-0.5">
+                    <div className="rounded-full bg-brand-gradient p-2 mt-0.5 text-white">
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-secondary"
+                        className="text-white"
                       >
                         <path
                           d="M9.75 12.75L11.25 14.25L14.25 9.75"
@@ -419,14 +419,14 @@ export function OpenSourceSection() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="rounded-full bg-secondary/10 p-2 mt-0.5">
+                    <div className="rounded-full bg-brand-gradient p-2 mt-0.5 text-white">
                       <svg
                         width="16"
                         height="16"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className="text-secondary"
+                        className="text-white"
                       >
                         <path
                           d="M9.75 12.75L11.25 14.25L14.25 9.75"
