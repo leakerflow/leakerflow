@@ -25,8 +25,6 @@ export function LeakerFlowLogo({
     setMounted(true);
   }, []);
 
-  const shouldInvert =
-    mounted && (theme === 'dark' || (theme === 'system' && systemTheme === 'dark'));
   return (
     <div className="flex items-center gap-2" style={{ lineHeight: 1 }}>
       <Image
@@ -34,7 +32,7 @@ export function LeakerFlowLogo({
         alt="LeakerFlow"
         width={size}
         height={size}
-        className={`${shouldInvert ? 'invert' : ''} flex-shrink-0`}
+        className="flex-shrink-0"
         style={{ width: size, height: size, minWidth: size, minHeight: size }}
       />
       {showText && (

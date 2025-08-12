@@ -87,7 +87,7 @@ export function FirstBentoAnimation() {
             <img 
               src="/leakerflow.png" 
               alt="LeakerFlow" 
-              className="size-4 dark:invert"
+              className="size-4"
             />
           </div>
 

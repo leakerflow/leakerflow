@@ -118,7 +118,7 @@ export function AITaskExecution({
             <img 
               src="/leakerflow.png" 
               alt="LeakerFlow" 
-              className="size-6 filter brightness-0 invert"
+              className="size-6"
             />
           </div>
           {/* Pulsing ring */}

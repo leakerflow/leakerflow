@@ -11,7 +11,7 @@ export function SecondBentoAnimation() {
         <img 
           src="/leakerflow.png" 
           alt="LeakerFlow" 
-          className="size-10 filter brightness-0 invert"
+          className="size-10"
         />
       </div>
       <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
