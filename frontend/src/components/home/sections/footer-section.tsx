@@ -3,6 +3,7 @@
 import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { siteConfig } from '@/lib/home';
+import { siteConfig as site } from '@/lib/site';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -34,7 +35,7 @@ export function FooterSection() {
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src={logoSrc}
-                  alt="Kortix Logo"
+                  alt="LeakerFlow Logo"
                   width={122}
                   height={22}
                   priority
@@ -46,7 +47,7 @@ export function FooterSection() {
 
               <div className="flex items-center gap-4">
             <a
-              href="https://github.com/kortix-ai/suna"
+              href={site.links.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -63,7 +64,7 @@ export function FooterSection() {
               </svg>
             </a>
             <a
-              href="https://x.com/kortixai"
+              href={site.links.twitter}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (Twitter)"
@@ -80,7 +81,7 @@ export function FooterSection() {
               </svg>
             </a>
             <a
-              href="https://www.linkedin.com/company/kortix/"
+              href={site.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"

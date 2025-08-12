@@ -312,10 +312,10 @@ export function OpenSourceSection() {
           {/* Section Header */}
           <SectionHeader>
             <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance">
-              100% Open Source
+              Open Source for GTA 6 Creators
             </h2>
             <p className="text-muted-foreground text-center text-balance font-medium">
-              Suna is fully open source. Join our community and help shape the future of AI.
+              LeakerFlow is open source. Join our community to build news, mods, tools and guides for GTA 6 together.
             </p>
           </SectionHeader>
 
