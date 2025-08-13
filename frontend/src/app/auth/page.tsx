@@ -30,7 +30,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import GitHubSignIn from '@/components/GithubSignIn';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { Ripple } from '@/components/ui/ripple';
 import { ReleaseBadge } from '@/components/auth/release-badge';
 
