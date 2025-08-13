@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import type { MarketplaceTemplate } from '@/components/agents/installation/types';
-import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 
 export type AgentCardMode = 'marketplace' | 'template' | 'agent';
 
@@ -38,7 +38,7 @@ interface BaseAgentData {
 
 interface MarketplaceData extends BaseAgentData {
   creator_id: string;
-  is_kortix_team?: boolean;
+  is_leakerflow_team?: boolean;
   download_count: number;
   creator_name?: string;
   marketplace_published_at?: string;
@@ -62,7 +62,7 @@ interface AgentData extends BaseAgentData {
     version_number: number;
   };
   metadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       system_prompt_editable?: boolean;
@@ -93,15 +93,15 @@ interface AgentCardProps {
 }
 
 const MarketplaceBadge: React.FC<{ 
-  isKortixTeam?: boolean; 
+  isLeakerFlowTeam?: boolean; 
   isOwner?: boolean;
-}> = ({ isKortixTeam, isOwner }) => {
+}> = ({ isLeakerFlowTeam, isOwner }) => {
   return (
     <div className="flex gap-1 flex-wrap">
-      {isKortixTeam && (
+      {isLeakerFlowTeam && (
         <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-0 dark:bg-blue-950 dark:text-blue-300">
           <CheckCircle className="h-3 w-3 mr-1" />
-          Kortix
+          Leaker Flow
         </Badge>
       )}
       {isOwner && (
@@ -130,15 +130,15 @@ const TemplateBadge: React.FC<{ isPublic?: boolean }> = ({ isPublic }) => {
   );
 };
 
-const AgentBadges: React.FC<{ agent: AgentData, isSunaAgent: boolean }> = ({ agent, isSunaAgent }) => (
+const AgentBadges: React.FC<{ agent: AgentData, isLeakerFlowAgent: boolean }> = ({ agent, isLeakerFlowAgent }) => (
   <div className="flex gap-1">
-    {!isSunaAgent && agent.current_version && (
+    {!isLeakerFlowAgent && agent.current_version && (
       <Badge variant="outline" className="text-xs">
         <GitBranch className="h-3 w-3 mr-1" />
         {agent.current_version.version_name}
       </Badge>
     )}
-    {!isSunaAgent && agent.is_public && (
+    {!isLeakerFlowAgent && agent.is_public && (
       <Badge variant="default" className="bg-green-100 text-green-700 border-0 dark:bg-green-950 dark:text-green-300 text-xs">
         <Globe className="h-3 w-3 mr-1" />
         Published
@@ -340,11 +340,11 @@ const TemplateActions: React.FC<{
   </div>
 );
 
-const CardAvatar: React.FC<{ avatar: string; color: string; isSunaAgent?: boolean; profileImageUrl?: string }> = ({ avatar, color, isSunaAgent = false, profileImageUrl }) => {
-  if (isSunaAgent) {
+const CardAvatar: React.FC<{ avatar: string; color: string; isLeakerFlowAgent?: boolean; profileImageUrl?: string }> = ({ avatar, color, isLeakerFlowAgent = false, profileImageUrl }) => {
+  if (isLeakerFlowAgent) {
     return (
       <div className="h-14 w-14 bg-muted border flex items-center justify-center rounded-2xl">
-        <KortixLogo size={28} />
+        <LeakerFlowLogo size={28} />
       </div>
     )
   }
@@ -359,9 +359,9 @@ const CardAvatar: React.FC<{ avatar: string; color: string; isSunaAgent?: boolea
       style={{ backgroundColor: color }}
     >
       <div className="text-2xl">{avatar}</div>
-      {isSunaAgent && (
+      {isLeakerFlowAgent && (
         <div className="absolute -top-1 -right-1 h-5 w-5 bg-background rounded-full border border-border flex items-center justify-center">
-          <KortixLogo size={12} />
+          <LeakerFlowLogo size={12} />
         </div>
       )}
       <div
@@ -408,7 +408,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
 }) => {
   const { avatar, color } = styling;
   
-  const isSunaAgent = mode === 'agent' && (data as AgentData).metadata?.is_suna_default === true;
+  const isLeakerFlowAgent = mode === 'agent' && (data as AgentData).metadata?.is_leakerflow_default === true;
   const isOwner = currentUserId && mode === 'marketplace' && (data as MarketplaceData).creator_id === currentUserId;
   
   const cardClassName = `group relative bg-card rounded-2xl overflow-hidden shadow-sm transition-all duration-300 border cursor-pointer flex flex-col min-h-[280px] max-h-[320px] border-border/50 hover:border-primary/20`;
@@ -417,13 +417,13 @@ export const AgentCard: React.FC<AgentCardProps> = ({
     switch (mode) {
       case 'marketplace':
         return <MarketplaceBadge 
-          isKortixTeam={(data as MarketplaceData).is_kortix_team} 
+          isLeakerFlowTeam={(data as MarketplaceData).is_leakerflow_team} 
           isOwner={isOwner}
         />;
       case 'template':
         return <TemplateBadge isPublic={(data as TemplateData).is_public} />;
       case 'agent':
-        return <AgentBadges agent={data as AgentData} isSunaAgent={isSunaAgent} />;
+        return <AgentBadges agent={data as AgentData} isLeakerFlowAgent={isLeakerFlowAgent} />;
       default:
         return null;
     }
@@ -471,7 +471,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="relative p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between mb-4">
-          <CardAvatar avatar={avatar} color={color} isSunaAgent={isSunaAgent} profileImageUrl={(data as any)?.profile_image_url} />
+          <CardAvatar avatar={avatar} color={color} isLeakerFlowAgent={isLeakerFlowAgent} profileImageUrl={(data as any)?.profile_image_url} />
           <div className="flex items-center gap-2">
             {renderBadge()}
           </div>

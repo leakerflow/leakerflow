@@ -62,7 +62,7 @@ export default function ThreadPage({
     setSelectedAgent, 
     initializeFromAgents,
     getCurrentAgent,
-    isSunaAgent 
+    isLeakerflowAgent 
   } = useAgentSelection();
   
   const { data: agentsResponse } = useAgents();
@@ -491,7 +491,7 @@ export default function ThreadPage({
   // SEO title update
   useEffect(() => {
     if (projectName) {
-      document.title = `${projectName} | Kortix Suna`;
+      document.title = `${projectName} | Leaker Flow`;
 
       const metaDescription = document.querySelector(
         'meta[name="description"]',
@@ -499,13 +499,13 @@ export default function ThreadPage({
       if (metaDescription) {
         metaDescription.setAttribute(
           'content',
-          `${projectName} - Interactive agent conversation powered by Kortix Suna`,
+          `${projectName} - Interactive agent conversation powered by Leaker Flow`,
         );
       }
 
       const ogTitle = document.querySelector('meta[property="og:title"]');
       if (ogTitle) {
-        ogTitle.setAttribute('content', `${projectName} | Kortix Suna`);
+        ogTitle.setAttribute('content', `${projectName} | Leaker Flow`);
       }
 
       const ogDescription = document.querySelector(
@@ -530,7 +530,7 @@ export default function ThreadPage({
   useEffect(() => {
     if (initialLoadCompleted && subscriptionData && !hasCheckedUpgradeDialog.current) {
       hasCheckedUpgradeDialog.current = true;
-      const hasSeenUpgradeDialog = localStorage.getItem('suna_upgrade_dialog_displayed');
+      const hasSeenUpgradeDialog = localStorage.getItem('leakerflow_upgrade_dialog_displayed');
       const isFreeTier = subscriptionStatus === 'no_subscription';
       if (!hasSeenUpgradeDialog && isFreeTier && !isLocalMode()) {
         setShowUpgradeDialog(true);
@@ -540,7 +540,7 @@ export default function ThreadPage({
 
   const handleDismissUpgradeDialog = () => {
     setShowUpgradeDialog(false);
-    localStorage.setItem('suna_upgrade_dialog_displayed', 'true');
+    localStorage.setItem('leakerflow_upgrade_dialog_displayed', 'true');
   };
 
   useEffect(() => {

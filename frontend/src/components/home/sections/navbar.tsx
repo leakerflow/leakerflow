@@ -63,7 +63,7 @@ export function Navbar() {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { user } = useAuth();
-  const { formattedStars, loading: starsLoading } = useGitHubStars('kortix-ai', 'suna');
+  const { formattedStars, loading: starsLoading } = useGitHubStars('leakerflow', 'leakerflow');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -145,7 +145,7 @@ export function Navbar() {
               <div className="flex flex-row items-center gap-2 md:gap-3 shrink-0">
                 <div className="flex items-center space-x-3">
                   <Link
-                    href="https://github.com/kortix-ai/suna"
+                    href="https://github.com/leakerflow/leakerflow"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hidden md:flex items-center gap-1.5 h-7 px-2.5 text-xs font-medium rounded-full bg-transparent text-muted-foreground/60 hover:text-muted-foreground hover:bg-accent/30 transition-all duration-200"
@@ -216,13 +216,13 @@ export function Navbar() {
                   <Link href="/" className="flex items-center gap-3">
                     <Image
                       src={logoSrc}
-                      alt="Kortix Logo"
+                      alt="Leaker Flow Logo"
                       width={120}
                       height={22}
                       priority
                     />
                     <span className="font-medium text-primary text-sm">
-                      / Suna
+                      / Leaker Flow
                     </span>
                   </Link>
                   <button
@@ -285,7 +285,7 @@ export function Navbar() {
 
                 {/* GitHub link for mobile */}
                 <Link
-                  href="https://github.com/kortix-ai/suna"
+                  href="https://github.com/leakerflow/leakerflow"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-1.5 h-7 px-2.5 text-xs font-medium rounded-full bg-transparent text-muted-foreground/60 hover:text-muted-foreground hover:bg-accent/30 transition-all duration-200"

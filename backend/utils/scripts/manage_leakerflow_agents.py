@@ -1,53 +1,51 @@
 #!/usr/bin/env python3
 """
-Suna Default Agent Management Script
+Leaker Flow Default Agent Management Script
 
-This script provides administrative functions for managing Suna default agents across all users.
+This script provides administrative functions for managing Leaker Flow default agents across all users.
 
 Usage:
     # 🚀 EASY COMMANDS (Most common)
-    python manage_suna_agents.py sync                  # Push config changes to all users (recommended)
-    python manage_suna_agents.py install-all          # Install Suna for all users who don't have it
-    python manage_suna_agents.py stats                # Show Suna agent statistics
+    python manage_leakerflow_agents.py sync                  # Push config changes to all users (recommended)
+    python manage_leakerflow_agents.py install-all          # Install Leaker Flow for all users who don't have it
+    python manage_leakerflow_agents.py stats                # Show Leaker Flow agent statistics
     
     # 🔧 ADVANCED COMMANDS
-    python manage_suna_agents.py update-all           # Update all Suna agents to latest version
-    python manage_suna_agents.py install-user <id>    # Install Suna for specific user
-    python manage_suna_agents.py update-user <id>     # Update Suna agent for specific user
-    python manage_suna_agents.py version <version>    # Update all agents to specific version
+    python manage_leakerflow_agents.py update-all           # Update all default agents to latest version
+    python manage_leakerflow_agents.py install-user <id>    # Install Leaker Flow for specific user
+    python manage_leakerflow_agents.py update-user <id>     # Update default agent for specific user
+    python manage_leakerflow_agents.py version <version>    # Update all agents to specific version
 
 Examples:
-    python manage_suna_agents.py sync                 # Most common - sync config changes
-    python manage_suna_agents.py install-all
-    python manage_suna_agents.py stats
-    python manage_suna_agents.py install-user 123e4567-e89b-12d3-a456-426614174000
+    python manage_leakerflow_agents.py sync                 # Most common - sync config changes
+    python manage_leakerflow_agents.py install-all
+    python manage_leakerflow_agents.py stats
+    python manage_leakerflow_agents.py install-user 123e4567-e89b-12d3-a456-426614174000
 """
 
 import asyncio
 import argparse
 import sys
-import json
 from pathlib import Path
 
 # Add the backend directory to the path so we can import modules
 backend_dir = Path(__file__).parent.parent
 sys.path.insert(0, str(backend_dir))
 
-from utils.suna_default_agent_service import SunaDefaultAgentService
-from services.supabase import DBConnection
+from utils.leakerflow_default_agent_service import LeakerflowDefaultAgentService
 from utils.logger import logger
 
 
-class SunaAgentManager:
+class LeakerflowAgentManager:
     def __init__(self):
-        self.service = SunaDefaultAgentService()
+        self.service = LeakerflowDefaultAgentService()
     
     async def sync_config(self):
-        """🚀 EASY SYNC: Push current suna_config.py changes to all users"""
-        print("🔄 Syncing Suna configuration from suna_config.py to all users...")
-        print("📝 This will update system prompt, tools, and settings for all Suna agents")
+        """🚀 EASY SYNC: Push current default config to all users"""
+        print("🔄 Syncing Leaker Flow configuration to all users...")
+        print("📝 This will update system prompt, tools, and settings for all default agents")
         
-        result = await self.service.sync_all_suna_agents()
+        result = await self.service.sync_all_default_agents()
         
         print(f"✅ Configuration sync completed!")
         print(f"   🔄 Synced: {result['updated_count']}")
@@ -61,11 +59,11 @@ class SunaAgentManager:
         
         if result['updated_count'] > 0:
             print(f"\n🎉 Successfully synced configuration to {result['updated_count']} users!")
-            print("💡 All users now have the latest Suna configuration from suna_config.py")
+            print("💡 All users now have the latest Leaker Flow configuration")
     
     async def install_all_users(self):
-        """Install Suna agent for all users who don't have it"""
-        print("🚀 Installing Suna default agent for all users who don't have it...")
+        """Install Leaker Flow default agent for all users who don't have it"""
+        print("🚀 Installing Leaker Flow default agent for all users who don't have it...")
         
         result = await self.service.install_for_all_users()
         
@@ -80,14 +78,14 @@ class SunaAgentManager:
                     print(f"   - User {detail['account_id']}: {detail.get('error', 'Unknown error')}")
         
         if result['installed_count'] > 0:
-            print(f"\n✅ Successfully installed Suna for {result['installed_count']} users")
+            print(f"\n✅ Successfully installed Leaker Flow for {result['installed_count']} users")
             
     async def update_all_agents(self, target_version=None):
-        """Update all Suna agents to latest or specific version"""
+        """Update all default agents to latest or specific version"""
         version_text = target_version or "latest"
-        print(f"🔄 Updating all Suna default agents to {version_text} version...")
+        print(f"🔄 Updating all default agents to {version_text} version...")
         
-        result = await self.service.update_all_suna_agents(target_version)
+        result = await self.service.update_all_default_agents(target_version)
         
         print(f"✅ Update completed!")
         print(f"   🔄 Updated: {result['updated_count']}")
@@ -100,37 +98,37 @@ class SunaAgentManager:
                     print(f"   - Agent {detail['agent_id']} (User {detail['account_id']}): {detail.get('error', 'Unknown error')}")
         
         if result['updated_count'] > 0:
-            print(f"\n✅ Successfully updated {result['updated_count']} Suna agents")
+            print(f"\n✅ Successfully updated {result['updated_count']} default agents")
     
     async def install_user(self, account_id):
-        """Install Suna agent for specific user"""
-        print(f"🚀 Installing Suna default agent for user {account_id}...")
+        """Install default agent for specific user"""
+        print(f"🚀 Installing Leaker Flow default agent for user {account_id}...")
         
-        agent_id = await self.service.install_suna_agent_for_user(account_id)
+        agent_id = await self.service.install_leakerflow_agent_for_user(account_id)
         
         if agent_id:
-            print(f"✅ Successfully installed Suna agent {agent_id} for user {account_id}")
+            print(f"✅ Successfully installed Leaker Flow agent {agent_id} for user {account_id}")
         else:
-            print(f"❌ Failed to install Suna agent for user {account_id}")
+            print(f"❌ Failed to install Leaker Flow agent for user {account_id}")
     
     async def update_user(self, account_id):
-        """Update Suna agent for specific user"""
-        print(f"🔄 Updating Suna default agent for user {account_id}...")
+        """Update default agent for specific user"""
+        print(f"🔄 Updating Leaker Flow default agent for user {account_id}...")
         
         # Install/replace the agent with latest config
-        agent_id = await self.service.install_suna_agent_for_user(account_id, replace_existing=True)
+        agent_id = await self.service.install_leakerflow_agent_for_user(account_id, replace_existing=True)
         
         if agent_id:
-            print(f"✅ Successfully updated Suna agent {agent_id} for user {account_id}")
+            print(f"✅ Successfully updated Leaker Flow agent {agent_id} for user {account_id}")
         else:
-            print(f"❌ Failed to update Suna agent for user {account_id}")
+            print(f"❌ Failed to update Leaker Flow agent for user {account_id}")
     
     async def show_stats(self):
-        """Show Suna agent statistics"""
-        print("📊 Suna Default Agent Statistics")
+        """Show default agent statistics"""
+        print("📊 Leaker Flow Default Agent Statistics")
         print("=" * 50)
         
-        stats = await self.service.get_suna_agent_stats()
+        stats = await self.service.get_default_agent_stats()
         
         if 'error' in stats:
             print(f"❌ Error getting stats: {stats['error']}")
@@ -155,7 +153,7 @@ class SunaAgentManager:
 
 async def main():
     parser = argparse.ArgumentParser(
-        description="Manage Suna default agents across all users",
+        description="Manage Leaker Flow default agents across all users",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
@@ -163,20 +161,20 @@ async def main():
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
     # 🚀 EASY COMMANDS
-    subparsers.add_parser('sync', help='🚀 Sync suna_config.py changes to all users (RECOMMENDED)')
-    subparsers.add_parser('install-all', help='Install Suna agent for all users who don\'t have it')
-    subparsers.add_parser('stats', help='Show Suna agent statistics')
+    subparsers.add_parser('sync', help='🚀 Sync default configuration to all users (RECOMMENDED)')
+    subparsers.add_parser('install-all', help='Install default agent for all users who do not have it')
+    subparsers.add_parser('stats', help='Show default agent statistics')
     
     # 🔧 ADVANCED COMMANDS  
-    subparsers.add_parser('update-all', help='Update all Suna agents to latest version')
+    subparsers.add_parser('update-all', help='Update all default agents to latest version')
     
     # Install user command
-    install_user_parser = subparsers.add_parser('install-user', help='Install Suna agent for specific user')
-    install_user_parser.add_argument('account_id', help='Account ID to install Suna for')
+    install_user_parser = subparsers.add_parser('install-user', help='Install default agent for specific user')
+    install_user_parser.add_argument('account_id', help='Account ID to install for')
     
     # Update user command
-    update_user_parser = subparsers.add_parser('update-user', help='Update Suna agent for specific user')
-    update_user_parser.add_argument('account_id', help='Account ID to update Suna for')
+    update_user_parser = subparsers.add_parser('update-user', help='Update default agent for specific user')
+    update_user_parser.add_argument('account_id', help='Account ID to update')
     
     # Version command
     version_parser = subparsers.add_parser('version', help='Update all agents to specific version')
@@ -188,7 +186,7 @@ async def main():
         parser.print_help()
         return
     
-    manager = SunaAgentManager()
+    manager = LeakerflowAgentManager()
     
     try:
         if args.command == 'sync':
@@ -216,4 +214,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())

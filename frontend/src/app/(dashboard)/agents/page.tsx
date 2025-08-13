@@ -81,7 +81,7 @@ export default function AgentsPage() {
   const [selectedItem, setSelectedItem] = useState<MarketplaceTemplate | null>(null);
   const [showInstallDialog, setShowInstallDialog] = useState(false);
   const [showPreviewDialog, setShowPreviewDialog] = useState(false);
-  const [marketplaceFilter, setMarketplaceFilter] = useState<'all' | 'kortix' | 'community' | 'mine'>('all');
+  const [marketplaceFilter, setMarketplaceFilter] = useState<'all' | 'leakerflow' | 'community' | 'mine'>('all');
 
   const [templatesActioningId, setTemplatesActioningId] = useState<string | null>(null);
   const [publishDialog, setPublishDialog] = useState<PublishDialogData | null>(null);
@@ -143,8 +143,8 @@ export default function AgentsPage() {
   const agents = agentsResponse?.agents || [];
   const agentsPagination = agentsResponse?.pagination;
 
-  const { kortixTeamItems, communityItems, mineItems } = useMemo(() => {
-    const kortixItems: MarketplaceTemplate[] = [];
+  const { leakerflowTeamItems, communityItems, mineItems } = useMemo(() => {
+    const leakerflowItems: MarketplaceTemplate[] = [];
     const communityItems: MarketplaceTemplate[] = [];
     const mineItems: MarketplaceTemplate[] = [];
 
@@ -164,7 +164,8 @@ export default function AgentsPage() {
           avatar_color: template.avatar_color,
           profile_image_url: template.profile_image_url,
           template_id: template.template_id,
-          is_kortix_team: template.is_kortix_team,
+          // Leaker Flow official templates flag (legacy removed)
+          is_leakerflow_team: (template as any).is_leakerflow_team || false,
           mcp_requirements: template.mcp_requirements,
           metadata: template.metadata,
         };
@@ -183,8 +184,8 @@ export default function AgentsPage() {
           mineItems.push(item);
         }
         
-        if (template.is_kortix_team) {
-          kortixItems.push(item);
+        if ((template as any).is_leakerflow_team) {
+          leakerflowItems.push(item);
         } else {
           communityItems.push(item);
         }
@@ -209,22 +210,22 @@ export default function AgentsPage() {
     };
 
     return {
-      kortixTeamItems: sortItems(kortixItems),
+      leakerflowTeamItems: sortItems(leakerflowItems),
       communityItems: sortItems(communityItems),
       mineItems: sortItems(mineItems)
     };
   }, [marketplaceTemplates, marketplaceSortBy, user?.id, marketplaceSearchQuery]);
 
   const allMarketplaceItems = useMemo(() => {
-    if (marketplaceFilter === 'kortix') {
-      return kortixTeamItems;
+    if (marketplaceFilter === 'leakerflow') {
+      return leakerflowTeamItems;
     } else if (marketplaceFilter === 'community') {
       return communityItems;
     } else if (marketplaceFilter === 'mine') {
       return mineItems;
     }
-    return [...kortixTeamItems, ...communityItems];
-  }, [kortixTeamItems, communityItems, mineItems, marketplaceFilter]);
+    return [...leakerflowTeamItems, ...communityItems];
+  }, [leakerflowTeamItems, communityItems, mineItems, marketplaceFilter]);
 
   const handleTabChange = (newTab: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -595,7 +596,7 @@ export default function AgentsPage() {
               setMarketplaceFilter={setMarketplaceFilter}
               marketplaceLoading={marketplaceLoading}
               allMarketplaceItems={allMarketplaceItems}
-              kortixTeamItems={kortixTeamItems}
+              leakerflowTeamItems={leakerflowTeamItems}
               communityItems={communityItems}
               mineItems={mineItems}
               installingItemId={installingItemId}

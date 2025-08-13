@@ -38,7 +38,7 @@ class AgentRun:
         return stream
 
 
-class KortixThread:
+class LeakerflowThread:
     def __init__(self, client: ThreadsClient):
         self._client = client
 
@@ -51,3 +51,5 @@ class KortixThread:
 
     async def delete(self, thread_id: str) -> None:
         await self._client.delete_thread(thread_id)
+
+ 

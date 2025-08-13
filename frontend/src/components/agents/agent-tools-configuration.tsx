@@ -8,10 +8,10 @@ interface AgentToolsConfigurationProps {
   tools: Record<string, boolean | { enabled: boolean; description: string }>;
   onToolsChange: (tools: Record<string, boolean | { enabled: boolean; description: string }>) => void;
   disabled?: boolean;
-  isSunaAgent?: boolean;
+  isLeakerflowAgent?: boolean;
 }
 
-export const AgentToolsConfiguration = ({ tools, onToolsChange, disabled = false, isSunaAgent = false }: AgentToolsConfigurationProps) => {
+export const AgentToolsConfiguration = ({ tools, onToolsChange, disabled = false, isLeakerflowAgent = false }: AgentToolsConfigurationProps) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const isToolEnabled = (tool: boolean | { enabled: boolean; description: string } | undefined): boolean => {
@@ -28,9 +28,9 @@ export const AgentToolsConfiguration = ({ tools, onToolsChange, disabled = false
   };
 
   const handleToolToggle = (toolName: string, enabled: boolean) => {
-    if (disabled && isSunaAgent) {
+    if (disabled && isLeakerflowAgent) {
       toast.error("Tools cannot be modified", {
-        description: "Suna's default tools are managed centrally and cannot be changed.",
+        description: "Leaker Flow's default tools are managed centrally and cannot be changed.",
       });
       return;
     }

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { KortixProcessModal } from '@/components/sidebar/kortix-enterprise-modal';
+import { LeakerflowEnterpriseModal } from '@/components/sidebar/leakerflow-enterprise-modal';
 
 export function CTACard() {
   return (
@@ -15,11 +15,11 @@ export function CTACard() {
         </div>
 
         <div>
-          <KortixProcessModal>
+          <LeakerflowEnterpriseModal>
             <Button className="w-full">
               Learn more
             </Button>
-          </KortixProcessModal>
+          </LeakerflowEnterpriseModal>
         </div>
 
       </div>

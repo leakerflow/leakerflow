@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-SUNA AGENT INSTALLER
+LEAKER FLOW AGENT INSTALLER
 
 Usage:
-    python suna_manager.py install                    # Install with default batch size (50)
-    python suna_manager.py install --batch-size 100   # Install with custom batch size
-    python suna_manager.py cleanup                    # Fix broken agents (agents without versions)
-    python suna_manager.py repair                     # Repair orphaned agents (agents with missing version records)
+    python leakerflow_manager.py install                    # Install with default batch size (50)
+    python leakerflow_manager.py install --batch-size 100   # Install with custom batch size
+    python leakerflow_manager.py cleanup                    # Fix broken agents (agents without versions)
+    python leakerflow_manager.py repair                     # Repair orphaned agents (agents with missing version records)
     
 Recovery:
     If interrupted, simply re-run the same command - it will skip completed users
     and retry any failed or incomplete installations.
     
     If you see discrepancies between agents and agent_versions tables, run:
-    python suna_manager.py cleanup
+    python leakerflow_manager.py cleanup
 """
 
 import asyncio
@@ -27,7 +27,7 @@ from pathlib import Path
 backend_dir = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(backend_dir))
 
-from agent.suna import SunaSyncService
+from agent.leakerflow import LeakerflowSyncService
 from utils.logger import logger
 
 # Global flag for graceful shutdown
@@ -53,13 +53,13 @@ def print_warning(message: str):
     print(f"⚠️  {message}")
 
 
-class SunaManagerCLI:
+class LeakerflowManagerCLI:
     def __init__(self):
-        self.sync_service = SunaSyncService()
+        self.sync_service = LeakerflowSyncService()
     
     async def cleanup_command(self):
         """Clean up broken agents (agents without versions) caused by termination"""
-        print("🧹 Cleaning up broken Suna agents (agents without versions)")
+        print("🧹 Cleaning up broken Leaker Flow agents (agents without versions)")
         
         try:
             # Find broken agents
@@ -96,7 +96,7 @@ class SunaManagerCLI:
             if failed_count > 0:
                 print_warning(f"Failed to clean up {failed_count} agents")
             
-            print_info("💡 Now run: python suna_manager.py install")
+            print_info("\n\uD83D\uDCA1 Now run this script with the 'install' command")
             print_info("   The install will recreate these users' agents properly")
             
         except Exception as e:
@@ -104,7 +104,7 @@ class SunaManagerCLI:
             logger.error(f"Cleanup error: {e}")
     
     async def _find_broken_agents(self):
-        """Find Suna agents that don't have corresponding versions"""
+        """Find Leaker Flow agents that don't have corresponding versions"""
         try:
             client = await self.sync_service.repository.db.client
             
@@ -135,8 +135,8 @@ class SunaManagerCLI:
             raise
     
     async def status_command(self):
-        """Show status of Suna agent installation"""
-        print("📊 Suna Agent Installation Status")
+        """Show status of Leaker Flow agent installation"""
+        print("📊 Leaker Flow Agent Installation Status")
         
         try:
             client = await self.sync_service.repository.db.client
@@ -147,7 +147,7 @@ class SunaManagerCLI:
             ).eq('personal_account', True).execute()
             total_accounts = accounts_result.count or 0
             
-            # Count Suna agents
+            # Count Leaker Flow agents
             agents_result = await client.table('agents').select(
                 'agent_id', count='exact'
             ).eq('metadata->>is_suna_default', 'true').execute()
@@ -158,17 +158,17 @@ class SunaManagerCLI:
                 'version_id', count='exact'
             ).execute()
             
-            suna_agents_result = await client.table('agents').select(
+            default_agents_result = await client.table('agents').select(
                 'agent_id'
             ).eq('metadata->>is_suna_default', 'true').execute()
             
-            suna_agent_ids = [a['agent_id'] for a in (suna_agents_result.data or [])]
+            default_agent_ids = [a['agent_id'] for a in (default_agents_result.data or [])]
             
-            if suna_agent_ids:
-                suna_versions_result = await client.table('agent_versions').select(
+            if default_agent_ids:
+                default_versions_result = await client.table('agent_versions').select(
                     'version_id', count='exact'
-                ).in_('agent_id', suna_agent_ids).execute()
-                total_suna_versions = suna_versions_result.count or 0
+                ).in_('agent_id', default_agent_ids).execute()
+                total_suna_versions = default_versions_result.count or 0
             else:
                 total_suna_versions = 0
             
@@ -177,21 +177,21 @@ class SunaManagerCLI:
             broken_count = len(broken_agents)
             
             print_info(f"Total personal accounts: {total_accounts}")
-            print_info(f"Suna agents created: {total_agents}")
+            print_info(f"Leaker Flow agents created: {total_agents}")
             print_info(f"Agent versions created: {total_suna_versions}")
             
             if broken_count > 0:
                 print_warning(f"Broken agents (no version): {broken_count}")
-                print_info("💡 Run: python suna_manager.py cleanup")
+                print_info("\uD83D\uDCA1 Run this script with the 'cleanup' command")
             else:
                 print_success("All agents have proper versions!")
             
             remaining = total_accounts - (total_agents - broken_count)
             if remaining > 0:
-                print_info(f"Users needing Suna: {remaining}")
-                print_info("💡 Run: python suna_manager.py install")
+                print_info(f"Users needing Leaker Flow: {remaining}")
+                print_info("\uD83D\uDCA1 Run this script with the 'install' command")
             else:
-                print_success("All users have Suna agents!")
+                print_success("All users have Leaker Flow agents!")
             
         except Exception as e:
             print_error(f"Status check failed: {e}")
@@ -200,7 +200,7 @@ class SunaManagerCLI:
     async def install_command(self, batch_size: int = 100):
         global shutdown_requested
         
-        print(f"🚀 Installing Suna for users who don't have it (batch size: {batch_size})")
+        print(f"🚀 Installing Leaker Flow for users who don't have it (batch size: {batch_size})")
         print_info(f"Concurrent processing will dramatically improve performance for large user bases")
         print_info("💡 Safe to interrupt: completed users won't be re-processed on restart")
         
@@ -213,11 +213,11 @@ class SunaManagerCLI:
             missing_accounts = [acc for acc in all_accounts if acc not in existing_account_ids]
             
             if not missing_accounts:
-                print_success("All users already have Suna agents!")
+                print_success("All users already have Leaker Flow agents!")
                 return
                 
             total_needed = len(missing_accounts)
-            print_info(f"Found {total_needed} users needing Suna agents")
+            print_info(f"Found {total_needed} users needing Leaker Flow agents")
             
         except Exception as e:
             print_error(f"Failed to get user counts: {e}")
@@ -237,7 +237,7 @@ class SunaManagerCLI:
         duration = end_time - start_time
         
         if result.success:
-            print_success(f"Successfully installed Suna for {result.synced_count} users")
+            print_success(f"Successfully installed Leaker Flow for {result.synced_count} users")
             if 'total_batches' in result.details[0]:
                 batches = result.details[0]['total_batches']
                 print_info(f"Processed in {batches} concurrent batches")
@@ -271,13 +271,13 @@ class SunaManagerCLI:
             missing_accounts = [acc for acc in all_accounts if acc not in existing_account_ids]
             
             if not missing_accounts:
-                from agent.suna.sync_service import SyncResult
+                from agent.leakerflow.sync_service import SyncResult
                 return SyncResult(
                     success=True,
-                    details=[{"message": "All users already have Suna agents"}]
+                    details=[{"message": "All users already have Leaker Flow agents"}]
                 )
             
-            logger.info(f"📦 Installing Suna for {len(missing_accounts)} users in batches of {batch_size}")
+            logger.info(f"📦 Installing Leaker Flow for {len(missing_accounts)} users in batches of {batch_size}")
             
             total_success = 0
             total_failed = 0
@@ -319,7 +319,7 @@ class SunaManagerCLI:
             
             logger.info(f"🎉 Installation completed: {final_message}")
             
-            from agent.suna.sync_service import SyncResult
+            from agent.leakerflow.sync_service import SyncResult
             return SyncResult(
                 success=total_failed == 0 and not shutdown_requested,
                 synced_count=total_success,
@@ -336,15 +336,15 @@ class SunaManagerCLI:
         except Exception as e:
             error_msg = f"Installation operation failed: {str(e)}"
             logger.error(error_msg)
-            from agent.suna.sync_service import SyncResult
+            from agent.leakerflow.sync_service import SyncResult
             return SyncResult(success=False, errors=[error_msg])
 
     async def repair_command(self):
-        """Repair orphaned Suna agents by creating missing versions and fixing broken pointers"""
-        print("🛠️  Repairing orphaned Suna agents and fixing broken version pointers")
+        """Repair orphaned Leaker Flow agents by creating missing versions and fixing broken pointers"""
+        print("🛠️  Repairing orphaned Leaker Flow agents and fixing broken version pointers")
         try:
             from datetime import datetime, timezone
-            from agent.suna.config import SunaConfig
+            from agent.leakerflow.config import SunaConfig
             from agent.versioning.version_service import get_version_service
 
             repo = self.sync_service.repository
@@ -375,7 +375,7 @@ class SunaManagerCLI:
             # Step 1: Repair agents with no versions at all
             orphaned = await repo.find_orphaned_suna_agents()
             if not orphaned:
-                print_success("No orphaned Suna agents found (all have version records)")
+                print_success("No orphaned Leaker Flow agents found (all have version records)")
             else:
                 print_warning(f"Found {len(orphaned)} orphaned agents without versions")
                 repaired = 0
@@ -447,7 +447,7 @@ async def main():
     signal.signal(signal.SIGTERM, signal_handler)
     
     parser = argparse.ArgumentParser(
-        description="🌞 Suna Agent Manager - Concurrent Installation",
+        description="🌞 Leaker Flow Agent Manager - Concurrent Installation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
@@ -455,7 +455,7 @@ async def main():
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
     # Install command
-    install_parser = subparsers.add_parser('install', help='📦 Install Suna for users who don\'t have it')
+    install_parser = subparsers.add_parser('install', help='📦 Install Leaker Flow for users who don\'t have it')
     install_parser.add_argument(
         '--batch-size', 
         type=int, 
@@ -470,7 +470,7 @@ async def main():
     subparsers.add_parser('status', help='📊 Show installation status and statistics')
 
     # Repair command
-    subparsers.add_parser('repair', help='🛠️  Repair orphaned Suna agents and fix broken version pointers')
+    subparsers.add_parser('repair', help='🛠️  Repair orphaned Leaker Flow agents and fix broken version pointers')
     
     args = parser.parse_args()
     
@@ -478,7 +478,7 @@ async def main():
         parser.print_help()
         return
     
-    cli = SunaManagerCLI()
+    cli = LeakerflowManagerCLI()
     
     try:
         if args.command == 'install':

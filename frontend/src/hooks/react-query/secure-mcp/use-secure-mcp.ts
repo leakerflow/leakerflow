@@ -46,7 +46,7 @@ export interface AgentTemplate {
   avatar?: string;
   avatar_color?: string;
   profile_image_url?: string;
-  is_kortix_team?: boolean;
+  is_leakerflow_team?: boolean;
   metadata?: {
     source_agent_id?: string;
     source_version_id?: string;

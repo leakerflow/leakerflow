@@ -12,7 +12,7 @@ export interface MarketplaceTemplate {
   avatar_color?: string;
   profile_image_url?: string;
   template_id: string;
-  is_kortix_team?: boolean;
+  is_leakerflow_team?: boolean;
   model?: string;
   agentpress_tools?: Record<string, any>;
   mcp_requirements?: Array<{
