@@ -32,7 +32,7 @@ from .versioning.api import router as version_router, initialize as initialize_v
 # Helper for version service
 async def _get_version_service():
     return await get_version_service()
-from utils.suna_default_agent_service import SunaDefaultAgentService
+from utils.leakerflow_default_agent_service import LeakerflowDefaultAgentService
 
 router = APIRouter()
 router.include_router(version_router)
@@ -69,7 +69,7 @@ class MessageCreateRequest(BaseModel):
 class AgentCreateRequest(BaseModel):
     name: str
     description: Optional[str] = None
-    system_prompt: Optional[str] = None  # Make optional to allow defaulting to Suna's system prompt
+    system_prompt: Optional[str] = None  # Optional: defaults to Leaker Flow's standard system prompt
     configured_mcps: Optional[List[Dict[str, Any]]] = []
     custom_mcps: Optional[List[Dict[str, Any]]] = []
     agentpress_tools: Optional[Dict[str, Any]] = {}
@@ -1965,8 +1965,8 @@ async def create_agent(
         
         try:
             version_service = await _get_version_service()
-            from agent.config_helper import get_default_system_prompt_for_suna_agent
-            system_prompt = get_default_system_prompt_for_suna_agent()
+            from agent.config_helper import get_default_system_prompt_for_leakerflow_agent
+            system_prompt = get_default_system_prompt_for_leakerflow_agent()
             
             version = await version_service.create_version(
                 agent_id=agent['agent_id'],

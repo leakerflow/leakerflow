@@ -243,7 +243,7 @@ export const PipedreamRegistry: React.FC<PipedreamRegistryProps> = ({
             <AgentSelector
               selectedAgentId={currentAgentId}
               onAgentSelect={handleAgentSelect}
-              isSunaAgent={agent?.metadata?.is_suna_default}
+              isLeakerflowAgent={(agent?.metadata as any)?.is_leakerflow_default}
             />
           )}
         </div>

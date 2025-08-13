@@ -27,7 +27,7 @@ interface AgentHeaderProps {
   onExport?: () => void;
   isExporting?: boolean;
   agentMetadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       name_editable?: boolean;
@@ -122,9 +122,9 @@ export function AgentHeader({
       {/* Left side - Agent info */}
       <div className="flex items-center gap-3 min-w-0">
         <div className="relative flex-shrink-0">
-          {isSunaAgent ? (
+          {isLeakerflowAgent ? (
             <div className="h-9 w-9 rounded-lg bg-muted border flex items-center justify-center">
-              <KortixLogo size={16} />
+              <LeakerFlowLogo size={16} />
             </div>
           ) : (
             <button 
@@ -165,7 +165,7 @@ export function AgentHeader({
             <div
               className={cn(
                 "text-base font-medium text-muted-foreground hover:text-foreground cursor-pointer flex items-center truncate max-w-[300px]",
-                !isNameEditable && isSunaAgent && "cursor-not-allowed opacity-75"
+                !isNameEditable && isLeakerflowAgent && "cursor-not-allowed opacity-75"
               )}
               onClick={isNameEditable ? startEditing : undefined}
               title={isNameEditable ? `Click to rename agent: ${displayData.name}` : `Name cannot be edited: ${displayData.name}`}

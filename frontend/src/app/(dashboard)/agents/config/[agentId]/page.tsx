@@ -103,17 +103,17 @@ export default function AgentConfigurationPage() {
   const handleSave = useCallback(async () => {
     if (!agent || isViewingOldVersion || isSaving) return;
     
-    const isleakerflowAgent = agent?.metadata?.is_leakerflow_default || false;
+    const isLeakerflowAgent = !!((agent?.metadata as any)?.is_leakerflow_default);
     const restrictions = agent?.metadata?.restrictions || {};
     
-    if (isleakerflowAgent) {
+    if (isLeakerflowAgent) {
       if (restrictions.name_editable === false && formData.name !== originalData.name) {
-        toast.error("leakerflow's name cannot be modified.");
+        toast.error("Leaker Flow's name cannot be modified.");
         return;
       }
 
       if (restrictions.tools_editable === false && JSON.stringify(formData.agentpress_tools) !== JSON.stringify(originalData.agentpress_tools)) {
-        toast.error("leakerflow's default tools cannot be modified.");
+        toast.error("Leaker Flow's default tools cannot be modified.");
         return;
       }
     }
@@ -133,7 +133,7 @@ export default function AgentConfigurationPage() {
         createVersionMutation.mutateAsync({
           agentId,
           data: {
-            system_prompt: isleakerflowAgent ? '' : formData.system_prompt,
+            system_prompt: isLeakerflowAgent ? '' : formData.system_prompt,
             model: formData.model,  // Include model in save
             configured_mcps: formData.configured_mcps,
             custom_mcps: normalizedCustomMcps,
@@ -508,7 +508,6 @@ export default function AgentConfigurationPage() {
           <div className="bg-background h-full flex flex-col border-r border-border/40 overflow-hidden">
             <div className="flex-shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <div className="pt-4">
-
                 
                 {isViewingOldVersion && (
                   <div className="mb-4 px-8">

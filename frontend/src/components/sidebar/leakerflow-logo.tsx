@@ -42,5 +42,3 @@ export function LeakerFlowLogo({
   );
 }
 
-// Backwards compatibility: keep old name available for existing imports
-export const KortixLogo = LeakerFlowLogo;

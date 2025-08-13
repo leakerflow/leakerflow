@@ -21,7 +21,7 @@ export function FAQSection() {
           {faqSection.title}
         </h2>
         <p className="text-muted-foreground text-center text-balance font-medium">
-          {faqSection.description}
+          {faqSection.subtitle}
         </p>
       </SectionHeader>
 

@@ -207,8 +207,8 @@ class Configuration:
     MORPH_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_BASE: Optional[str] = "https://openrouter.ai/api/v1"
-    OR_SITE_URL: Optional[str] = "https://kortix.ai"
-    OR_APP_NAME: Optional[str] = "Kortix AI"    
+    OR_SITE_URL: Optional[str] = "https://leakerflow.com"
+    OR_APP_NAME: Optional[str] = "Leaker Flow"    
     
     # AWS Bedrock credentials
     AWS_ACCESS_KEY_ID: Optional[str] = None
@@ -262,7 +262,7 @@ class Configuration:
     LANGFUSE_HOST: str = "https://cloud.langfuse.com"
 
     # Admin API key for server-side operations
-    KORTIX_ADMIN_API_KEY: Optional[str] = None
+    LEAKERFLOW_ADMIN_API_KEY: Optional[str] = None
 
     # API Keys system configuration
     API_KEY_SECRET: str = "default-secret-key-change-in-production"
@@ -374,6 +374,8 @@ class Configuration:
         max_parallel_runs_env = os.getenv("MAX_PARALLEL_AGENT_RUNS")
         if max_parallel_runs_env is not None:
             self._MAX_PARALLEL_AGENT_RUNS_ENV = max_parallel_runs_env
+
+        # Removed legacy fallback for KORTIX_ADMIN_API_KEY to enforce LEAKERFLOW_ADMIN_API_KEY only
     
     def _validate(self):
         """Validate configuration based on type hints."""
