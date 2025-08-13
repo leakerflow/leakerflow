@@ -61,7 +61,7 @@ export function FirstBentoAnimation() {
       >
         <div className="flex items-end justify-end gap-3">
           <motion.div
-            className="max-w-[280px] bg-brand-gradient text-white p-4 rounded-2xl ml-auto shadow-[0_0_10px_rgba(0,0,0,0.05)]"
+            className="max-w-[280px] bg-secondary text-white p-4 rounded-2xl ml-auto shadow-[0_0_10px_rgba(0,0,0,0.05)]"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
@@ -85,9 +85,9 @@ export function FirstBentoAnimation() {
         <div className="flex items-start gap-2">
           <div className="flex items-center bg-background rounded-full size-10 flex-shrink-0 justify-center shadow-[0_0_10px_rgba(0,0,0,0.05)] border border-border">
             <img 
-              src="/leakerflow.png" 
-              alt="LeakerFlow" 
-              className="size-4"
+              src="/kortix-symbol.svg" 
+              alt="Kortix Symbol" 
+              className="size-4 dark:invert"
             />
           </div>
 

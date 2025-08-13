@@ -30,25 +30,28 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
-    template: `%s | LeakerFlow — GTA 6`,
+    template: `%s - ${siteConfig.name}`,
   },
   description:
-    'LeakerFlow — GTA 6 news, leaks, mods, and guides for creators, streamers, and players. Build videos, publish news, optimize performance, and join the largest gaming community.',
+    'Kortix is a fully open source AI assistant that helps you accomplish real-world tasks with ease. Through natural conversation, Kortix becomes your digital companion for research, data analysis, and everyday challenges.',
   keywords: [
-    'GTA 6',
-    'GTA 6 news',
-    'GTA 6 leaks',
-    'GTA 6 mods',
-    'GTA 6 guides',
-    'GTA 6 streaming',
-    'GTA 6 performance',
-    'Rockstar Games',
+    'AI',
+    'artificial intelligence',
+    'browser automation',
+    'web scraping',
+    'file management',
+    'AI assistant',
+    'open source',
+    'research',
+    'data analysis',
   ],
-  authors: [{ name: 'LeakerFlow', url: siteConfig.url }],
-  creator: 'LeakerFlow',
-  publisher: 'LeakerFlow',
-  category: 'Gaming',
-  applicationName: 'LeakerFlow',
+  authors: [{ name: 'Kortix Team', url: 'https://suna.so' }],
+  creator:
+    'Kortix Team',
+  publisher:
+    'Kortix Team',
+  category: 'Technology',
+  applicationName: 'Suna',
   formatDetection: {
     telephone: false,
     email: false,
@@ -63,17 +66,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
+    title: 'Suna - Open Source Generalist AI Worker',
     description:
-      'GTA 6 news, leaks, mods, performance tips, and creator resources — join LeakerFlow to build videos, publish news, and grow your audience.',
+      'Suna is a fully open source AI assistant that helps you accomplish real-world tasks with ease through natural conversation.',
     url: siteConfig.url,
-    siteName: 'LeakerFlow',
+    siteName: 'Suna',
     images: [
       {
         url: '/banner.png',
         width: 1200,
         height: 630,
-        alt: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
+        alt: 'Suna - Open Source Generalist AI Worker',
         type: 'image/png',
       },
     ],
@@ -82,23 +85,23 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
+    title: 'Suna - Open Source Generalist AI Worker',
     description:
-      'GTA 6 news, leaks, mods, performance tips, and creator resources — join LeakerFlow to build videos, publish news, and grow your audience.',
-    creator: '@leakerflow',
-    site: '@leakerflow',
+      'Suna is a fully open source AI assistant that helps you accomplish real-world tasks with ease through natural conversation.',
+    creator: '@kortixai',
+    site: '@kortixai',
     images: [
       {
         url: '/banner.png',
         width: 1200,
         height: 630,
-        alt: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
+        alt: 'Suna - Open Source Generalist AI Worker',
       },
     ],
   },
   icons: {
-    icon: [{ url: '/leakerflow.ico', sizes: 'any' }],
-    shortcut: '/leakerflow.ico',
+    icon: [{ url: '/favicon.png', sizes: 'any' }],
+    shortcut: '/favicon.png',
   },
   // manifest: "/manifest.json",
   alternates: {
@@ -121,35 +124,6 @@ export default function RootLayout({
           j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-PCHSN4M2');`}
-        </Script>
-        {/* JSON-LD: Organization */}
-        <Script id="ld-org" type="application/ld+json" strategy="afterInteractive">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'LeakerFlow',
-            url: siteConfig.url,
-            logo: `${siteConfig.url}leakerflow.png`,
-            sameAs: [
-              siteConfig.links.twitter,
-              siteConfig.links.github,
-              siteConfig.links.linkedin,
-            ],
-          })}
-        </Script>
-        {/* JSON-LD: WebSite with SearchAction (if internal search exists later it can be wired) */}
-        <Script id="ld-website" type="application/ld+json" strategy="afterInteractive">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'LeakerFlow',
-            url: siteConfig.url,
-            potentialAction: {
-              '@type': 'SearchAction',
-              target: `${siteConfig.url}search?q={search_term_string}`,
-              'query-input': 'required name=search_term_string',
-            },
-          })}
         </Script>
         <Script async src="https://cdn.tolt.io/tolt.js" data-tolt={process.env.NEXT_PUBLIC_TOLT_REFERRAL_ID}></Script>
       </head>

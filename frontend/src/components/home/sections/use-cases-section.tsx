@@ -30,11 +30,11 @@ export function UseCasesSection() {
     >
       <SectionHeader>
         <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance">
-          See LeakerFlow in action
+          See Suna in action
         </h2>
         <p className="text-muted-foreground text-center text-balance font-medium">
-          Explore how LeakerFlow helps GTA 6 creators publish news, share mods,
-          and grow their audience
+          Explore real-world examples of how Suna completes complex tasks
+          autonomously
         </p>
       </SectionHeader>
 
@@ -76,9 +76,9 @@ export function UseCasesSection() {
                     <img
                       src={
                         useCase.image ||
-                        `https://placehold.co/800x400/f5f5f5/666666?text=LeakerFlow+${useCase.title.split(' ').join('+')}`
+                        `https://placehold.co/800x400/f5f5f5/666666?text=Suna+${useCase.title.split(' ').join('+')}`
                       }
-                      alt={`LeakerFlow ${useCase.title}`}
+                      alt={`Suna ${useCase.title}`}
                       className="w-full h-full object-cover"
                     />
                     <a

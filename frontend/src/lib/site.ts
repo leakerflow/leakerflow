@@ -1,12 +1,11 @@
 export const siteConfig = {
-  name: 'LeakerFlow',
-  url: 'https://leakerflow.com/',
-  description:
-    'LeakerFlow — GTA 6 news, leaks, mods, and guides for creators, streamers, and players. Join the largest gaming community to create videos, build mods, publish news, and grow your audience.',
+  name: 'Kortix Suna',
+  url: 'https://suna.so/',
+  description: 'Kortix AI',
   links: {
-    twitter: 'https://x.com/leakerflow',
-    github: 'https://github.com/leakerflow/',
-    linkedin: 'https://www.linkedin.com/company/leakerflow/',
+    twitter: 'https://x.com/kortixai',
+    github: 'https://github.com/kortix-ai/',
+    linkedin: 'https://www.linkedin.com/company/kortix/',
   },
 };
 

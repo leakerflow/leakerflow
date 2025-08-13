@@ -1,5 +1,4 @@
 import redis.asyncio as redis
-from redis.asyncio.connection import SSLConnection
 import os
 from dotenv import load_dotenv
 import asyncio
@@ -28,61 +27,28 @@ def initialize():
     redis_host = os.getenv("REDIS_HOST", "redis")
     redis_port = int(os.getenv("REDIS_PORT", 6379))
     redis_password = os.getenv("REDIS_PASSWORD", "")
-
-    # Auto-detect SSL/TLS usage without requiring cert files or username
-    # - Use SSL for known hosted providers (e.g., Upstash) or when explicitly enabled via REDIS_SSL=true
-    # - Keep plain TCP for local hosts (redis, localhost, 127.0.0.1) to preserve dev environment
-    redis_ssl_env = os.getenv("REDIS_SSL", "auto").lower()
-    is_local_host = redis_host in {"redis", "localhost", "127.0.0.1"}
-    is_known_tls_host = ".upstash.io" in redis_host
-    use_ssl = False
-    if redis_ssl_env == "true":
-        use_ssl = True
-    elif redis_ssl_env == "false":
-        use_ssl = False
-    else:
-        # auto mode
-        use_ssl = not is_local_host and (is_known_tls_host or bool(redis_password))
-
+    
     # Connection pool configuration - optimized for production
     max_connections = 128            # Reasonable limit for production
     socket_timeout = 15.0            # 15 seconds socket timeout
     connect_timeout = 10.0           # 10 seconds connection timeout
     retry_on_timeout = not (os.getenv("REDIS_RETRY_ON_TIMEOUT", "True").lower() != "true")
 
-    logger.info(
-        f"Initializing Redis connection pool to {redis_host}:{redis_port} with max {max_connections} connections",
-        ssl=use_ssl,
-    )
+    logger.info(f"Initializing Redis connection pool to {redis_host}:{redis_port} with max {max_connections} connections")
 
     # Create connection pool with production-optimized settings
-    if use_ssl:
-        pool = redis.ConnectionPool(
-            host=redis_host,
-            port=redis_port,
-            password=redis_password,
-            decode_responses=True,
-            socket_timeout=socket_timeout,
-            socket_connect_timeout=connect_timeout,
-            socket_keepalive=True,
-            retry_on_timeout=retry_on_timeout,
-            health_check_interval=30,
-            max_connections=max_connections,
-            connection_class=SSLConnection,
-        )
-    else:
-        pool = redis.ConnectionPool(
-            host=redis_host,
-            port=redis_port,
-            password=redis_password,
-            decode_responses=True,
-            socket_timeout=socket_timeout,
-            socket_connect_timeout=connect_timeout,
-            socket_keepalive=True,
-            retry_on_timeout=retry_on_timeout,
-            health_check_interval=30,
-            max_connections=max_connections,
-        )
+    pool = redis.ConnectionPool(
+        host=redis_host,
+        port=redis_port,
+        password=redis_password,
+        decode_responses=True,
+        socket_timeout=socket_timeout,
+        socket_connect_timeout=connect_timeout,
+        socket_keepalive=True,
+        retry_on_timeout=retry_on_timeout,
+        health_check_interval=30,
+        max_connections=max_connections,
+    )
 
     # Create Redis client from connection pool
     client = redis.Redis(connection_pool=pool)

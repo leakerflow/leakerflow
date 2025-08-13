@@ -20,7 +20,7 @@ import { NewAgentDialog } from '@/components/agents/new-agent-dialog';
 
 import { useRouter } from 'next/navigation';
 import { cn, truncateString } from '@/lib/utils';
-import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
+import { KortixLogo } from '@/components/sidebar/kortix-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface AgentSelectorProps {
@@ -59,7 +59,7 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
       ...agent,
       id: agent.agent_id,
       type: 'custom' as const,
-      icon: agent.avatar || <Bot className="h-4 w-4" />
+      icon: <Bot className="h-4 w-4" />
     }))
   ];
 
