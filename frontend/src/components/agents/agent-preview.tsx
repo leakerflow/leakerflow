@@ -15,7 +15,7 @@ import { useAddUserMessageMutation } from '@/hooks/react-query/threads/use-messa
 import { useStartAgentMutation, useStopAgentMutation } from '@/hooks/react-query/threads/use-agent-run';
 import { BillingError } from '@/lib/api';
 import { normalizeFilenameToNFC } from '@/lib/utils/unicode';
-import { KortixLogo } from '../sidebar/leakerflow-logo';
+import { LeakerFlowLogo } from '../sidebar/leakerflow-logo';
 
 interface Agent {
   agent_id: string;
@@ -30,11 +30,13 @@ interface Agent {
   profile_image_url?: string;
 }
 
+interface AgentMetadata {
+  is_leakerflow_default?: boolean;
+}
+
 interface AgentPreviewProps {
   agent: Agent;
-  agentMetadata?: {
-    is_suna_default?: boolean;
-  };
+  agentMetadata?: AgentMetadata;
 }
 
 export const AgentPreview = ({ agent, agentMetadata }: AgentPreviewProps) => {
@@ -46,7 +48,7 @@ export const AgentPreview = ({ agent, agentMetadata }: AgentPreviewProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasStartedConversation, setHasStartedConversation] = useState(false);
 
-  const isSunaAgent = agentMetadata?.is_suna_default || false;
+  const isLeakerflowAgent = !!agentMetadata?.is_leakerflow_default;
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<ChatInputHandles>(null);
@@ -65,8 +67,8 @@ export const AgentPreview = ({ agent, agentMetadata }: AgentPreviewProps) => {
   const { avatar, color } = getAgentStyling();
 
   const agentAvatarComponent = React.useMemo(() => {
-    if (isSunaAgent) {
-      return <KortixLogo size={16} />;
+    if (isLeakerflowAgent) {
+      return <LeakerFlowLogo size={16} />;
     }
     if (agent.profile_image_url) {
       return (
@@ -80,8 +82,8 @@ export const AgentPreview = ({ agent, agentMetadata }: AgentPreviewProps) => {
     if (avatar) {
       return <div className="text-base leading-none">{avatar}</div>;
     }
-    return <KortixLogo size={16} />;
-  }, [agent.profile_image_url, agent.name, avatar, isSunaAgent]);
+    return <LeakerFlowLogo size={16} />;
+  }, [agent.profile_image_url, agent.name, avatar, isLeakerflowAgent]);
 
   const initiateAgentMutation = useInitiateAgentWithInvalidation();
   const addUserMessageMutation = useAddUserMessageMutation();
@@ -354,8 +356,8 @@ export const AgentPreview = ({ agent, agentMetadata }: AgentPreviewProps) => {
             emptyStateComponent={
               <div className="flex flex-col items-center text-center text-muted-foreground/80">
                 <div className="flex w-20 aspect-square items-center justify-center rounded-2xl bg-muted-foreground/10 p-4 mb-4">
-                  {isSunaAgent ? (
-                    <KortixLogo size={36} />
+                  {isLeakerflowAgent ? (
+                    <LeakerFlowLogo size={36} />
                   ) : agent.profile_image_url ? (
                     <img 
                       src={agent.profile_image_url} 

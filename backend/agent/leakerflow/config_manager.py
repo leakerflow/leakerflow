@@ -1,11 +1,11 @@
 import datetime
 from typing import Dict, Any
 from dataclasses import dataclass
-from agent.suna.config import SunaConfig
+from agent.leakerflow.config import SunaConfig
 
 
 @dataclass
-class SunaConfiguration:
+class LeakerflowConfiguration:
     name: str
     description: str
     configured_mcps: list
@@ -14,11 +14,11 @@ class SunaConfiguration:
     version_tag: str
 
 
-class SunaConfigManager:
-    def get_current_config(self) -> SunaConfiguration:
+class LeakerflowConfigManager:
+    def get_current_config(self) -> LeakerflowConfiguration:
         version_tag = self._generate_version_tag()
         
-        return SunaConfiguration(
+        return LeakerflowConfiguration(
             name=SunaConfig.NAME,
             description=SunaConfig.DESCRIPTION,
             configured_mcps=SunaConfig.DEFAULT_MCPS.copy(),
@@ -31,7 +31,7 @@ class SunaConfigManager:
         current = self.get_current_config()
         return current.version_tag != last_version_tag
     
-    def validate_config(self, config: SunaConfiguration) -> tuple[bool, list[str]]:
+    def validate_config(self, config: LeakerflowConfiguration) -> tuple[bool, list[str]]:
         errors = []
         
         if not config.name.strip():

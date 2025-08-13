@@ -25,7 +25,7 @@ interface AgentConfigModalProps {
   selectedAgentId?: string;
   onAgentSelect?: (agentId: string | undefined) => void;
   initialTab?: string;
-  isSunaAgent?: boolean;
+  isLeakerflowAgent?: boolean;
 }
 
 export const AgentConfigModal: React.FC<AgentConfigModalProps> = ({
@@ -34,7 +34,7 @@ export const AgentConfigModal: React.FC<AgentConfigModalProps> = ({
   selectedAgentId,
   onAgentSelect,
   initialTab = 'tools',
-  isSunaAgent
+  isLeakerflowAgent
 }) => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [editingInstructions, setEditingInstructions] = useState(false);
@@ -108,7 +108,7 @@ export const AgentConfigModal: React.FC<AgentConfigModalProps> = ({
     }
   };
 
-  const displayName = agent?.name || 'Suna';
+  const displayName = agent?.name || 'Leaker Flow';
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -137,7 +137,7 @@ export const AgentConfigModal: React.FC<AgentConfigModalProps> = ({
           <AgentSelector
             selectedAgentId={selectedAgentId}
             onAgentSelect={onAgentSelect}
-            isSunaAgent={isSunaAgent}
+            isLeakerflowAgent={isLeakerflowAgent}
           />
         </div>
 

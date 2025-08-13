@@ -17,7 +17,7 @@ interface EnterpriseModalProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export function KortixEnterpriseModal({ 
+export function LeakerflowEnterpriseModal({ 
   children,
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange
@@ -119,7 +119,7 @@ export function KortixEnterpriseModal({
             <div className="h-full overflow-auto">
               <Cal
                 namespace="enterprise-demo"
-                calLink="team/kortix/enterprise-demo"
+                calLink="team/leakerflow/enterprise-demo"
                 style={{ width: '100%', height: '100%' }}
                 config={{
                   layout: 'month_view',
@@ -134,5 +134,4 @@ export function KortixEnterpriseModal({
   );
 }
 
-// Export with original name for backwards compatibility
-export const KortixProcessModal = KortixEnterpriseModal;
+ 

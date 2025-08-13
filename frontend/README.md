@@ -1,4 +1,4 @@
-# Kortix Frontend
+# Leaker Flow Frontend
 
 ## Quick Setup
 

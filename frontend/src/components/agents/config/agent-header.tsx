@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EditableText } from '@/components/ui/editable';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -35,7 +35,7 @@ interface AgentHeaderProps {
   onExport?: () => void;
   isExporting?: boolean;
   agentMetadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       name_editable?: boolean;
@@ -57,14 +57,14 @@ export function AgentHeader({
   agentMetadata,
 }: AgentHeaderProps) {
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
-  const isSunaAgent = agentMetadata?.is_suna_default || false;
+  const isLeakerflowAgent = !!agentMetadata?.is_leakerflow_default;
   const restrictions = agentMetadata?.restrictions || {};
   const isNameEditable = !isViewingOldVersion && (restrictions.name_editable !== false);
   
   const handleNameChange = (value: string) => {
-    if (!isNameEditable && isSunaAgent) {
+    if (!isNameEditable && isLeakerflowAgent) {
       toast.error("Name cannot be edited", {
-        description: "Suna's name is managed centrally and cannot be changed.",
+        description: "Leaker Flow's name is managed centrally and cannot be changed.",
       });
       return;
     }
@@ -79,9 +79,9 @@ export function AgentHeader({
     <div className="flex items-center justify-between mb-0">
       <div className="flex items-center gap-3">
         <div className="relative">
-          {isSunaAgent ? (
+          {isLeakerflowAgent ? (
             <div className="h-9 w-9 rounded-lg bg-muted border flex items-center justify-center">
-              <KortixLogo size={16} />
+              <LeakerFlowLogo size={16} />
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export function AgentHeader({
             onSave={handleNameChange}
             className={cn(
               "text-lg font-semibold bg-transparent text-foreground placeholder:text-muted-foreground",
-              !isNameEditable && isSunaAgent && "cursor-not-allowed opacity-75"
+              !isNameEditable && isLeakerflowAgent && "cursor-not-allowed opacity-75"
             )}
             placeholder="Agent name..."
             disabled={!isNameEditable}

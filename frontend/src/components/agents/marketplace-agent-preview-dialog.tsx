@@ -81,7 +81,8 @@ export const MarketplaceAgentPreviewDialog: React.FC<MarketplaceAgentPreviewDial
   if (!agent) return null;
 
   const { avatar, avatar_color } = agent;
-  const isSunaAgent = agent.is_kortix_team || false;
+  // Leaker Flow verified flag (legacy removed)
+  const isLeakerflowTeam = (agent as any).is_leakerflow_team || false;
   
   const tools = agent.mcp_requirements || [];
   const integrations = tools.filter(tool => !tool.custom_type || tool.custom_type !== 'sse');

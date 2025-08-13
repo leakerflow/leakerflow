@@ -11,7 +11,7 @@ import {
     getUserFriendlyToolName,
     safeJsonParse,
 } from '@/components/thread/utils';
-import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { AgentLoader } from './loader';
 import { AgentAvatar, AgentName } from './agent-avatar';
 import { parseXmlToolCalls, isNewXmlFormat } from '@/components/thread/tool-views/xml-parser';
@@ -303,8 +303,8 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
     project,
     debugMode = false,
     isPreviewMode = false,
-    agentName = 'Suna',
-    agentAvatar = <KortixLogo size={16} />,
+    agentName = 'Leaker Flow',
+    agentAvatar = <LeakerFlowLogo size={16} />,
     emptyStateComponent,
     threadMetadata,
     scrollContainerRef,
@@ -341,8 +341,8 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
             };
         }
 
-        // Check if this is a Suna default agent from metadata
-        const isSunaDefaultAgent = agentMetadata?.is_suna_default || false;
+        // Check if this is a Leaker Flow default agent from metadata
+        const isLeakerflowDefaultAgent = (agentMetadata?.is_leakerflow_default ?? false) || false;
 
         // Then check recent messages for agent info
         const recentAssistantWithAgent = [...displayMessages].reverse().find(msg =>
@@ -360,7 +360,7 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
             };
         }
 
-        if (agentData && !isSunaDefaultAgent) {
+        if (agentData && !isLeakerflowDefaultAgent) {
             const profileUrl = agentData.profile_image_url;
             const avatar = profileUrl ? (
                 <img src={profileUrl} alt={agentData.name || agentName} className="h-5 w-5 rounded object-cover" />
@@ -370,7 +370,7 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
                 </div>
             ) : (
                 <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
-                    <KortixLogo size={16} />
+                    <LeakerFlowLogo size={16} />
                 </div>
             );
             return {
@@ -380,16 +380,16 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
         }
 
         if (recentAssistantWithAgent?.agents?.name) {
-            const isSunaAgent = recentAssistantWithAgent.agents.name === 'Suna' || isSunaDefaultAgent;
+            const isLeakerflowAgent = recentAssistantWithAgent.agents.name === 'Leaker Flow' || isLeakerflowDefaultAgent;
             // Prefer profile image if available on the agent payload
             const profileUrl = (recentAssistantWithAgent as any)?.agents?.profile_image_url;
-            const avatar = profileUrl && !isSunaDefaultAgent ? (
+            const avatar = profileUrl && !isLeakerflowDefaultAgent ? (
                 <img src={profileUrl} alt={recentAssistantWithAgent.agents.name} className="h-5 w-5 rounded object-cover" />
-            ) : recentAssistantWithAgent.agents.avatar && !isSunaDefaultAgent ? (
+            ) : recentAssistantWithAgent.agents.avatar && !isLeakerflowDefaultAgent ? (
                 <>
-                    {isSunaAgent ? (
+                    {isLeakerflowAgent ? (
                         <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
-                            <KortixLogo size={16} />
+                            <LeakerFlowLogo size={16} />
                         </div>
                     ) : (
                         <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
@@ -399,7 +399,7 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
                 </>
             ) : (
                 <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
-                    <KortixLogo size={16} />
+                    <LeakerFlowLogo size={16} />
                 </div>
             );
             return {
@@ -408,20 +408,20 @@ export const ThreadContent: React.FC<ThreadContentProps> = ({
             };
         }
 
-        // Fallback: if this is a Suna default agent, always show KortixLogo
-        if (isSunaDefaultAgent) {
+        // Fallback: if this is a Leaker Flow default agent, always show LeakerFlowLogo
+        if (isLeakerflowDefaultAgent) {
             return {
-                name: agentName || 'Suna',
+                name: agentName || 'Leaker Flow',
                 avatar: (
                     <div className="h-5 w-5 flex items-center justify-center rounded text-xs">
-                        <KortixLogo size={16} />
+                        <LeakerFlowLogo size={16} />
                     </div>
                 )
             };
         }
 
         return {
-            name: agentName || 'Suna',
+            name: agentName || 'Leaker Flow',
             avatar: agentAvatar
         };
     }, [threadMetadata, displayMessages, agentName, agentAvatar, agentMetadata, agentData]);

@@ -9,7 +9,7 @@ import { getAgentAvatar } from '../../lib/utils/get-agent-style';
 import { useCreateTemplate, useUnpublishTemplate } from '@/hooks/react-query/secure-mcp/use-secure-mcp';
 import { toast } from 'sonner';
 import { AgentCard } from './custom-agents-page/agent-card';
-import { KortixLogo } from '../sidebar/leakerflow-logo';
+import { LeakerFlowLogo } from '../sidebar/leakerflow-logo';
 
 interface Agent {
   agent_id: string;
@@ -35,7 +35,7 @@ interface Agent {
     version_number: number;
   };
   metadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       system_prompt_editable?: boolean;
@@ -95,7 +95,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
   };
 
   const { avatar, color } = getAgentStyling(agent);
-  const isSunaAgent = agent.metadata?.is_suna_default || false;
+  const isLeakerflowAgent = !!agent.metadata?.is_leakerflow_default;
   
   const truncateDescription = (text?: string, maxLength = 120) => {
     if (!text || text.length <= maxLength) return text || 'Try out this agent';
@@ -108,9 +108,9 @@ const AgentModal: React.FC<AgentModalProps> = ({
         <DialogTitle className="sr-only">Agent actions</DialogTitle>
         <div className="relative">
           <div className={`p-4 h-24 flex items-start justify-start relative`}>
-            {isSunaAgent ? (
+            {isLeakerflowAgent ? (
               <div className="p-6">
-                <KortixLogo size={48} />
+                <LeakerFlowLogo size={48} />
               </div>
             ) : agent.profile_image_url ? (
               <img src={agent.profile_image_url} alt={agent.name} className="h-16 w-16 rounded-xl object-cover" />
@@ -127,7 +127,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                 <h2 className="text-xl font-semibold text-foreground">
                   {agent.name}
                 </h2>
-                {!isSunaAgent && agent.current_version && (
+                {!isLeakerflowAgent && agent.current_version && (
                   <Badge variant="outline" className="text-xs">
                     <GitBranch className="h-3 w-3" />
                     {agent.current_version.version_name}
@@ -162,7 +162,7 @@ const AgentModal: React.FC<AgentModalProps> = ({
                 Chat
               </Button>
             </div>
-            {!isSunaAgent && (
+            {!isLeakerflowAgent && (
               <div className="pt-2">
                 {agent.is_public ? (
                   <div className="space-y-2">

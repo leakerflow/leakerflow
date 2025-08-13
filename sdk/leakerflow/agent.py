@@ -1,6 +1,6 @@
 from .api.threads import AgentStartRequest
 from .thread import Thread, AgentRun
-from .tools import AgentPressTools, MCPTools, KortixTools
+from .tools import AgentPressTools, MCPTools, LeakerflowTools
 from .api.agents import (
     AgentCreateRequest,
     AgentPress_ToolConfig,
@@ -26,7 +26,7 @@ class Agent:
         self,
         name: str | None = None,
         system_prompt: str | None = None,
-        mcp_tools: list[KortixTools] | None = None,
+        mcp_tools: list[LeakerflowTools] | None = None,
         allowed_tools: list[str] | None = None,
     ):
         if mcp_tools:
@@ -91,7 +91,7 @@ class Agent:
         return AgentRun(thread, response.agent_run_id)
 
 
-class KortixAgent:
+class LeakerflowAgent:
     def __init__(self, client: AgentsClient):
         self._client = client
 
@@ -99,7 +99,7 @@ class KortixAgent:
         self,
         name: str,
         system_prompt: str,
-        mcp_tools: list[KortixTools] = [],
+        mcp_tools: list[LeakerflowTools] = [],
         allowed_tools: list[str] | None = None,
     ) -> Agent:
         agentpress_tools = {}
@@ -138,3 +138,5 @@ class KortixAgent:
     async def get(self, agent_id: str) -> Agent:
         agent = await self._client.get_agent(agent_id)
         return Agent(self._client, agent.agent_id)
+
+ 
