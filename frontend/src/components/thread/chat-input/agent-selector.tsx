@@ -20,7 +20,7 @@ import { NewAgentDialog } from '@/components/agents/new-agent-dialog';
 
 import { useRouter } from 'next/navigation';
 import { cn, truncateString } from '@/lib/utils';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface AgentSelectorProps {
