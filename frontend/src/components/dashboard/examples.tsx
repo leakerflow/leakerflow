@@ -34,99 +34,64 @@ type PromptExample = {
 
 const allPrompts: PromptExample[] = [
   {
-    title: 'Find best bakeries map',
-    query: '1. Search Google Maps for "best bakeries in {{city}}"\n2. Create a custom list with top {{number}} bakeries\n3. For each bakery, gather:\n   - Customer ratings and popular items\n   - Hours, location, and specialties\n   - Price range and must-try pastries\n4. Generate a summary with recommendations',
+    title: 'Track latest GTA 6 leaks',
+    query: '1. Collect GTA 6 leaks from {{sources}} (Twitter, Reddit, YouTube)\n2. Extract date, author, media links and credibility\n3. Group by theme (map, gameplay, characters, release)\n4. Create a summary and a timeline of major rumors',
     icon: <Globe className="text-blue-700 dark:text-blue-400" size={16} />,
   },
   {
-    title: 'Research education data',
-    query: '1. Access UNESCO database for {{topic}} education statistics\n2. Compile data on:\n   - Student enrollment ratios by region\n   - Teacher-to-student ratios globally\n   - Education spending as % of GDP\n3. Create structured spreadsheet with trends\n4. Generate executive summary with key insights',
-    icon: <BarChart3 className="text-purple-700 dark:text-purple-400" size={16} />,
-  },
-  {
-    title: 'Plan travel itinerary',
-    query: '1. Research {{destination}} on TripAdvisor for {{duration}} day trip\n2. Find top attractions, restaurants, and activities\n3. Optimize daily schedule by location and hours\n4. Include transportation, weather, and backup plans\n5. Create day-by-day itinerary with time blocks',
-    icon: <Calendar className="text-rose-700 dark:text-rose-400" size={16} />,
-  },
-  {
-    title: 'Analyze news coverage',
-    query: '1. Search {{news_outlet}} for {{topic}} articles from past {{time_period}}\n2. Categorize coverage and identify key themes\n3. Track expert sources and data points\n4. Create timeline of major developments\n5. Generate report with insights and coverage gaps',
+    title: 'Summarize Rockstar Newswire updates',
+    query: '1. Fetch the latest Rockstar Newswire posts about GTA 6\n2. Extract key info: features, dates, media, quotes\n3. Generate a concise brief + bullet highlights\n4. Suggest SEO title and meta description',
     icon: <PenTool className="text-indigo-700 dark:text-indigo-400" size={16} />,
   },
-  // {
-  //   title: 'Book restaurant reservations',
-  //   query: '1. Search OpenTable for restaurants in {{city}} for {{occasion}}\n2. Filter by date, party size, and cuisine preferences\n3. Check reviews and menu highlights\n4. Make reservations at {{number}} restaurants\n5. Create itinerary with confirmation details',
-  //   icon: <Users className="text-emerald-700 dark:text-emerald-400" size={16} />,
-  // },
   {
-    title: 'Build financial model',
-    query: '1. Create {{model_type}} model for {{company_type}} business\n2. Gather historical data and industry benchmarks\n3. Build revenue forecasts and expense projections\n4. Include DCF, LTV/CAC, or NPV analysis\n5. Design Excel dashboard with scenarios',
-    icon: <DollarSign className="text-orange-700 dark:text-orange-400" size={16} />,
-  },
-  {
-    title: 'Develop market strategy',
-    query: '1. Create go-to-market strategy for {{product_type}} launch\n2. Analyze target market and competitive landscape\n3. Design market entry and pricing strategy\n4. Build financial projections and timeline\n5. Create presentation with recommendations',
-    icon: <Target className="text-cyan-700 dark:text-cyan-400" size={16} />,
-  },
-  {
-    title: 'Research company intelligence',
-    query: '1. Research {{company_name}} comprehensively\n2. Gather recent news, funding, and leadership info\n3. Analyze competitive position and market share\n4. Research key personnel background\n5. Create detailed profile with actionable insights',
-    icon: <Briefcase className="text-teal-700 dark:text-teal-400" size={16} />,
-  },
-  {
-    title: 'Audit calendar productivity',
-    query: '1. Analyze {{calendar_app}} data from past {{months}} months\n2. Assess meeting frequency and focus time\n3. Identify optimization opportunities\n4. Analyze meeting effectiveness patterns\n5. Generate recommendations and implementation plan',
-    icon: <Calendar className="text-violet-700 dark:text-violet-400" size={16} />,
-  },
-  {
-    title: 'Research industry trends',
-    query: '1. Research {{industry}} trends from {{data_sources}}\n2. Gather investment activity and technology developments\n3. Analyze market drivers and opportunities\n4. Identify emerging themes and gaps\n5. Create comprehensive report with recommendations',
-    icon: <TrendingUp className="text-pink-700 dark:text-pink-400" size={16} />,
-  },
-  {
-    title: 'Automate support tickets',
-    query: '1. Monitor {{support_platform}} for incoming tickets\n2. Categorize issues and assess urgency\n3. Search {{knowledge_base}} for solutions\n4. Auto-respond or escalate based on confidence\n5. Track metrics and generate daily reports',
-    icon: <Shield className="text-yellow-600 dark:text-yellow-300" size={16} />,
-  },
-  {
-    title: 'Research legal compliance',
-    query: '1. Research {{legal_topic}} across {{jurisdictions}}\n2. Compare state requirements and fees\n3. Analyze decision factors and implications\n4. Gather practical implementation details\n5. Create comparison spreadsheet with recommendations',
-    icon: <Settings className="text-red-700 dark:text-red-400" size={16} />,
-  },
-  {
-    title: 'Compile data analysis',
-    query: '1. Gather {{data_topic}} from {{data_sources}}\n2. Clean and standardize datasets\n3. Analyze patterns and calculate trends\n4. Create spreadsheet with visualizations\n5. Provide strategic recommendations',
-    icon: <BarChart3 className="text-slate-700 dark:text-slate-400" size={16} />,
-  },
-  {
-    title: 'Plan social media content',
-    query: '1. Create {{duration}} social strategy for {{brand}}\n2. Research trending topics and competitor content\n3. Develop content calendar with {{posts_per_week}} posts\n4. Create platform-specific content and scheduling\n5. Set up analytics and monthly reporting',
+    title: 'Analyze GTA 6 trailer frame-by-frame',
+    query: '1. Break down {{trailer_url}} into scenes and key frames\n2. Identify locations, vehicles, NPCs and UI hints\n3. Compare with known GTA 5 assets and rumors\n4. Produce insights and speculation with confidence notes',
     icon: <Camera className="text-stone-700 dark:text-stone-400" size={16} />,
   },
   {
-    title: 'Compare products',
-    query: '1. Research {{product_category}} options comprehensively\n2. Gather scientific studies and expert opinions\n3. Analyze benefits, drawbacks, and costs\n4. Research current expert consensus\n5. Create comparison report with personalized recommendations',
-    icon: <Brain className="text-fuchsia-700 dark:text-fuchsia-400" size={16} />,
+    title: 'Create GTA 6 mod roadmap',
+    query: '1. Define a {{mod_type}} mod concept (goal, scope, platform)\n2. List required tools, dependencies and assets\n3. Plan milestones, tasks and estimated effort\n4. Prepare release checklist and changelog template',
+    icon: <Code className="text-emerald-700 dark:text-emerald-400" size={16} />,
   },
   {
-    title: 'Analyze market opportunities',
-    query: '1. Research {{market_topic}} for investment opportunities\n2. Analyze market size, growth, and key players\n3. Identify investment themes and risks\n4. Assess market challenges and barriers\n5. Create investment presentation with recommendations',
+    title: 'YouTube script: GTA 6 news roundup',
+    query: '1. Outline a 6–8 min script on {{topic}}\n2. Hook, context, 3–4 key updates, analysis, CTA\n3. Add timestamps and on-screen b-roll cues\n4. Generate SEO title, description and tags',
     icon: <Rocket className="text-green-600 dark:text-green-300" size={16} />,
   },
   {
-    title: 'Process invoices & documents',
-    query: '1. Scan {{document_folder}} for PDF invoices\n2. Extract key data: numbers, dates, amounts, vendors\n3. Organize data with standardized fields\n4. Build comprehensive tracking spreadsheet\n5. Generate monthly financial reports',
-    icon: <Heart className="text-amber-700 dark:text-amber-400" size={16} />,
+    title: 'Compare GTA 6 map theories',
+    query: '1. Gather top community map theories from {{subreddits}} and forums\n2. Compare evidence, sources and contradictions\n3. Visualize a table of claims vs credibility\n4. Summarize consensus and open questions',
+    icon: <Brain className="text-fuchsia-700 dark:text-fuchsia-400" size={16} />,
   },
   {
-    title: 'Source talent & candidates',
-    query: '1. Search for {{job_title}} candidates in {{location}}\n2. Use LinkedIn, GitHub, and job boards\n3. Evaluate skills, experience, and culture fit\n4. Create ranked candidate pipeline\n5. Develop personalized outreach strategy',
+    title: 'Social calendar for a GTA 6 channel',
+    query: '1. Build a {{duration}} content plan for {{platforms}}\n2. Mix formats: news, leaks, memes, shorts, guides\n3. Schedule {{posts_per_week}} posts with captions and hashtags\n4. Add KPIs and weekly review checklist',
+    icon: <Calendar className="text-rose-700 dark:text-rose-400" size={16} />,
+  },
+  {
+    title: 'Extract GTA 6 rumors from Reddit',
+    query: '1. Scan {{subreddits}} for GTA 6 rumor threads\n2. Capture claim, source, link, date and sentiment\n3. Cluster by feature area (map, AI, police, multiplayer)\n4. Output CSV and short summary',
     icon: <Users className="text-blue-600 dark:text-blue-300" size={16} />,
   },
   {
-    title: 'Build professional website',
-    query: '1. Research {{person_name}} online comprehensively\n2. Analyze professional brand and achievements\n3. Design website structure and content\n4. Create optimized pages with portfolio\n5. Implement SEO and performance features',
-    icon: <Globe className="text-red-600 dark:text-red-300" size={16} />,
+    title: 'SEO keywords for GTA 6 article',
+    query: '1. Generate keyword set for {{article_topic}}\n2. Map primary + secondary keywords and intent\n3. Draft title H1 and meta description (<160 chars)\n4. Suggest internal links and anchor text',
+    icon: <Target className="text-cyan-700 dark:text-cyan-400" size={16} />,
+  },
+  {
+    title: 'Thumbnail ideas for GTA 6 video',
+    query: '1. Propose 5 thumbnail concepts for {{video_topic}}\n2. Include text overlays (max 4 words) and color palette\n3. Suggest focal subject and composition\n4. Provide A/B test notes',
+    icon: <Zap className="text-yellow-600 dark:text-yellow-300" size={16} />,
+  },
+  {
+    title: 'Sentiment on GTA 6 hashtags',
+    query: '1. Track {{hashtags}} over {{time_period}}\n2. Extract volume, reach and engagement proxies\n3. Analyze sentiment and top creators\n4. Summarize insights and timing recommendations',
+    icon: <TrendingUp className="text-pink-700 dark:text-pink-400" size={16} />,
+  },
+  {
+    title: 'Fact-check a GTA 6 claim',
+    query: '1. Verify the claim: "{{claim}}"\n2. Cross-check sources (Newswire, official channels, dev interviews)\n3. Rate confidence and list evidence\n4. Produce a short verdict for social',
+    icon: <Shield className="text-red-700 dark:text-red-400" size={16} />,
   },
 ];
 
