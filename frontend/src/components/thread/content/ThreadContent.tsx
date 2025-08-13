@@ -11,7 +11,7 @@ import {
     getUserFriendlyToolName,
     safeJsonParse,
 } from '@/components/thread/utils';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { KortixLogo } from '@/components/sidebar/leakerflow-logo';
 import { AgentLoader } from './loader';
 import { AgentAvatar, AgentName } from './agent-avatar';
 import { parseXmlToolCalls, isNewXmlFormat } from '@/components/thread/tool-views/xml-parser';
