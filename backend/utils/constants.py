@@ -68,22 +68,22 @@ MODELS = {
         },
         "tier_availability": ["paid"]
     },
-    "openai/gpt-4o": {
-        "aliases": ["gpt-4o"],
-        "pricing": {
-            "input_cost_per_million_tokens": 2.50,
-            "output_cost_per_million_tokens": 10.00
-        },
-        "tier_availability": ["paid"]
-    },
-    "openai/gpt-4.1": {
-        "aliases": ["gpt-4.1"],
-        "pricing": {
-            "input_cost_per_million_tokens": 15.00,
-            "output_cost_per_million_tokens": 60.00
-        },
-        "tier_availability": ["paid"]
-    },
+    # "openai/gpt-4o": {
+    #     "aliases": ["gpt-4o"],
+    #     "pricing": {
+    #         "input_cost_per_million_tokens": 2.50,
+    #         "output_cost_per_million_tokens": 10.00
+    #     },
+    #     "tier_availability": ["paid"]
+    # },
+    # "openai/gpt-4.1": {
+    #     "aliases": ["gpt-4.1"],
+    #     "pricing": {
+    #         "input_cost_per_million_tokens": 15.00,
+    #         "output_cost_per_million_tokens": 60.00
+    #     },
+    #     "tier_availability": ["paid"]
+    # },
     "openai/gpt-5": {
         "aliases": ["gpt-5"],
         "pricing": {
@@ -100,14 +100,14 @@ MODELS = {
         },
         "tier_availability": ["paid"]
     },
-    "openai/gpt-4.1-mini": {
-        "aliases": ["gpt-4.1-mini"],
-        "pricing": {
-            "input_cost_per_million_tokens": 1.50,
-            "output_cost_per_million_tokens": 6.00
-        },
-        "tier_availability": ["paid"]
-    },
+    # "openai/gpt-4.1-mini": {
+    #     "aliases": ["gpt-4.1-mini"],
+    #     "pricing": {
+    #         "input_cost_per_million_tokens": 1.50,
+    #         "output_cost_per_million_tokens": 6.00
+    #     },
+    #     "tier_availability": ["paid"]
+    # },
     "anthropic/claude-3-7-sonnet-latest": {
         "aliases": ["sonnet-3.7"],
         "pricing": {
@@ -187,4 +187,7 @@ MODEL_ACCESS_TIERS = {
     "tier_50_400": PAID_TIER_MODELS,
     "tier_125_800": PAID_TIER_MODELS,
     "tier_200_1000": PAID_TIER_MODELS,
+    "tier_25_170_yearly_commitment": PAID_TIER_MODELS,
+    "tier_6_42_yearly_commitment": PAID_TIER_MODELS,
+    "tier_12_84_yearly_commitment": PAID_TIER_MODELS,
 }
