@@ -33,25 +33,22 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description:
-    'Kortix is a fully open source AI assistant that helps you accomplish real-world tasks with ease. Through natural conversation, Kortix becomes your digital companion for research, data analysis, and everyday challenges.',
+    'LeakerFlow — GTA 6 news, leaks, mods, and guides for creators, streamers, and players. Build videos, publish news, optimize performance, and join the largest gaming community.',
   keywords: [
-    'AI',
-    'artificial intelligence',
-    'browser automation',
-    'web scraping',
-    'file management',
-    'AI assistant',
-    'open source',
-    'research',
-    'data analysis',
+    'GTA 6',
+    'GTA 6 news',
+    'GTA 6 leaks',
+    'GTA 6 mods',
+    'GTA 6 guides',
+    'GTA 6 streaming',
+    'GTA 6 performance',
+    'Rockstar Games',
   ],
-  authors: [{ name: 'Kortix Team', url: 'https://suna.so' }],
-  creator:
-    'Kortix Team',
-  publisher:
-    'Kortix Team',
-  category: 'Technology',
-  applicationName: 'Suna',
+  authors: [{ name: 'LeakerFlow', url: siteConfig.url }],
+  creator: 'LeakerFlow',
+  publisher: 'LeakerFlow',
+  category: 'Gaming',
+  applicationName: 'LeakerFlow',
   formatDetection: {
     telephone: false,
     email: false,
@@ -66,17 +63,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Suna - Open Source Generalist AI Worker',
+    title: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
     description:
-      'Suna is a fully open source AI assistant that helps you accomplish real-world tasks with ease through natural conversation.',
+      'GTA 6 news, leaks, mods, performance tips, and creator resources — join LeakerFlow to build videos, publish news, and grow your audience.',
     url: siteConfig.url,
-    siteName: 'Suna',
+    siteName: 'LeakerFlow',
     images: [
       {
         url: '/banner.png',
         width: 1200,
         height: 630,
-        alt: 'Suna - Open Source Generalist AI Worker',
+        alt: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
         type: 'image/png',
       },
     ],
@@ -85,23 +82,23 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Suna - Open Source Generalist AI Worker',
+    title: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
     description:
-      'Suna is a fully open source AI assistant that helps you accomplish real-world tasks with ease through natural conversation.',
-    creator: '@kortixai',
-    site: '@kortixai',
+      'GTA 6 news, leaks, mods, performance tips, and creator resources — join LeakerFlow to build videos, publish news, and grow your audience.',
+    creator: '@leakerflow',
+    site: '@leakerflow',
     images: [
       {
         url: '/banner.png',
         width: 1200,
         height: 630,
-        alt: 'Suna - Open Source Generalist AI Worker',
+        alt: 'LeakerFlow — GTA 6 News, Leaks, Mods & Guides',
       },
     ],
   },
   icons: {
-    icon: [{ url: '/favicon.png', sizes: 'any' }],
-    shortcut: '/favicon.png',
+    icon: [{ url: '/leakerflow.ico', sizes: 'any' }],
+    shortcut: '/leakerflow.ico',
   },
   // manifest: "/manifest.json",
   alternates: {
