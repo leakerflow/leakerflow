@@ -30,7 +30,6 @@ def extract_agent_config(agent_data: Dict[str, Any], version_data: Optional[Dict
             agentpress_tools = version_data.get('agentpress_tools', {})
         
         if is_leakerflow_default:
-            from agent.leakerflow.config import LeakerFlowConfig
             system_prompt = LeakerFlowConfig.get_system_prompt()
             agentpress_tools = LeakerFlowConfig.DEFAULT_TOOLS
         

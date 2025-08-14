@@ -5,7 +5,7 @@ from .template_service import (
     TemplateCreationRequest,
     TemplateNotFoundError,
     TemplateAccessDeniedError,
-    LeakerflowDefaultAgentTemplateError,
+    LeakerFlowDefaultAgentTemplateError,
     get_template_service
 )
 

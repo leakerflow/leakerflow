@@ -27,7 +27,7 @@ from pathlib import Path
 backend_dir = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(backend_dir))
 
-from agent.leakerflow import LeakerflowSyncService
+from agent.leakerflow import LeakerFlowSyncService
 from utils.logger import logger
 
 # Global flag for graceful shutdown
@@ -55,7 +55,7 @@ def print_warning(message: str):
 
 class LeakerflowManagerCLI:
     def __init__(self):
-        self.sync_service = LeakerflowSyncService()
+        self.sync_service = LeakerFlowSyncService()
     
     async def cleanup_command(self):
         """Clean up broken agents (agents without versions) caused by termination"""
@@ -501,4 +501,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    asyncio.run(main())
