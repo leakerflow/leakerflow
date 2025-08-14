@@ -207,8 +207,8 @@ class Configuration:
     MORPH_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_BASE: Optional[str] = "https://openrouter.ai/api/v1"
-    OR_SITE_URL: Optional[str] = "https://leakerflow.ai"
-    OR_APP_NAME: Optional[str] = "LeakerFlow AI"    
+    OR_SITE_URL: Optional[str] = "https://leakerflow.com"
+    OR_APP_NAME: Optional[str] = "LeakerFlow"    
     
     # AWS Bedrock credentials
     AWS_ACCESS_KEY_ID: Optional[str] = None

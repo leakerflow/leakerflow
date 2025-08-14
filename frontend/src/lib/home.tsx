@@ -289,11 +289,11 @@ export const siteConfig = {
     'where to buy GTA 6',
   ],
   links: {
-    email: 'support@leakerflow.ai',
-    twitter: 'https://x.com/leakerflowai',
+    email: 'support@leakerflow.com',
+    twitter: 'https://x.com/leakerflow',
     // discord: 'https://discord.gg/leakerflowai',
     github: 'https://github.com/leakerflow/LeakerFlow',
-    instagram: 'https://instagram.com/leakerflowai',
+    instagram: 'https://instagram.com/leakerflow',
   },
   nav: {
     links: [
@@ -1462,9 +1462,9 @@ export const siteConfig = {
     {
       title: 'LeakerFlow',
       links: [
-        { id: 1, title: 'About', url: 'https://leakerflow.ai' },
-        { id: 3, title: 'Contact', url: 'mailto:hey@leakerflow.ai' },
-        { id: 4, title: 'Careers', url: 'https://leakerflow.ai/careers' },
+        { id: 1, title: 'About', url: 'https://leakerflow.com' },
+        { id: 3, title: 'Contact', url: 'mailto:hey@leakerflow.com' },
+        { id: 4, title: 'Careers', url: 'https://leakerflow.com/careers' },
       ],
     },
     {

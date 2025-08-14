@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class EmailService:
     def __init__(self):
         self.api_token = os.getenv('MAILTRAP_API_TOKEN')
-        self.sender_email = os.getenv('MAILTRAP_SENDER_EMAIL', 'dom@leakerflow.ai')
+        self.sender_email = os.getenv('MAILTRAP_SENDER_EMAIL', 'dom@leakerflow.com')
         self.sender_name = os.getenv('MAILTRAP_SENDER_NAME', 'Leaker Flow Team')
         
         if not self.api_token:
