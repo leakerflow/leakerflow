@@ -1,6 +1,6 @@
-# Variáveis de Ambiente - Suna AI Worker Platform
+# Variáveis de Ambiente - LeakerFlow AI Worker Platform
 
-Este documento lista todas as variáveis de ambiente utilizadas no projeto Suna, organizadas por categoria, com suas finalidades e configurações recomendadas.
+Este documento lista todas as variáveis de ambiente utilizadas no projeto LeakerFlow, organizadas por categoria, com suas finalidades e configurações recomendadas.
 
 ## Índice
 
@@ -210,10 +210,10 @@ Este documento lista todas as variáveis de ambiente utilizadas no projeto Suna,
 - **Segurança**: Manter segura e fazer backup
 
 ### KORTIX_ADMIN_API_KEY
-- **Finalidade**: Chave de API administrativa para Kortix
+- **Finalidade**: Chave de API administrativa para LeakerFlow
 - **Formato**: String hexadecimal de 64 caracteres
 - **Exemplo**: `KORTIX_ADMIN_API_KEY=1234567890abcdef...`
-- **Responsabilidade**: Permite acesso a funções administrativas do Kortix
+- **Responsabilidade**: Permite acesso a funções administrativas do LeakerFlow
 - **Configuração**: Gerada automaticamente pelo script de setup
 - **Segurança**: Acesso apenas para administradores
 
@@ -419,4 +419,4 @@ supabase status
 
 ---
 
-*Documento gerado automaticamente baseado na análise do código-fonte do projeto Suna AI Worker Platform.*
+*Documento gerado automaticamente baseado na análise do código-fonte do projeto LeakerFlow AI Worker Platform.*

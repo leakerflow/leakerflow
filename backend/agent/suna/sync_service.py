@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from utils.logger import logger
 
-from .config_manager import SunaConfigManager, SunaConfiguration
-from .repository import SunaAgentRepository, SunaAgentRecord
+from .config_manager import LeakerFlowConfigManager, LeakerFlowConfiguration
+from .repository import LeakerFlowAgentRepository, LeakerFlowAgentRecord
 
 
 @dataclass
@@ -22,22 +22,22 @@ class SyncResult:
             self.details = []
 
 
-class SunaSyncService:
+class LeakerFlowSyncService:
     def __init__(self):
-        self.config_manager = SunaConfigManager()
-        self.repository = SunaAgentRepository()
+        self.config_manager = LeakerFlowConfigManager()
+        self.repository = LeakerFlowAgentRepository()
     
     async def sync_all_agents(self, dry_run: bool = False) -> SyncResult:
-        logger.info("🚀 Starting Suna agent metadata sync")
+        logger.info("🚀 Starting LeakerFlow agent metadata sync")
         
         try:
             current_config = self.config_manager.get_current_config()
-            agents_needing_sync = await self.repository.find_suna_agents_needing_sync(
+            agents_needing_sync = await self.repository.find_leakerflow_agents_needing_sync(
                 current_config.version_tag
             )
             
             if not agents_needing_sync:
-                logger.info("📋 All Suna agents already have current metadata")
+                logger.info("📋 All LeakerFlow agents already have current metadata")
                 return SyncResult(
                     success=True,
                     synced_count=0,
@@ -89,12 +89,12 @@ class SunaSyncService:
             return SyncResult(success=False, errors=[error_msg])
     
     async def install_for_all_missing_users(self) -> SyncResult:
-        logger.info("🚀 Installing Suna agents for users who don't have them")
+        logger.info("🚀 Installing LeakerFlow agents for users who don't have them")
         
         try:
             current_config = self.config_manager.get_current_config()
             all_accounts = await self.repository.get_all_personal_accounts()
-            existing_agents = await self.repository.find_all_suna_agents()
+            existing_agents = await self.repository.find_all_leakerflow_agents()
             existing_account_ids = {agent.account_id for agent in existing_agents}
             
             missing_accounts = [acc for acc in all_accounts if acc not in existing_account_ids]
@@ -102,10 +102,10 @@ class SunaSyncService:
             if not missing_accounts:
                 return SyncResult(
                     success=True,
-                    details=[{"message": "All users already have Suna agents"}]
+                    details=[{"message": "All users already have LeakerFlow agents"}]
                 )
             
-            logger.info(f"📦 Installing Suna for {len(missing_accounts)} users")
+            logger.info(f"📦 Installing LeakerFlow for {len(missing_accounts)} users")
             
             success_count = 0
             failed_count = 0
@@ -113,12 +113,12 @@ class SunaSyncService:
             
             for account_id in missing_accounts:
                 try:
-                    await self.repository.create_suna_agent_simple(
+                    await self.repository.create_leakerflow_agent_simple(
                         account_id,
                         current_config.version_tag
                     )
                     success_count += 1
-                    logger.info(f"✅ Installed Suna for user {account_id}")
+                    logger.info(f"✅ Installed LeakerFlow for user {account_id}")
                 except Exception as e:
                     failed_count += 1
                     error_msg = f"Failed to install for user {account_id}: {str(e)}"
@@ -143,7 +143,7 @@ class SunaSyncService:
     async def get_sync_status(self) -> Dict[str, Any]:
         try:
             current_config = self.config_manager.get_current_config()
-            agents_needing_sync = await self.repository.find_suna_agents_needing_sync(
+            agents_needing_sync = await self.repository.find_leakerflow_agents_needing_sync(
                 current_config.version_tag
             )
             stats = await self.repository.get_agent_stats()
@@ -154,7 +154,7 @@ class SunaSyncService:
                 "agents_needing_sync": len(agents_needing_sync),
                 "version_distribution": stats.get("version_distribution", {}),
                 "last_sync": stats.get("last_updated", "unknown"),
-                "note": "System prompt & tools always current from SunaConfig"
+                "note": "System prompt & tools always current from LeakerFlowConfig"
             }
             
         except Exception as e:

@@ -1,8 +1,8 @@
 [project]
-name = "suna"
+name = "leakerflow"
 version = "1.0"
 description = "open source generalist AI Worker"
-authors = [{ name = "marko-kraemer", email = "mail@markokraemer.com" }]
+authors = [{ name = "toddy", email = "toddy@leakerflow.com" }]
 readme = "README.md"
 license = { text = "Apache-2.0" }
 classifiers = [
@@ -69,8 +69,8 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://www.suna.so/"
-repository = "https://github.com/kortix-ai/suna"
+homepage = "https://www.leakerflow.com/"
+repository = "https://github.com/leakerflow/leakerflow"
 
 [tool.uv]
 package = false

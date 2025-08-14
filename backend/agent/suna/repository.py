@@ -6,7 +6,7 @@ from utils.logger import logger
 
 
 @dataclass
-class SunaAgentRecord:
+class LeakerFlowAgentRecord:
     agent_id: str
     account_id: str
     name: str
@@ -15,7 +15,7 @@ class SunaAgentRecord:
     is_active: bool
     
     @classmethod
-    def from_db_row(cls, row: Dict[str, Any]) -> 'SunaAgentRecord':
+    def from_db_row(cls, row: Dict[str, Any]) -> 'LeakerFlowAgentRecord':
         metadata = row.get('metadata', {})
         return cls(
             agent_id=row['agent_id'],
@@ -27,11 +27,11 @@ class SunaAgentRecord:
         )
 
 
-class SunaAgentRepository:
+class LeakerFlowAgentRepository:
     def __init__(self, db: DBConnection = None):
         self.db = db or DBConnection()
     
-    async def find_all_suna_agents(self) -> List[SunaAgentRecord]:
+    async def find_all_leakerflow_agents(self) -> List[LeakerFlowAgentRecord]:
         try:
             client = await self.db.client
             all_agents = []
@@ -41,12 +41,12 @@ class SunaAgentRepository:
             while True:
                 result = await client.table('agents').select(
                     'agent_id, account_id, name, metadata'
-                ).eq('metadata->>is_suna_default', 'true').range(offset, offset + page_size - 1).execute()
+                ).eq('metadata->>is_leakerflow_default', 'true').range(offset, offset + page_size - 1).execute()
                 
                 if not result.data:
                     break
                 
-                batch_agents = [SunaAgentRecord.from_db_row(row) for row in result.data]
+                batch_agents = [LeakerFlowAgentRecord.from_db_row(row) for row in result.data]
                 all_agents.extend(batch_agents)
                 
                 # If we got less than page_size, we've reached the end
@@ -55,15 +55,15 @@ class SunaAgentRepository:
                 
                 offset += page_size
             
-            logger.info(f"Found {len(all_agents)} existing Suna agents")
+            logger.info(f"Found {len(all_agents)} existing LeakerFlow agents")
             return all_agents
             
         except Exception as e:
-            logger.error(f"Failed to find Suna agents: {e}")
+            logger.error(f"Failed to find LeakerFlow agents: {e}")
             raise
     
-    async def find_suna_agents_needing_sync(self, target_version_tag: str) -> List[SunaAgentRecord]:
-        agents = await self.find_all_suna_agents()
+    async def find_leakerflow_agents_needing_sync(self, target_version_tag: str) -> List[LeakerFlowAgentRecord]:
+        agents = await self.find_all_leakerflow_agents()
         return [
             agent for agent in agents 
             if agent.current_version_tag != target_version_tag
@@ -115,7 +115,7 @@ class SunaAgentRepository:
                     'agentpress': {}
                 },
                 'metadata': {
-                    'is_suna_default': True,
+                    'is_leakerflow_default': True,
                     'centrally_managed': True
                 }
             }
@@ -151,11 +151,11 @@ class SunaAgentRepository:
             
             total_result = await client.table('agents').select(
                 'agent_id', count='exact'
-            ).eq('metadata->>is_suna_default', 'true').execute()
+            ).eq('metadata->>is_leakerflow_default', 'true').execute()
             
             total_count = total_result.count or 0
             
-            agents = await self.find_all_suna_agents()
+            agents = await self.find_all_leakerflow_agents()
             version_dist = {}
             for agent in agents:
                 version = agent.current_version_tag
@@ -171,24 +171,24 @@ class SunaAgentRepository:
             logger.error(f"Failed to get agent stats: {e}")
             return {"error": str(e)}
     
-    async def create_suna_agent_simple(
+    async def create_leakerflow_agent_simple(
         self, 
         account_id: str,
     ) -> str:
         try:
-            from agent.suna.config import SunaConfig
+            from agent.leakerflow.config import LeakerFlowConfig
             
             client = await self.db.client
             
             agent_data = {
                 "account_id": account_id,
-                "name": SunaConfig.NAME,
-                "description": SunaConfig.DESCRIPTION,
+                "name": LeakerFlowConfig.NAME,
+                "description": LeakerFlowConfig.DESCRIPTION,
                 "is_default": True,
-                "avatar": SunaConfig.AVATAR,
-                "avatar_color": SunaConfig.AVATAR_COLOR,
+                "avatar": LeakerFlowConfig.AVATAR,
+                "avatar_color": LeakerFlowConfig.AVATAR_COLOR,
                 "metadata": {
-                    "is_suna_default": True,
+                    "is_leakerflow_default": True,
                     "centrally_managed": True,
                     "installation_date": datetime.now(timezone.utc).isoformat()
                 },
@@ -199,22 +199,22 @@ class SunaAgentRepository:
             
             if result.data:
                 agent_id = result.data[0]['agent_id']
-                logger.info(f"Created minimal Suna agent {agent_id} for {account_id}")
+                logger.info(f"Created minimal LeakerFlow agent {agent_id} for {account_id}")
                 await self._create_initial_version(
                     agent_id=agent_id,
                     account_id=account_id,
                     system_prompt="[MANAGED]",
-                    model=SunaConfig.DEFAULT_MODEL,
-                    configured_mcps=SunaConfig.DEFAULT_MCPS,
-                    custom_mcps=SunaConfig.DEFAULT_CUSTOM_MCPS,
-                    agentpress_tools=SunaConfig.DEFAULT_TOOLS
+                    model=LeakerFlowConfig.DEFAULT_MODEL,
+                    configured_mcps=LeakerFlowConfig.DEFAULT_MCPS,
+                    custom_mcps=LeakerFlowConfig.DEFAULT_CUSTOM_MCPS,
+                    agentpress_tools=LeakerFlowConfig.DEFAULT_TOOLS
                 )
                 return agent_id
             
             raise Exception("No data returned from insert")
             
         except Exception as e:
-            logger.error(f"Failed to create Suna agent for {account_id}: {e}")
+            logger.error(f"Failed to create LeakerFlow agent for {account_id}: {e}")
             raise
     
     async def update_agent_metadata(
@@ -227,7 +227,7 @@ class SunaAgentRepository:
             
             update_data = {
                 "metadata": {
-                    "is_suna_default": True,
+                    "is_leakerflow_default": True,
                     "centrally_managed": True,
                     "config_version": version_tag,
                     "last_central_update": datetime.now(timezone.utc).isoformat()
@@ -253,18 +253,18 @@ class SunaAgentRepository:
             logger.error(f"Failed to delete agent {agent_id}: {e}")
             raise
     
-    async def find_orphaned_suna_agents(self) -> List[SunaAgentRecord]:
+    async def find_orphaned_leakerflow_agents(self) -> List[LeakerFlowAgentRecord]:
         """
-        Find Suna agents that exist but don't have proper version records.
+        Find LeakerFlow agents that exist but don't have proper version records.
         These are agents that were created but the version creation process failed.
         """
         try:
             client = await self.db.client
             
-            # Get all Suna agents
+            # Get all LeakerFlow agents
             agents_result = await client.table('agents').select(
                 'agent_id, account_id, name, metadata'
-            ).eq('metadata->>is_suna_default', 'true').execute()
+            ).eq('metadata->>is_leakerflow_default', 'true').execute()
             
             if not agents_result.data:
                 return []
@@ -277,13 +277,13 @@ class SunaAgentRepository:
             orphaned_agents = []
             for row in agents_result.data:
                 if row['agent_id'] not in agents_with_versions:
-                    orphaned_agents.append(SunaAgentRecord.from_db_row(row))
+                    orphaned_agents.append(LeakerFlowAgentRecord.from_db_row(row))
             
-            logger.info(f"Found {len(orphaned_agents)} orphaned Suna agents")
+            logger.info(f"Found {len(orphaned_agents)} orphaned LeakerFlow agents")
             return orphaned_agents
             
         except Exception as e:
-            logger.error(f"Failed to find orphaned Suna agents: {e}")
+            logger.error(f"Failed to find orphaned LeakerFlow agents: {e}")
             raise
     
     async def create_version_record_for_existing_agent(
@@ -300,13 +300,13 @@ class SunaAgentRepository:
         """
         try:
             from agent.versioning.version_service import get_version_service
-            from agent.suna.config import SunaConfig
+            from agent.leakerflow.config import LeakerFlowConfig
             
-            # Build configuration exclusively from SunaConfig and provided unified_config
-            system_prompt = SunaConfig.get_system_prompt()
-            model = SunaConfig.DEFAULT_MODEL
-            configured_mcps = SunaConfig.DEFAULT_MCPS
-            custom_mcps = SunaConfig.DEFAULT_CUSTOM_MCPS
+            # Build configuration exclusively from LeakerFlowConfig and provided unified_config
+            system_prompt = LeakerFlowConfig.get_system_prompt()
+            model = LeakerFlowConfig.DEFAULT_MODEL
+            configured_mcps = LeakerFlowConfig.DEFAULT_MCPS
+            custom_mcps = LeakerFlowConfig.DEFAULT_CUSTOM_MCPS
             agentpress_tools = unified_config.get('tools', {}).get('agentpress', {})
             
             # Create the version record using the version service
@@ -394,11 +394,11 @@ class SunaAgentRepository:
                 agentpress_tools=agentpress_tools,
                 model=model,
                 version_name="v1",
-                change_description="Initial Suna agent version"
+                change_description="Initial LeakerFlow agent version"
             )
             
-            logger.info(f"Created initial version for Suna agent {agent_id}")
+            logger.info(f"Created initial version for LeakerFlow agent {agent_id}")
             
         except Exception as e:
-            logger.error(f"Failed to create initial version for Suna agent {agent_id}: {e}")
+            logger.error(f"Failed to create initial version for LeakerFlow agent {agent_id}: {e}")
             raise

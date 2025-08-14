@@ -174,8 +174,8 @@ pipedream = True
 # Credentials API feature flag
 credentials_api = True
 
-# Suna default agent feature flag
-suna_default_agent = True
+# Leaker Flow default agent feature flag
+leakerflow_default_agent = True
 
 
 

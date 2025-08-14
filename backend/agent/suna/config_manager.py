@@ -1,11 +1,11 @@
 import datetime
 from typing import Dict, Any
 from dataclasses import dataclass
-from agent.suna.config import SunaConfig
+from agent.leakerflow.config import LeakerFlowConfig
 
 
 @dataclass
-class SunaConfiguration:
+class LeakerFlowConfiguration:
     name: str
     description: str
     configured_mcps: list
@@ -14,16 +14,16 @@ class SunaConfiguration:
     version_tag: str
 
 
-class SunaConfigManager:
-    def get_current_config(self) -> SunaConfiguration:
+class LeakerFlowConfigManager:
+    def get_current_config(self) -> LeakerFlowConfiguration:
         version_tag = self._generate_version_tag()
         
-        return SunaConfiguration(
-            name=SunaConfig.NAME,
-            description=SunaConfig.DESCRIPTION,
-            configured_mcps=SunaConfig.DEFAULT_MCPS.copy(),
-            custom_mcps=SunaConfig.DEFAULT_CUSTOM_MCPS.copy(),
-            restrictions=SunaConfig.USER_RESTRICTIONS.copy(),
+        return LeakerFlowConfiguration(
+            name=LeakerFlowConfig.NAME,
+            description=LeakerFlowConfig.DESCRIPTION,
+            configured_mcps=LeakerFlowConfig.DEFAULT_MCPS.copy(),
+            custom_mcps=LeakerFlowConfig.DEFAULT_CUSTOM_MCPS.copy(),
+            restrictions=LeakerFlowConfig.USER_RESTRICTIONS.copy(),
             version_tag=version_tag
         )
     
@@ -31,7 +31,7 @@ class SunaConfigManager:
         current = self.get_current_config()
         return current.version_tag != last_version_tag
     
-    def validate_config(self, config: SunaConfiguration) -> tuple[bool, list[str]]:
+    def validate_config(self, config: LeakerFlowConfiguration) -> tuple[bool, list[str]]:
         errors = []
         
         if not config.name.strip():
@@ -44,13 +44,13 @@ class SunaConfigManager:
         import json
         
         config_data = {
-            "name": SunaConfig.NAME,
-            "description": SunaConfig.DESCRIPTION,
-            "system_prompt": SunaConfig.get_system_prompt(),
-            "default_tools": SunaConfig.DEFAULT_TOOLS,
-            "avatar": SunaConfig.AVATAR,
-            "avatar_color": SunaConfig.AVATAR_COLOR,
-            "restrictions": SunaConfig.USER_RESTRICTIONS,
+            "name": LeakerFlowConfig.NAME,
+            "description": LeakerFlowConfig.DESCRIPTION,
+            "system_prompt": LeakerFlowConfig.get_system_prompt(),
+            "default_tools": LeakerFlowConfig.DEFAULT_TOOLS,
+            "avatar": LeakerFlowConfig.AVATAR,
+            "avatar_color": LeakerFlowConfig.AVATAR_COLOR,
+            "restrictions": LeakerFlowConfig.USER_RESTRICTIONS,
         }
         
         config_str = json.dumps(config_data, sort_keys=True)

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Ripple } from '../ui/ripple';
-import { useKortixTeamTemplates, useInstallTemplate } from '@/hooks/react-query/secure-mcp/use-secure-mcp';
+import { useLeakerFlowTeamTemplates, useInstallTemplate } from '@/hooks/react-query/secure-mcp/use-secure-mcp';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRouter } from 'next/navigation';
 import { MarketplaceAgentPreviewDialog } from '@/components/agents/marketplace-agent-preview-dialog';
@@ -21,7 +21,7 @@ interface CustomAgentsSectionProps {
 
 export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps) {
   const router = useRouter();
-  const { data: templates, isLoading, error } = useKortixTeamTemplates();
+  const { data: templates, isLoading, error } = useLeakerFlowTeamTemplates();
   const installTemplate = useInstallTemplate();
   
   const [selectedTemplate, setSelectedTemplate] = React.useState<MarketplaceTemplate | null>(null);
@@ -41,7 +41,7 @@ export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps)
       description: template.description,
       tags: template.tags || [],
       download_count: template.download_count || 0,
-      is_kortix_team: template.is_kortix_team || false,
+      is_leakerflow_team: template.is_leakerflow_team || false,
       creator_name: template.creator_name,
       created_at: template.created_at,
       profile_image_url: template.profile_image_url,
@@ -137,7 +137,7 @@ export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps)
                   Custom Agents
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Specialized AI agents built by the Kortix team for specific tasks
+                  Specialized AI agents built by the LeakerFlow team for specific tasks
                 </p>
               </div>
             </div>
@@ -189,7 +189,7 @@ export function CustomAgentsSection({ onAgentSelect }: CustomAgentsSectionProps)
                   Featured Agents
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Specialized AI agents built by the Kortix team for specific tasks
+                  Specialized AI agents built by the LeakerFlow team for specific tasks
                 </p>
               </div>
             </div>

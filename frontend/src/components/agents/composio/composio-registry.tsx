@@ -521,7 +521,7 @@ export const ComposioRegistry: React.FC<ComposioRegistryProps> = ({
                     <AgentSelector
                       selectedAgentId={currentAgentId}
                       onAgentSelect={handleAgentSelect}
-                      isSunaAgent={agent?.metadata?.is_suna_default}
+                      isLeakerFlowAgent={agent?.metadata?.is_leakerflow_default}
                     />
                   )} */}
                 </div>

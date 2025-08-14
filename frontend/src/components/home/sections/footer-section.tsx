@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { FlickeringGrid } from '@/components/home/ui/flickering-grid';
+import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { siteConfig } from '@/lib/home';
+import { siteConfig as site } from '@/lib/site';
 import { ChevronRightIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,11 +20,7 @@ export function FooterSection() {
     setMounted(true);
   }, []);
 
-  const logoSrc = !mounted
-    ? '/kortix-logo.svg'
-    : resolvedTheme === 'dark'
-      ? '/kortix-logo-white.svg'
-      : '/kortix-logo.svg';
+  const logoSrc = '/leakerflow.png';
 
   return (
     <footer id="footer" className="w-full pb-0 px-6">
@@ -34,7 +31,7 @@ export function FooterSection() {
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src={logoSrc}
-                  alt="Kortix Logo"
+                  alt="LeakerFlow Logo"
                   width={122}
                   height={22}
                   priority
@@ -46,7 +43,7 @@ export function FooterSection() {
 
               <div className="flex items-center gap-4">
             <a
-              href="https://github.com/kortix-ai/suna"
+              href={site.links.github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -63,7 +60,7 @@ export function FooterSection() {
               </svg>
             </a>
             <a
-              href="https://x.com/kortixai"
+              href={site.links.twitter}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="X (Twitter)"
@@ -80,7 +77,7 @@ export function FooterSection() {
               </svg>
             </a>
             <a
-              href="https://www.linkedin.com/company/kortix/"
+              href={site.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
@@ -137,20 +134,19 @@ export function FooterSection() {
         href="https://www.youtube.com/watch?v=nuf5BF1jvjQ"
         target="_blank"
         rel="noopener noreferrer"
-        className="block w-full h-48 md:h-64 relative mt-24 z-0 cursor-pointer"
+        className="block w-full h-48 md:h-64 relative mt-24 z-0 cursor-pointer overflow-hidden rounded-xl"
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-10 from-40%" />
-        <div className="absolute inset-0 ">
-          <FlickeringGrid
-            text={tablet ? 'Agents' : 'Agents Agents Agents'}
-            fontSize={tablet ? 60 : 90}
-            className="h-full w-full"
-            squareSize={2}
-            gridGap={tablet ? 2 : 3}
-            color="#6B7280"
-            maxOpacity={0.3}
-            flickerChance={0.1}
-          />
+        {/* Fade overlay to blend into background */}
+        <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-20 from-40%" />
+
+        {/* Background animated beams */}
+        <BackgroundBeams className="z-0 opacity-80 pointer-events-none" />
+
+        {/* Centered headline replacing grid text */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <span className="font-extrabold tracking-tight text-muted-foreground/80 select-none text-[40px] md:text-[72px] leading-none">
+            {tablet ? 'GTA 6' : 'GTA 6 GTA 6 GTA 6'}
+          </span>
         </div>
       </Link>
     </footer>

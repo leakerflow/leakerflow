@@ -103,17 +103,17 @@ export default function AgentConfigurationPage() {
   const handleSave = useCallback(async () => {
     if (!agent || isViewingOldVersion || isSaving) return;
     
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isLeakerFlowAgent = agent?.metadata?.is_leakerflow_default || false;
     const restrictions = agent?.metadata?.restrictions || {};
     
-    if (isSunaAgent) {
+    if (isLeakerFlowAgent) {
       if (restrictions.name_editable === false && formData.name !== originalData.name) {
-        toast.error("Suna's name cannot be modified.");
+        toast.error("Leaker Flow's name cannot be modified.");
         return;
       }
 
       if (restrictions.tools_editable === false && JSON.stringify(formData.agentpress_tools) !== JSON.stringify(originalData.agentpress_tools)) {
-        toast.error("Suna's default tools cannot be modified.");
+        toast.error("Leaker Flow's default tools cannot be modified.");
         return;
       }
     }
@@ -133,7 +133,7 @@ export default function AgentConfigurationPage() {
         createVersionMutation.mutateAsync({
           agentId,
           data: {
-            system_prompt: isSunaAgent ? '' : formData.system_prompt,
+            system_prompt: isLeakerFlowAgent ? '' : formData.system_prompt,
             model: formData.model,  // Include model in save
             configured_mcps: formData.configured_mcps,
             custom_mcps: normalizedCustomMcps,
@@ -196,12 +196,12 @@ export default function AgentConfigurationPage() {
       return;
     }
     
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isLeakerFlowAgent = agent?.metadata?.is_leakerflow_default || false;
     const restrictions = agent?.metadata?.restrictions || {};
     
-    if (isSunaAgent && restrictions.name_editable === false) {
+    if (isLeakerFlowAgent && restrictions.name_editable === false) {
       toast.error("Name cannot be edited", {
-        description: "Suna's name is managed centrally and cannot be changed.",
+        description: "Leaker Flow's name is managed centrally and cannot be changed.",
       });
       return;
     }
@@ -238,11 +238,11 @@ export default function AgentConfigurationPage() {
       return;
     }
     
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isLeakerFlowAgent = agent?.metadata?.is_leakerflow_default || false;
     
-    if (isSunaAgent) {
+    if (isLeakerFlowAgent) {
       toast.error("System prompt cannot be edited", {
-        description: "Suna's system prompt is managed centrally and cannot be changed.",
+        description: "Leaker Flow's system prompt is managed centrally and cannot be changed.",
       });
       return;
     }
@@ -328,10 +328,10 @@ export default function AgentConfigurationPage() {
       enabledTools: Array.isArray(mcp.enabledTools) ? mcp.enabledTools : [],
     }));
     
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isLeakerFlowAgent = agent?.metadata?.is_leakerflow_default || false;
     
     const saveData = {
-      system_prompt: isSunaAgent ? '' : formData.system_prompt,
+      system_prompt: isLeakerFlowAgent ? '' : formData.system_prompt,
       model,
       configured_mcps: formData.configured_mcps,
       custom_mcps: normalizedCustomMcps,
@@ -363,11 +363,11 @@ export default function AgentConfigurationPage() {
       return;
     }
     
-    const isSunaAgent = agent?.metadata?.is_suna_default || false;
+    const isLeakerFlowAgent = agent?.metadata?.is_leakerflow_default || false;
     const restrictions = agent?.metadata?.restrictions || {};
     
-    if (isSunaAgent && restrictions.tools_editable === false) {
-      toast.error("Suna's default tools cannot be modified.");
+    if (isLeakerFlowAgent && restrictions.tools_editable === false) {
+      toast.error("Leaker Flow's default tools cannot be modified.");
       return;
     }
     
@@ -381,7 +381,7 @@ export default function AgentConfigurationPage() {
     }));
     
     const saveData = {
-      system_prompt: isSunaAgent ? '' : formData.system_prompt,
+      system_prompt: isLeakerFlowAgent ? '' : formData.system_prompt,
       model: formData.model,
       configured_mcps: formData.configured_mcps,
       custom_mcps: normalizedCustomMcps,
@@ -436,7 +436,7 @@ export default function AgentConfigurationPage() {
       const result = await createVersionMutation.mutateAsync({
         agentId,
         data: {
-          system_prompt: agent?.metadata?.is_suna_default ? '' : newFormData.system_prompt,
+          system_prompt: agent?.metadata?.is_leakerflow_default ? '' : newFormData.system_prompt,
           model: newFormData.model, 
           configured_mcps: newFormData.configured_mcps,
           custom_mcps: normalizedCustomMcps,
@@ -576,7 +576,7 @@ export default function AgentConfigurationPage() {
               </div>
             </div>
             <div className="flex-1 overflow-hidden">
-              {agent?.metadata?.is_suna_default ? (
+              {agent?.metadata?.is_leakerflow_default ? (
                 <ConfigurationTab
                   agentId={agentId}
                   displayData={displayData}
@@ -667,7 +667,7 @@ export default function AgentConfigurationPage() {
               </div>
             </div>
             <div className="flex-1 overflow-hidden">
-              {agent?.metadata?.is_suna_default ? (
+              {agent?.metadata?.is_leakerflow_default ? (
                 <ConfigurationTab
                   agentId={agentId}
                   displayData={displayData}

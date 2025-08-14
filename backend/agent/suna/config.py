@@ -2,9 +2,9 @@ import datetime
 from typing import Dict, Any, List
 from agent.prompt import SYSTEM_PROMPT
 
-class SunaConfig:
-    NAME = "Suna"
-    DESCRIPTION = "Suna is your AI assistant with access to various tools and integrations to help you with tasks across domains."
+class LeakerFlowConfig:
+    NAME = "LeakerFlow"
+    DESCRIPTION = "LeakerFlow is your AI assistant with access to various tools and integrations to help you with tasks across domains."
     AVATAR = "🌞"
     AVATAR_COLOR = "#F59E0B"
     DEFAULT_MODEL = "anthropic/claude-sonnet-4-20250514"
@@ -52,7 +52,7 @@ class SunaConfig:
             "avatar": cls.AVATAR,
             "avatar_color": cls.AVATAR_COLOR,
             "metadata": {
-                "is_suna_default": True,
+                "is_leakerflow_default": True,
                 "centrally_managed": True,
                 "restrictions": cls.USER_RESTRICTIONS,
                 "installation_date": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -62,19 +62,19 @@ class SunaConfig:
 
 
 def add_tool(tool_name: str, description: str, enabled: bool = True):
-    SunaConfig.DEFAULT_TOOLS[tool_name] = {
+    LeakerFlowConfig.DEFAULT_TOOLS[tool_name] = {
         "enabled": enabled,
         "description": description
     }
 
 def remove_tool(tool_name: str):
-    if tool_name in SunaConfig.DEFAULT_TOOLS:
-        del SunaConfig.DEFAULT_TOOLS[tool_name]
+    if tool_name in LeakerFlowConfig.DEFAULT_TOOLS:
+        del LeakerFlowConfig.DEFAULT_TOOLS[tool_name]
 
 def enable_tool(tool_name: str):
-    if tool_name in SunaConfig.DEFAULT_TOOLS:
-        SunaConfig.DEFAULT_TOOLS[tool_name]["enabled"] = True
+    if tool_name in LeakerFlowConfig.DEFAULT_TOOLS:
+        LeakerFlowConfig.DEFAULT_TOOLS[tool_name]["enabled"] = True
 
 def disable_tool(tool_name: str):  
-    if tool_name in SunaConfig.DEFAULT_TOOLS:
-        SunaConfig.DEFAULT_TOOLS[tool_name]["enabled"] = False 
+    if tool_name in LeakerFlowConfig.DEFAULT_TOOLS:
+        LeakerFlowConfig.DEFAULT_TOOLS[tool_name]["enabled"] = False 
