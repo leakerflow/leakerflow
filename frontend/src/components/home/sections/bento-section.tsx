@@ -9,23 +9,23 @@ export function BentoSection() {
     {
       id: 1,
       content: <FirstBentoAnimation />,
-      title: 'Design with conversation',
+      title: 'Create content faster',
       description:
-        'Simply describe what you need your agent to accomplish, and Leaker Flow will build it for you automatically.',
+        'Describe your GTA 6 video, news post, or mod idea — LeakerFlow helps you plan and publish faster.',
     },
     {
       id: 2,
       content: <SecondBentoAnimation />,
-      title: 'Integrate everything',
+      title: 'Integrate your tools',
       description:
-        'Connect to your favorite tools and services with our extensive library of integrations.',
+        'Connect with your favorite creation, editing and distribution tools to streamline your GTA 6 workflow.',
     },
     {
       id: 3,
       content: <ThirdBentoAnimation />,
-      title: 'Automate intelligently',
+      title: 'Automate publishing',
       description:
-        'Watch your agent handle complex tasks and workflows with advanced AI reasoning.',
+        'Automate repetitive tasks like scheduling, tagging and internal linking across your GTA 6 content.',
     },
   ];
 
@@ -38,10 +38,10 @@ export function BentoSection() {
         <div className="max-w-6xl mx-auto border-l border-r border-border">
           <SectionHeader>
             <h2 className="text-3xl md:text-4xl font-medium tracking-tighter text-center text-balance pb-1">
-              Build Your AI Worker in 3 Simple Steps
+              Grow your GTA 6 channel in 3 simple steps
             </h2>
             <p className="text-muted-foreground text-center text-balance font-medium">
-              From description to deployment, create powerful AI Workers that work autonomously in minutes.
+              From idea to publish, plan and ship GTA 6 news, leaks, mods and guides with clarity and speed.
             </p>
           </SectionHeader>
 
