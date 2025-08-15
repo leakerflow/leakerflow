@@ -1,11 +1,11 @@
 import React, { useState, useRef, KeyboardEvent } from 'react';
-import { Sparkles, Settings, Download, Image as ImageIcon } from 'lucide-react';
+import { Sparkles, Settings, Download, Image as ImageIcon, Workflow } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -27,7 +27,7 @@ interface AgentHeaderProps {
   onExport?: () => void;
   isExporting?: boolean;
   agentMetadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       name_editable?: boolean;
@@ -68,7 +68,7 @@ export function AgentHeader({
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(displayData.name);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSunaAgent = agentMetadata?.is_suna_default || false;
+  const isLeakerFlowAgent = agentMetadata?.is_leakerflow_default || false;
   const restrictions = agentMetadata?.restrictions || {};
   const isNameEditable = !isViewingOldVersion && (restrictions.name_editable !== false);
   
@@ -94,9 +94,9 @@ export function AgentHeader({
     }
 
     if (editName !== displayData.name) {
-      if (!isNameEditable && isSunaAgent) {
+      if (!isNameEditable && isLeakerFlowAgent) {
         toast.error("Name cannot be edited", {
-          description: "Suna's name is managed centrally and cannot be changed.",
+          description: "Leaker Flow's name is managed centrally and cannot be changed.",
         });
         setEditName(displayData.name);
         setIsEditing(false);
@@ -137,9 +137,9 @@ export function AgentHeader({
       {/* Left side - Agent info */}
       <div className="flex items-center gap-3 min-w-0">
         <div className="relative flex-shrink-0">
-          {isSunaAgent ? (
+          {isLeakerFlowAgent ? (
             <div className="h-9 w-9 rounded-lg bg-muted border flex items-center justify-center">
-              <KortixLogo size={16} />
+              <LeakerFlowLogo size={16} />
             </div>
           ) : (
             <button 
@@ -180,7 +180,7 @@ export function AgentHeader({
             <div
               className={cn(
                 "text-base font-medium text-muted-foreground hover:text-foreground cursor-pointer flex items-center truncate max-w-[300px]",
-                !isNameEditable && isSunaAgent && "cursor-not-allowed opacity-75"
+                !isNameEditable && isLeakerFlowAgent && "cursor-not-allowed opacity-75"
               )}
               onClick={isNameEditable ? startEditing : undefined}
               title={isNameEditable ? `Click to rename agent: ${displayData.name}` : `Name cannot be edited: ${displayData.name}`}
@@ -198,7 +198,7 @@ export function AgentHeader({
       {/* Right side - Version controls, tabs and actions aligned together */}
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1">
-          {!isSunaAgent && currentFormData && (
+          {!isLeakerFlowAgent && currentFormData && (
             <AgentVersionSwitcher
               agentId={agentId}
               currentVersionId={currentVersionId}
@@ -227,7 +227,7 @@ export function AgentHeader({
             </TooltipProvider>
           )}
         </div>
-        {!isSunaAgent && (
+        {!isLeakerFlowAgent && (
           <Tabs value={activeTab} onValueChange={onTabChange}>
             <TabsList className="grid grid-cols-2 h-9 w-[280px]">
               <TabsTrigger 
@@ -258,4 +258,4 @@ export function AgentHeader({
     />
     </>
   );
-} 
+}

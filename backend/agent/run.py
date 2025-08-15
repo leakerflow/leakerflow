@@ -11,7 +11,6 @@ from agent.tools.sb_expose_tool import SandboxExposeTool
 from agent.tools.web_search_tool import SandboxWebSearchTool
 from dotenv import load_dotenv
 from utils.config import config
-from flags.flags import is_enabled
 from agent.agent_builder_prompt import get_agent_builder_prompt
 from agentpress.thread_manager import ThreadManager
 from agentpress.response_processor import ProcessorConfig
@@ -421,9 +420,9 @@ class AgentRunner:
     async def setup_tools(self):
         tool_manager = ToolManager(self.thread_manager, self.config.project_id, self.config.thread_id)
         
-        if self.config.agent_config and self.config.agent_config.get('is_suna_default', False):
-            suna_agent_id = self.config.agent_config['agent_id']
-            tool_manager.register_agent_builder_tools(suna_agent_id)
+        if self.config.agent_config and self.config.agent_config.get('is_leakerflow_default', False):
+            leakerflow_agent_id = self.config.agent_config['agent_id']
+            tool_manager.register_agent_builder_tools(leakerflow_agent_id)
         
         if self.config.is_agent_builder:
             tool_manager.register_agent_builder_tools(self.config.target_agent_id)
@@ -433,7 +432,7 @@ class AgentRunner:
             raw_tools = self.config.agent_config['agentpress_tools']
             
             if isinstance(raw_tools, dict):
-                if self.config.agent_config.get('is_suna_default', False) and not raw_tools:
+                if self.config.agent_config.get('is_leakerflow_default', False) and not raw_tools:
                     enabled_tools = None
                 else:
                     enabled_tools = raw_tools

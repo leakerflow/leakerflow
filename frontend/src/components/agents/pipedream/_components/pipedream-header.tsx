@@ -12,7 +12,7 @@ export const PipedreamHeader: React.FC<PipedreamHeaderProps> = ({
   currentAgentId,
   onAgentChange,
   agentName,
-  isSunaAgent
+  isLeakerFlowAgent
 }) => {
   return (
     <div className="flex-shrink-0 border-b bg-background px-4 py-3">
@@ -51,7 +51,7 @@ export const PipedreamHeader: React.FC<PipedreamHeaderProps> = ({
             <AgentSelector
               selectedAgentId={currentAgentId}
               onAgentSelect={onAgentChange}
-              isSunaAgent={isSunaAgent}
+              isLeakerFlowAgent={isLeakerFlowAgent}
             />
           </div>
         )}

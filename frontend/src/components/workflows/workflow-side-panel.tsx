@@ -317,6 +317,29 @@ export function WorkflowSidePanel({
                             </div>
                         </div>
 
+                        {/* Playbook configuration */}
+                        {selectedStep.config?.step_type === 'playbook' && (
+                            <div className="space-y-4">
+                                <div>
+                                    <Label htmlFor="playbook-template" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Playbook Template</Label>
+                                    <Textarea
+                                        id="playbook-template"
+                                        value={selectedStep.config?.template || ''}
+                                        onChange={(e) => onUpdateStep({ 
+                                            id: selectedStep.id, 
+                                            config: { ...selectedStep.config, template: e.target.value }
+                                        })}
+                                        placeholder="Write the playbook instructions here. Use {{google_sheet_id}}, {{sheet_name}}, {{start_row}}, {{limit_rows}} as needed."
+                                        rows={6}
+                                        className="mt-1 resize-none font-mono text-sm"
+                                    />
+                                    <div className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                                        Use double braces like {`{{token}}`} for variables.
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Tool configuration */}
                         {selectedStep.config?.tool_name && (
                             <div className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-200 dark:border-zinc-800">
@@ -428,4 +451,4 @@ export function WorkflowSidePanel({
             />
         </>
     );
-} 
+}

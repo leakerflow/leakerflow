@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { FlickeringGrid } from '@/components/home/ui/flickering-grid';
+import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ArrowLeft } from 'lucide-react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
@@ -59,36 +59,9 @@ function LegalContent() {
     <main className="flex flex-col items-center justify-center min-h-screen w-full">
       <section className="w-full relative overflow-hidden pb-20">
         <div className="relative flex flex-col items-center w-full px-6 pt-10">
-          {/* Left side flickering grid with gradient fades - similar to hero section */}
-          <div className="absolute left-0 top-0 h-[600px] w-1/3 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background z-10" />
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={mounted && tablet ? 2 : 2.5}
-              gridGap={mounted && tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={0.4}
-              flickerChance={isScrolling ? 0.01 : 0.03}
-            />
-          </div>
-
-          {/* Right side flickering grid with gradient fades */}
-          <div className="absolute right-0 top-0 h-[600px] w-1/3 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background z-10" />
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={mounted && tablet ? 2 : 2.5}
-              gridGap={mounted && tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={0.4}
-              flickerChance={isScrolling ? 0.01 : 0.03}
-            />
+          {/* Background beams effect */}
+          <div className="absolute inset-0 h-[600px] -z-10 overflow-hidden">
+            <BackgroundBeams className="opacity-30" />
           </div>
 
           {/* Center content background with rounded bottom */}
@@ -107,7 +80,7 @@ function LegalContent() {
               </Link>
 
               <h1 className="text-3xl md:text-4xl font-medium tracking-tighter text-center">
-                Legal <span className="text-secondary">Information</span>
+                Legal <span className="text-brand-gradient">Information</span>
               </h1>
             </div>
 
@@ -117,7 +90,7 @@ function LegalContent() {
                   onClick={() => handleTabChange('terms')}
                   className={`pb-2 px-4 ${
                     activeTab === 'terms'
-                      ? 'border-b-2 border-secondary font-medium text-secondary'
+                      ? 'border-b-2 border-transparent bg-brand-gradient bg-clip-border font-medium text-brand-gradient'
                       : 'text-muted-foreground hover:text-primary/80 transition-colors'
                   }`}
                 >
@@ -127,7 +100,7 @@ function LegalContent() {
                   onClick={() => handleTabChange('privacy')}
                   className={`pb-2 px-4 ${
                     activeTab === 'privacy'
-                      ? 'border-b-2 border-secondary font-medium text-secondary'
+                      ? 'border-b-2 border-transparent bg-brand-gradient bg-clip-border font-medium text-brand-gradient'
                       : 'text-muted-foreground hover:text-primary/80 transition-colors'
                   }`}
                 >
@@ -136,8 +109,10 @@ function LegalContent() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-[#F3F4F6] dark:bg-[#F9FAFB]/[0.02] p-8 shadow-sm">
-              <div className="prose prose-sm max-w-none dark:prose-invert">
+            <div className="rounded-xl border border-border bg-[#F3F4F6] dark:bg-[#F9FAFB]/[0.02] p-8 shadow-sm relative overflow-hidden">
+              <div className="absolute inset-0 bg-brand-gradient opacity-[0.02] pointer-events-none"></div>
+              <div className="relative z-10">
+                <div className="prose prose-sm max-w-none dark:prose-invert">
                 {activeTab === 'terms' ? (
                   <div>
                     <h2 className="text-2xl font-medium tracking-tight mb-4">
@@ -157,11 +132,11 @@ function LegalContent() {
                     <p className="text-muted-foreground text-balance mb-6">
                       PLEASE READ THESE TERMS OF USE ("AGREEMENT" OR "TERMS OF
                       USE" or "TERMS OF SERVICE" or "TERMS AND CONDITIONS")
-                      CAREFULLY BEFORE USING THE SERVICES OFFERED BY Kortix AI
-                      Corp (701 Tillery Street Unit 12-2521 Austin, Texas 78702,
+                      CAREFULLY BEFORE USING THE SERVICES OFFERED BY Leaker
+                      Flow (701 Tillery Street Unit 12-2521 Austin, Texas 78702,
                       United States). THIS AGREEMENT SETS FORTH THE LEGALLY
-                      BINDING TERMS AND CONDITIONS FOR YOUR USE OF THE SUNA
-                      WEBSITE AND ALL RELATED SERVICES.
+                      BINDING TERMS AND CONDITIONS FOR YOUR USE OF THE LEAKER
+                      FLOW WEBSITE AND ALL RELATED SERVICES.
                     </p>
 
                     <h3 className="text-lg font-medium tracking-tight">
@@ -169,16 +144,16 @@ function LegalContent() {
                     </h3>
                     <ul className="text-muted-foreground space-y-1 mb-6">
                       <li>
-                        "Company" refers to Kortix AI Corp (701 Tillery Street
+                        "Company" refers to Leaker Flow (701 Tillery Street
                         Unit 12-2521 Austin, Texas 78702, United States).
                       </li>
                       <li>
-                        "Site" refers to the Suna website, including any related
+                        "Site" refers to the Leaker Flow website, including any related
                         features, content, or applications offered from time to
                         time by the Company.
                       </li>
                       <li>
-                        "Service" refers to the Suna website and all related
+                        "Service" refers to the Leaker Flow website and all related
                         services provided by the Company, including the
                         AI-powered agent that helps you accomplish real-world
                         tasks.
@@ -216,7 +191,7 @@ function LegalContent() {
                       </li>
                       <li>
                         "Notice Address" refers to the contact address for the
-                        Company, specifically legal@kortix.ai
+                        Company, specifically legal@leakerflow.com
                       </li>
                       <li>
                         "Privacy Policy" refers to the document outlining how
@@ -354,13 +329,13 @@ function LegalContent() {
                       Open Source License
                     </h3>
                     <p className="text-muted-foreground text-balance mb-6">
-                      Suna is licensed under the Apache License, Version 2.0.
+                      Leaker Flow is licensed under the Apache License, Version 2.0.
                       You may obtain a copy of the License at{' '}
                       <a
                         href="http://www.apache.org/licenses/LICENSE-2.0"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-secondary hover:underline"
+                        className="text-brand-gradient hover:underline"
                       >
                         http://www.apache.org/licenses/LICENSE-2.0
                       </a>
@@ -394,7 +369,7 @@ function LegalContent() {
                       held by others. We respect rights holders internationally,
                       and we ask our users to do the same. If you believe your
                       copyright or trademark is being infringed by the Service,
-                      please write to legal@kortixai.com and we will process and
+                      please write to legal@leakerflow.com and we will process and
                       investigate your request and take appropriate actions
                       under the Digital Millennium Copyright Act and other
                       applicable intellectual property laws with respect to any
@@ -410,7 +385,7 @@ function LegalContent() {
                       subscription, payable in U.S. dollars, that will
                       automatically renew. You can stop using the Service and
                       cancel your subscription at any time through the website
-                      or by emailing us at legal@kortixai.com. If you cancel
+                      or by emailing us at legal@leakerflow.com. If you cancel
                       your subscription, you may not receive a refund or credit
                       for any amounts that have already been billed or paid. The
                       Company reserves the right to change its prices at any
@@ -556,7 +531,7 @@ function LegalContent() {
                       Trademarks and Patents
                     </h3>
                     <p className="text-muted-foreground text-balance mb-6">
-                      All Suna logos, marks, and designations are trademarks or
+                      All Leaker Flow logos, marks, and designations are trademarks or
                       registered trademarks of the Company. All other trademarks
                       mentioned on this website are the property of their
                       respective owners. The trademarks and logos displayed on
@@ -646,14 +621,14 @@ function LegalContent() {
                     <p className="text-muted-foreground text-balance mb-6">
                       ALL USE OF THE SERVICE AND ANY CONTENT IS UNDERTAKEN
                       ENTIRELY AT YOUR OWN RISK. THE SERVICE (INCLUDING, WITHOUT
-                      LIMITATION, THE SUNA WEB APP AND ANY CONTENT) IS PROVIDED
+                      LIMITATION, THE LEAKER FLOW WEB APP AND ANY CONTENT) IS PROVIDED
                       "AS IS" AND "AS AVAILABLE" AND IS WITHOUT WARRANTY OF ANY
                       KIND, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
                       THE IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT,
                       MERCHANTABILITY, AND FITNESS FOR A PARTICULAR PURPOSE, AND
                       ANY WARRANTIES IMPLIED BY ANY COURSE OF PERFORMANCE OR
                       USAGE OF TRADE, ALL OF WHICH ARE EXPRESSLY DISCLAIMED.
-                      SUNA DOES NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR
+                      LEAKER FLOW DOES NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR
                       RELIABILITY OF THE AI-GENERATED CONTENT, AND USERS ASSUME
                       FULL RESPONSIBILITY FOR ANY APPLICATIONS CREATED USING THE
                       SERVICE. SOME STATES DO NOT ALLOW LIMITATIONS ON HOW LONG
@@ -688,10 +663,10 @@ function LegalContent() {
                       For questions regarding the Service, you can get in touch
                       by emailing us at{' '}
                       <a
-                        href="mailto:legal@kortixai.com"
-                        className="text-secondary hover:underline"
+                        href="mailto:legal@leakerflow.com"
+                        className="text-brand-gradient hover:underline"
                       >
-                        legal@kortixai.com
+                        legal@leakerflow.com
                       </a>
                       .
                     </p>
@@ -719,7 +694,7 @@ function LegalContent() {
                     </p>
 
                     <p className="text-muted-foreground text-balance mb-6">
-                      References to our "Services" at Suna in this statement
+                      References to our "Services" at Leaker Flow in this statement
                       include our website, apps, and other products and
                       services. This statement applies to our Services that
                       display or reference this Privacy Statement. Third-party
@@ -728,7 +703,7 @@ function LegalContent() {
                     </p>
 
                     <p className="text-muted-foreground text-balance mb-6">
-                      Suna does not collect biometric or identifying
+                      Leaker Flow does not collect biometric or identifying
                       information. All data is processed securely and any data
                       is deleted upon account removal.
                     </p>
@@ -912,22 +887,23 @@ function LegalContent() {
                     <p className="text-muted-foreground text-balance">
                       You can get in touch by emailing us at{' '}
                       <a
-                        href="mailto:legal@kortixai.com"
-                        className="text-secondary hover:underline"
+                        href="mailto:legal@leakerflow.com"
+                        className="text-brand-gradient hover:underline"
                       >
-                        legal@kortixai.com
+                        legal@leakerflow.com
                       </a>
                       .
                     </p>
                   </div>
                 )}
+                </div>
               </div>
             </div>
 
             <div className="mt-12 text-center pb-10">
               <Link
                 href="/"
-                className="group inline-flex h-10 items-center justify-center gap-2 text-sm font-medium tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground px-6 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] bg-primary hover:bg-primary/90 transition-all duration-200 w-fit"
+                className="group inline-flex h-10 items-center justify-center gap-2 text-sm font-medium tracking-wide rounded-full text-white px-6 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] bg-brand-gradient hover:opacity-90 transition-all duration-200 w-fit"
               >
                 <span>Return to Home</span>
                 <span className="inline-flex items-center justify-center size-5 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors duration-200">

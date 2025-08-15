@@ -2511,7 +2511,7 @@ wheels = [
 ]
 
 [[package]]
-name = "suna"
+name = "leakerflow"
 version = "1.0"
 source = { virtual = "." }
 dependencies = [

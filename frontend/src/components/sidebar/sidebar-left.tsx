@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Bot, Menu, Store, Plus, Zap, Plug, ChevronRight, Loader2 } from 'lucide-react';
+import { Bot, Menu, Store, Plus, Zap, ChevronRight, Loader2 } from 'lucide-react';
 
 import { NavAgents } from '@/components/sidebar/nav-agents';
 import { NavUserWithTeams } from '@/components/sidebar/nav-user-with-teams';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { CTACard } from '@/components/sidebar/cta';
 import {
   Sidebar,
@@ -150,7 +150,7 @@ export function SidebarLeft({
       <SidebarHeader className="px-2 py-2">
         <div className="flex h-[40px] items-center px-1 relative">
           <Link href="/dashboard" className="flex-shrink-0" onClick={() => isMobile && setOpenMobile(false)}>
-            <KortixLogo size={24} />
+            <LeakerFlowLogo size={24} />
           </Link>
           {state !== 'collapsed' && (
             <div className="ml-2 transition-all duration-200 ease-in-out whitespace-nowrap">
@@ -243,21 +243,6 @@ export function SidebarLeft({
                 </SidebarMenuItem>
               </Collapsible>
             </SidebarMenu>
-          )}
-          {!flagsLoading && customAgentsEnabled && (
-            <Link href="/settings/credentials">
-              <SidebarMenuButton 
-                className={cn('touch-manipulation', {
-                  'bg-accent text-accent-foreground font-medium': pathname === '/settings/credentials',
-                })}
-                onClick={() => isMobile && setOpenMobile(false)}
-              >
-                <Plug className="h-4 w-4 mr-1" />
-                <span className="flex items-center justify-between w-full">
-                  Integrations
-                </span>
-              </SidebarMenuButton>
-            </Link>
           )}
         </SidebarGroup>
         <NavAgents />

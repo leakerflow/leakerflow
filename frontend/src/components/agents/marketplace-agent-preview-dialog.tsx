@@ -85,7 +85,7 @@ export const MarketplaceAgentPreviewDialog: React.FC<MarketplaceAgentPreviewDial
 
   const avatar = '🤖';
   const avatar_color = '#6366f1';
-  const isSunaAgent = agent.is_kortix_team || false;
+  const isLeakerFlowAgent = agent.is_leakerflow_team || false;
   
   const tools = agent.mcp_requirements || [];
   const integrations = tools.filter(tool => !tool.custom_type || tool.custom_type !== 'sse');

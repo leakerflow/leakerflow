@@ -20,14 +20,14 @@ import { NewAgentDialog } from '@/components/agents/new-agent-dialog';
 
 import { useRouter } from 'next/navigation';
 import { cn, truncateString } from '@/lib/utils';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface AgentSelectorProps {
   selectedAgentId?: string;
   onAgentSelect?: (agentId: string | undefined) => void;
   disabled?: boolean;
-  isSunaAgent?: boolean;
+  isLeakerFlowAgent?: boolean;
   compact?: boolean;
 }
 
@@ -35,7 +35,7 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
   selectedAgentId,
   onAgentSelect,
   disabled = false,
-  isSunaAgent,
+  isLeakerFlowAgent,
   compact = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,10 +93,10 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
   const getAgentDisplay = () => {
     const selectedAgent = allAgents.find(agent => agent.id === selectedAgentId);
     if (selectedAgent) {
-      const isSelectedAgentSuna = selectedAgent.metadata?.is_suna_default || false;
+      const isSelectedAgentLeakerFlow = selectedAgent.metadata?.is_leakerflow_default || false;
       return {
         name: selectedAgent.name,
-        icon: isSelectedAgentSuna ? <KortixLogo size={16} /> : selectedAgent.icon
+        icon: isSelectedAgentLeakerFlow ? <LeakerFlowLogo size={16} /> : selectedAgent.icon
       };
     }
     
@@ -104,10 +104,10 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
     }
     
     const defaultAgent = allAgents[0];
-    const isDefaultAgentSuna = defaultAgent?.metadata?.is_suna_default || false;
+    const isDefaultAgentLeakerFlow = defaultAgent?.metadata?.is_leakerflow_default || false;
     return {
-      name: defaultAgent?.name || 'Suna',
-      icon: isDefaultAgentSuna ? <KortixLogo size={16} /> : (defaultAgent?.icon || <KortixLogo size={16} />)
+      name: defaultAgent?.name || 'Leaker Flow',
+      icon: isDefaultAgentLeakerFlow ? <LeakerFlowLogo size={16} /> : (defaultAgent?.icon || <LeakerFlowLogo size={16} />)
     };
   };
 
@@ -157,7 +157,7 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
     const isSelected = agent.id === selectedAgentId;
     const isHighlighted = index === highlightedIndex;
     const hasSettings = agent.type === 'custom' && agent.id;
-    const isThisAgentSuna = agent.metadata?.is_suna_default || false;
+    const isThisAgentLeakerFlow = agent.metadata?.is_leakerflow_default || false;
 
     return (
       <TooltipProvider key={agent.id || 'default'}>
@@ -172,8 +172,8 @@ export const AgentSelector: React.FC<AgentSelectorProps> = ({
               onMouseEnter={() => setHighlightedIndex(index)}
             >
               <div className="flex-shrink-0">
-                {isThisAgentSuna ? (
-                  <KortixLogo size={16} />
+                {isThisAgentLeakerFlow ? (
+                  <LeakerFlowLogo size={16} />
                 ) : (
                   agent.icon
                 )}

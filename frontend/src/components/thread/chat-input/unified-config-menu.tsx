@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Cpu, Search, Check, ChevronDown, Plus, ExternalLink, Crown } from 'lucide-react';
 import { useAgents } from '@/hooks/react-query/agents/use-agents';
-import { KortixLogo } from '@/components/sidebar/kortix-logo';
+import { LeakerFlowLogo } from '@/components/sidebar/leakerflow-logo';
 import type { ModelOption, SubscriptionStatus } from './_use-model-selection';
 import { MODELS, STORAGE_KEY_CUSTOM_MODELS, STORAGE_KEY_MODEL, formatModelName, getCustomModels } from './_use-model-selection';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -28,7 +28,7 @@ import { useComposioToolkitIcon } from '@/hooks/react-query/composio/use-composi
 import { Skeleton } from '@/components/ui/skeleton';
 import { NewAgentDialog } from '@/components/agents/new-agent-dialog';
 import { useAgentWorkflows } from '@/hooks/react-query/agents/use-agent-workflows';
-import { PlaybookExecuteDialog } from '@/components/playbooks/playbook-execute-dialog';
+
 import { AgentAvatar } from '@/components/thread/content/agent-avatar';
 
 type UnifiedConfigMenuProps = {
@@ -65,7 +65,7 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
     const [integrationsOpen, setIntegrationsOpen] = useState(false);
     const [showNewAgentDialog, setShowNewAgentDialog] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const [execDialog, setExecDialog] = useState<{ open: boolean; playbook: any | null; agentId: string | null }>({ open: false, playbook: null, agentId: null });
+
     const [isCustomModelDialogOpen, setIsCustomModelDialogOpen] = useState(false);
     const [dialogInitialData, setDialogInitialData] = useState<CustomModelFormData>({ id: '', label: '' });
     const [customModels, setCustomModels] = useState<Array<{ id: string; label: string }>>([]);
@@ -222,9 +222,9 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
         return found;
     }, [agents, selectedAgentId]);
 
-    const currentAgentIdForPlaybooks = isLoggedIn ? displayAgent?.agent_id || '' : '';
-    const { data: playbooks = [], isLoading: playbooksLoading } = useAgentWorkflows(currentAgentIdForPlaybooks);
-    const [playbooksExpanded, setPlaybooksExpanded] = useState(true);
+    const currentAgentIdForWorkflows = isLoggedIn ? displayAgent?.agent_id || '' : '';
+    const { data: workflows = [], isLoading: workflowsLoading } = useAgentWorkflows(currentAgentIdForWorkflows);
+    const [workflowsExpanded, setWorkflowsExpanded] = useState(true);
 
     return (
         <>
@@ -244,7 +244,7 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
                                     {renderAgentIcon(displayAgent)}
                                 </div>
                                 <span className="truncate text-sm">
-                                    {displayAgent?.name || 'Suna'}
+                                    {displayAgent?.name || 'LeakerFlow'}
                                 </span>
                                 <ChevronDown size={12} className="opacity-60" />
                             </div>
@@ -310,7 +310,7 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
                             )}
 
                             {/* Agents "see all" removed; scroll container shows all */}
-                            {/* Playbooks moved below (as hover submenu) */}
+                            {/* Workflows moved below (as hover submenu) */}
                         </div>
                     )}
 
@@ -456,29 +456,29 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
 
                     <DropdownMenuSeparator />
 
-                    {/* Playbooks submenu (current agent) */}
+                    {/* Workflows submenu (current agent) */}
                     {onAgentSelect && (
                         <div className="px-1.5">
                             <DropdownMenuSub>
                                 <DropdownMenuSubTrigger className="flex items-center rounded-lg gap-2 px-3 py-2 mx-0 my-0.5">
-                                    <span className="font-medium">Playbooks</span>
+                                    <span className="font-medium">Workflows</span>
                                 </DropdownMenuSubTrigger>
                                 <DropdownMenuPortal>
                                     <DropdownMenuSubContent className="w-72 rounded-xl max-h-80 overflow-y-auto">
-                                        {playbooksLoading ? (
+                                        {workflowsLoading ? (
                                             <div className="px-3 py-2 text-xs text-muted-foreground">Loading…</div>
-                                        ) : playbooks && playbooks.length > 0 ? (
-                                            playbooks.map((wf: any) => (
+                                        ) : workflows && workflows.length > 0 ? (
+                                            workflows.map((wf: any) => (
                                                 <DropdownMenuItem
                                                     key={`pb-${wf.id}`}
                                                     className="text-sm px-3 py-2 mx-0 my-0.5 flex items-center justify-between cursor-pointer rounded-lg"
-                                                    onClick={(e) => { e.stopPropagation(); setExecDialog({ open: true, playbook: wf, agentId: currentAgentIdForPlaybooks }); setIsOpen(false); }}
+                                                    onClick={(e) => { e.stopPropagation(); /* TODO: Implement workflow execution */ }}
                                                 >
                                                     <span className="truncate">{wf.name}</span>
                                                 </DropdownMenuItem>
                                             ))
                                         ) : (
-                                            <div className="px-3 py-2 text-xs text-muted-foreground">No playbooks</div>
+                                            <div className="px-3 py-2 text-xs text-muted-foreground">No workflows</div>
                                         )}
                                     </DropdownMenuSubContent>
                                 </DropdownMenuPortal>
@@ -546,13 +546,7 @@ const LoggedInMenu: React.FC<UnifiedConfigMenuProps> = ({
             {/* Create Agent */}
             <NewAgentDialog open={showNewAgentDialog} onOpenChange={setShowNewAgentDialog} />
 
-            {/* Execute Playbook */}
-            <PlaybookExecuteDialog
-                open={execDialog.open}
-                onOpenChange={(open) => setExecDialog((s) => ({ ...s, open }))}
-                playbook={execDialog.playbook as any}
-                agentId={execDialog.agentId || ''}
-            />
+
 
             <CustomModelDialog
                 isOpen={isCustomModelDialogOpen}
@@ -579,9 +573,9 @@ const GuestMenu: React.FC<UnifiedConfigMenuProps> = () => {
                         >
                             <div className="flex items-center gap-2 max-w-[160px]">
                                 <div className="flex-shrink-0">
-                                    <KortixLogo size={16} />
+                                    <LeakerFlowLogo size={16} />
                                 </div>
-                                <span className="truncate text-sm">Suna</span>
+                                <span className="truncate text-sm">LeakerFlow</span>
                                 <ChevronDown size={12} className="opacity-60" />
                             </div>
                         </Button>

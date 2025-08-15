@@ -320,7 +320,7 @@ export const ScheduleTriggerConfigForm: React.FC<ScheduleTriggerConfigFormProps>
     onChange({
       ...config,
       workflow_id: workflowId,
-      // reset inputs when switching playbooks to avoid leaking old keys
+      // reset inputs when switching workflows to avoid leaking old keys
       workflow_input: {},
     });
   };

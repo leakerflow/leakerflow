@@ -4,11 +4,12 @@ import { ExpandableMarkdownEditor } from '@/components/ui/expandable-markdown-ed
 import { AgentToolsConfiguration } from '../agent-tools-configuration';
 import { AgentMCPConfiguration } from '../agent-mcp-configuration';
 import { AgentKnowledgeBaseManager } from '../knowledge-base/agent-knowledge-base-manager';
-import { AgentPlaybooksConfiguration } from '../playbooks/agent-playbooks-configuration';
+
 import { AgentTriggersConfiguration } from '../triggers/agent-triggers-configuration';
 import { AgentModelSelector } from './model-selector';
+import { WorkflowTab } from './workflow-tab';
 import { toast } from 'sonner';
-import { KortixLogo } from '../../sidebar/kortix-logo';
+import { LeakerFlowLogo } from '../../sidebar/leakerflow-logo';
 
 interface ConfigurationTabProps {
   agentId: string;
@@ -38,7 +39,7 @@ interface ConfigurationTabProps {
   onToolsSave?: (tools: Record<string, boolean | { enabled: boolean; description: string }>) => void;
   initialAccordion?: string;
   agentMetadata?: {
-    is_suna_default?: boolean;
+    is_leakerflow_default?: boolean;
     centrally_managed?: boolean;
     restrictions?: {
       system_prompt_editable?: boolean;
@@ -65,18 +66,17 @@ export function ConfigurationTab({
   agentMetadata,
   isLoading = false,
 }: ConfigurationTabProps) {
-  const isSunaAgent = agentMetadata?.is_suna_default || false;
+  const isLeakerFlowAgent = agentMetadata?.is_leakerflow_default || false;
 
   const mapAccordion = (val?: string) => {
-    if (val === 'instructions') return isSunaAgent ? 'integrations' : 'system';
-    if (val === 'workflows') return 'playbooks';
-    if (isSunaAgent && (val === 'system' || val === 'tools')) {
+    if (val === 'instructions') return isLeakerFlowAgent ? 'integrations' : 'system';
+    if (isLeakerFlowAgent && (val === 'system' || val === 'tools')) {
       return 'integrations';
     }
-    if (['system', 'tools', 'integrations', 'knowledge', 'playbooks', 'triggers'].includes(val || '')) {
+    if (['system', 'tools', 'integrations', 'knowledge', 'triggers'].includes(val || '')) {
       return val!;
     }
-    return isSunaAgent ? 'integrations' : 'system';
+    return isLeakerFlowAgent ? 'integrations' : 'system';
   };
 
   const [openAccordion, setOpenAccordion] = React.useState<string>(mapAccordion(initialAccordion));
@@ -91,9 +91,9 @@ export function ConfigurationTab({
   const areToolsEditable = !isViewingOldVersion && (restrictions.tools_editable !== false);
 
   const handleSystemPromptChange = (value: string) => {
-    if (!isSystemPromptEditable && isSunaAgent) {
+    if (!isSystemPromptEditable && isLeakerFlowAgent) {
       toast.error("System prompt cannot be edited", {
-        description: "Suna's system prompt is managed centrally and cannot be changed.",
+        description: "Leaker Flow's system prompt is managed centrally and cannot be changed.",
       });
       return;
     }
@@ -105,9 +105,9 @@ export function ConfigurationTab({
   };
 
   const handleToolsChange = (tools: Record<string, boolean | { enabled: boolean; description: string }>) => {
-    if (!areToolsEditable && isSunaAgent) {
+    if (!areToolsEditable && isLeakerFlowAgent) {
       toast.error("Tools cannot be modified", {
-        description: "Suna's default tools are managed centrally and cannot be changed.",
+        description: "Leaker Flow's default tools are managed centrally and cannot be changed.",
       });
       return;
     }
@@ -123,23 +123,23 @@ export function ConfigurationTab({
     <div className="h-full flex flex-col">
       <div className="flex-1 overflow-y-auto">
         <div className="px-8 py-0 space-y-3">
-          {isSunaAgent && (
+          {isLeakerFlowAgent && (
             <div className="p-4 bg-primary/10 border border-primary-200 rounded-xl">
               <div className="flex items-center gap-3 mb-2">
                 <div className="text-primary-600">
-                  <KortixLogo size={20} />
+                  <LeakerFlowLogo size={20} />
                 </div>
-                <span className="font-semibold text-primary-800">Suna Default Agent</span>
+                <span className="font-semibold text-primary-800">Leaker Flow Default Agent</span>
               </div>
               <p className="text-sm text-primary-700">
-                This is Suna's default agent with centrally managed system prompt and tools.
-                You can customize integrations, knowledge base, playbooks, and triggers to personalize your experience.
+                This is Leaker Flow's default agent with centrally managed system prompt and tools.
+                You can customize integrations, knowledge base, and triggers to personalize your experience.
               </p>
             </div>
           )}
 
           <div className="space-y-3">
-            {!isSunaAgent && (
+            {!isLeakerFlowAgent && (
               <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/10">
                 <button
                   className="w-full p-4 text-left group-hover:bg-muted/30 transition-all duration-300"
@@ -180,7 +180,7 @@ export function ConfigurationTab({
               </div>
             )}
             
-            {!isSunaAgent && (
+            {!isLeakerFlowAgent && (
               <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/10">
                 <button
                   className="w-full p-4 text-left group-hover:bg-muted/30 transition-all duration-300"
@@ -225,7 +225,7 @@ export function ConfigurationTab({
               </div>
             )}
             
-            {!isSunaAgent && (
+            {!isLeakerFlowAgent && (
               <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/10">
                 <button
                   className="w-full p-4 text-left group-hover:bg-muted/30 transition-all duration-300"
@@ -257,7 +257,7 @@ export function ConfigurationTab({
                         tools={displayData.agentpress_tools}
                         onToolsChange={areToolsEditable ? handleToolsChange : () => { }}
                         disabled={!areToolsEditable}
-                        isSunaAgent={isSunaAgent}
+                        isLeakerFlowAgent={isLeakerFlowAgent}
                         isLoading={isLoading}
                       />
                     </div>
@@ -352,7 +352,7 @@ export function ConfigurationTab({
             <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/10">
               <button
                 className="w-full p-4 text-left group-hover:bg-muted/30 transition-all duration-300"
-                onClick={() => setOpenAccordion(openAccordion === 'playbooks' ? '' : 'playbooks')}
+                onClick={() => setOpenAccordion(openAccordion === 'workflows' ? '' : 'workflows')}
                 disabled={isLoading}
               >
                 <div className="flex items-center gap-4 w-full">
@@ -362,23 +362,23 @@ export function ConfigurationTab({
                     </div>
                   </div>
                   <div className="text-left flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-300">Playbooks</h4>
-                    <p className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors duration-300">Simple variable-driven runs</p>
+                    <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-300">Workflows</h4>
+                    <p className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors duration-300">Create and manage automated workflows</p>
                   </div>
-                  <ChevronDown className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ease-out ${openAccordion === 'playbooks' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ease-out ${openAccordion === 'workflows' ? 'rotate-180' : ''}`} />
                 </div>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 ease-out ${openAccordion === 'playbooks'
-                  ? 'max-h-[600px] opacity-100'
+                className={`overflow-hidden transition-all duration-300 ease-out ${openAccordion === 'workflows'
+                  ? 'max-h-[800px] opacity-100'
                   : 'max-h-0 opacity-0'
                   }`}
               >
                 <div className="px-6 pb-6 pt-2">
                   <div className="pt-4">
-                    <AgentPlaybooksConfiguration
+                    <WorkflowTab
                       agentId={agentId}
-                      agentName={displayData.name || 'Agent'}
+                      isViewingOldVersion={isViewingOldVersion}
                     />
                   </div>
                 </div>

@@ -25,7 +25,7 @@ import { useAgentSelection } from '@/lib/stores/agent-selection-store';
 import { Examples } from './examples';
 import { useThreadQuery } from '@/hooks/react-query/threads/use-threads';
 import { normalizeFilenameToNFC } from '@/lib/utils/unicode';
-import { KortixLogo } from '../sidebar/kortix-logo';
+import { LeakerFlowLogo } from '../sidebar/leakerflow-logo';
 import { AgentRunLimitDialog } from '@/components/thread/agent-run-limit-dialog';
 import { useFeatureFlag } from '@/lib/feature-flags';
 import { CustomAgentsSection } from './custom-agents-section';
@@ -75,9 +75,9 @@ export function DashboardContent() {
   const selectedAgent = selectedAgentId
     ? agents.find(agent => agent.agent_id === selectedAgentId)
     : null;
-  const displayName = selectedAgent?.name || 'Suna';
+  const displayName = selectedAgent?.name || 'Leaker Flow';
   const agentAvatar = undefined;
-  const isSunaAgent = selectedAgent?.metadata?.is_suna_default || false;
+  const isLeakerFlowAgent = selectedAgent?.metadata?.is_leakerflow_default || false;
 
   const threadQuery = useThreadQuery(initiatedThreadId || '');
 
@@ -87,7 +87,7 @@ export function DashboardContent() {
     console.log('🚀 Dashboard effect:', { 
       agentsLength: agents.length, 
       selectedAgentId, 
-      agents: agents.map(a => ({ id: a.agent_id, name: a.name, isDefault: a.metadata?.is_suna_default })) 
+      agents: agents.map(a => ({ id: a.agent_id, name: a.name, isDefault: a.metadata?.is_leakerflow_default })) 
     });
     
     if (agents.length > 0) {
@@ -219,7 +219,7 @@ export function DashboardContent() {
           <div className="min-h-full flex flex-col">
             {customAgentsEnabled && (
               <div className="flex justify-center px-4 pt-4 md:pt-8">
-                <ReleaseBadge text="Custom Agents, Playbooks, and more!" link="/agents?tab=my-agents" />
+                <ReleaseBadge text="Custom Agents, Workflows, and more!" link="/agents?tab=my-agents" />
               </div>
             )}
             <div className="flex-1 flex items-center justify-center px-4 py-8">

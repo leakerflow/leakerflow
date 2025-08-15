@@ -207,8 +207,8 @@ class Configuration:
     MORPH_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
     OPENROUTER_API_BASE: Optional[str] = "https://openrouter.ai/api/v1"
-    OR_SITE_URL: Optional[str] = "https://kortix.ai"
-    OR_APP_NAME: Optional[str] = "Kortix AI"    
+    OR_SITE_URL: Optional[str] = "https://leakerflow.com"
+    OR_APP_NAME: Optional[str] = "LeakerFlow"    
     
     # AWS Bedrock credentials
     AWS_ACCESS_KEY_ID: Optional[str] = None
@@ -252,8 +252,8 @@ class Configuration:
     STRIPE_PRODUCT_ID_STAGING: str = 'prod_SCgIj3G7yPOAWY'
     
     # Sandbox configuration
-    SANDBOX_IMAGE_NAME = "kortix/suna:0.1.3.1"
-    SANDBOX_SNAPSHOT_NAME = "kortix/suna:0.1.3.1"
+    SANDBOX_IMAGE_NAME = "leakerflow/leakerflow:0.1.3.1"
+    SANDBOX_SNAPSHOT_NAME = "leakerflow/leakerflow:0.1.3.1"
     SANDBOX_ENTRYPOINT = "/usr/bin/supervisord -n -c /etc/supervisor/conf.d/supervisord.conf"
 
     # LangFuse configuration

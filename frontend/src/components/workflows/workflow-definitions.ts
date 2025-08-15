@@ -1,4 +1,4 @@
-import { FileText, Terminal, Rocket, Computer, Eye, Search, Globe, GitBranch, Settings, MonitorPlay, Cog, Key, Table2 } from 'lucide-react';
+import { FileText, Terminal, Rocket, Computer, Eye, Search, Globe, GitBranch, Settings, MonitorPlay, Cog, Key, Table2, BookOpen } from 'lucide-react';
 
 export interface StepDefinition {
     id: string;
@@ -61,6 +61,18 @@ export const BASE_STEP_DEFINITIONS: StepDefinition[] = [
         icon: FileText,
         category: 'actions',
         color: 'from-gray-500/20 to-gray-600/10 border-gray-500/20 text-gray-500'
+    },
+    {
+        id: 'playbook',
+        name: 'Playbook',
+        description: 'Execute a predefined playbook workflow',
+        icon: BookOpen,
+        category: 'actions',
+        color: 'from-blue-500/20 to-blue-600/10 border-blue-500/20 text-blue-500',
+        config: { 
+            step_type: 'playbook',
+            template: ''
+        }
     },
     // {
     //     id: 'sequence',
@@ -183,6 +195,13 @@ export function getStepIconAndColor(stepType: any): { icon: any; color: string }
             return { icon: Key, color: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/20 text-emerald-500' };
         }
         return { icon: Cog, color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/20 text-indigo-500' };
+    } else if (stepType.category === 'actions') {
+        const stepType_id = stepType.config?.step_type || stepType.id;
+        if (stepType_id === 'playbook') {
+            return { icon: BookOpen, color: 'from-blue-500/20 to-blue-600/10 border-blue-500/20 text-blue-500' };
+        }
+        const icon = ACTION_ICONS[stepType.icon] || FileText;
+        return { icon, color: 'from-gray-500/20 to-gray-600/10 border-gray-500/20 text-gray-500' };
     } else {
         const icon = ACTION_ICONS[stepType.icon] || FileText;
         return { icon, color: 'from-gray-500/20 to-gray-600/10 border-gray-500/20 text-gray-500' };
@@ -227,4 +246,4 @@ export function generateAvailableStepTypes(agentTools?: {
     }
 
     return allSteps;
-} 
+}

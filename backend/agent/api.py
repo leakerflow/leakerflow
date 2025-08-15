@@ -32,7 +32,7 @@ from .versioning.api import router as version_router, initialize as initialize_v
 # Helper for version service
 async def _get_version_service():
     return await get_version_service()
-from utils.suna_default_agent_service import SunaDefaultAgentService
+from utils.leakerflow_default_agent_service import LeakerFlowDefaultAgentService
 
 router = APIRouter()
 router.include_router(version_router)
@@ -69,7 +69,7 @@ class MessageCreateRequest(BaseModel):
 class AgentCreateRequest(BaseModel):
     name: str
     description: Optional[str] = None
-    system_prompt: Optional[str] = None  # Make optional to allow defaulting to Suna's system prompt
+    system_prompt: Optional[str] = None  # Make optional to allow defaulting to LeakerFlow's system prompt
     configured_mcps: Optional[List[Dict[str, Any]]] = []
     custom_mcps: Optional[List[Dict[str, Any]]] = []
     agentpress_tools: Optional[Dict[str, Any]] = {}
@@ -1770,7 +1770,7 @@ async def export_agent(agent_id: str, user_id: str = Depends(get_current_user_id
         export_metadata = {}
         if agent.get('metadata'):
             export_metadata = {k: v for k, v in agent['metadata'].items() 
-                             if k not in ['is_suna_default', 'centrally_managed', 'installation_date', 'last_central_update']}
+                             if k not in ['is_leakerflow_default', 'centrally_managed', 'installation_date', 'last_central_update']}
         
         export_data = {
             "tools": sanitized_config['tools'],
@@ -1965,8 +1965,8 @@ async def create_agent(
         
         try:
             version_service = await _get_version_service()
-            from agent.config_helper import get_default_system_prompt_for_suna_agent
-            system_prompt = get_default_system_prompt_for_suna_agent()
+            from agent.config_helper import get_default_system_prompt_for_leakerflow_agent
+            system_prompt = get_default_system_prompt_for_leakerflow_agent()
             
             version = await version_service.create_version(
                 agent_id=agent['agent_id'],
@@ -2081,55 +2081,55 @@ async def update_agent(
         existing_data = existing_agent.data
 
         agent_metadata = existing_data.get('metadata', {})
-        is_suna_agent = agent_metadata.get('is_suna_default', False)
+        is_leakerflow_agent = agent_metadata.get('is_leakerflow_default', False)
         restrictions = agent_metadata.get('restrictions', {})
         
-        if is_suna_agent:
-            logger.warning(f"Update attempt on Suna default agent {agent_id} by user {user_id}")
+        if is_leakerflow_agent:
+            logger.warning(f"Update attempt on LeakerFlow default agent {agent_id} by user {user_id}")
             
             if (agent_data.name is not None and 
                 agent_data.name != existing_data.get('name') and 
                 restrictions.get('name_editable') == False):
-                logger.error(f"User {user_id} attempted to modify restricted name of Suna agent {agent_id}")
+                logger.error(f"User {user_id} attempted to modify restricted name of LeakerFlow agent {agent_id}")
                 raise HTTPException(
                     status_code=403, 
-                    detail="Suna's name cannot be modified. This restriction is managed centrally."
+                    detail="LeakerFlow's name cannot be modified. This restriction is managed centrally."
                 )
             
             if (agent_data.description is not None and
                 agent_data.description != existing_data.get('description') and 
                 restrictions.get('description_editable') == False):
-                logger.error(f"User {user_id} attempted to modify restricted description of Suna agent {agent_id}")
+                logger.error(f"User {user_id} attempted to modify restricted description of LeakerFlow agent {agent_id}")
                 raise HTTPException(
                     status_code=403, 
-                    detail="Suna's description cannot be modified."
+                    detail="LeakerFlow's description cannot be modified."
                 )
             
             if (agent_data.system_prompt is not None and 
                 restrictions.get('system_prompt_editable') == False):
-                logger.error(f"User {user_id} attempted to modify restricted system prompt of Suna agent {agent_id}")
+                logger.error(f"User {user_id} attempted to modify restricted system prompt of LeakerFlow agent {agent_id}")
                 raise HTTPException(
                     status_code=403, 
-                    detail="Suna's system prompt cannot be modified. This is managed centrally to ensure optimal performance."
+                    detail="LeakerFlow's system prompt cannot be modified. This is managed centrally to ensure optimal performance."
                 )
             
             if (agent_data.agentpress_tools is not None and 
                 restrictions.get('tools_editable') == False):
-                logger.error(f"User {user_id} attempted to modify restricted tools of Suna agent {agent_id}")
+                logger.error(f"User {user_id} attempted to modify restricted tools of LeakerFlow agent {agent_id}")
                 raise HTTPException(
                     status_code=403, 
-                    detail="Suna's default tools cannot be modified. These tools are optimized for Suna's capabilities."
+                    detail="LeakerFlow's default tools cannot be modified. These tools are optimized for LeakerFlow's capabilities."
                 )
             
             if ((agent_data.configured_mcps is not None or agent_data.custom_mcps is not None) and 
                 restrictions.get('mcps_editable') == False):
-                logger.error(f"User {user_id} attempted to modify restricted MCPs of Suna agent {agent_id}")
+                logger.error(f"User {user_id} attempted to modify restricted MCPs of LeakerFlow agent {agent_id}")
                 raise HTTPException(
                     status_code=403, 
-                    detail="Suna's integrations cannot be modified."
+                    detail="LeakerFlow's integrations cannot be modified."
                 )
             
-            logger.info(f"Suna agent update validation passed for agent {agent_id} by user {user_id}")
+            logger.info(f"LeakerFlow agent update validation passed for agent {agent_id} by user {user_id}")
 
         current_version_data = None
         if existing_data.get('current_version_id'):
@@ -2147,6 +2147,9 @@ async def update_agent(
         if current_version_data is None:
             logger.info(f"Agent {agent_id} has no version data, creating initial version")
             try:
+                workflows_result = await client.table('agent_workflows').select('*').eq('agent_id', agent_id).execute()
+                workflows = workflows_result.data if workflows_result.data else []
+                
                 initial_version_data = {
                     "agent_id": agent_id,
                     "version_number": 1,
@@ -2165,7 +2168,8 @@ async def update_agent(
                     configured_mcps=initial_version_data["configured_mcps"],
                     custom_mcps=initial_version_data["custom_mcps"],
                     avatar=None,
-                    avatar_color=None
+                    avatar_color=None,
+                    workflows=workflows
                 )
                 initial_version_data["config"] = initial_config
                 
@@ -2413,8 +2417,8 @@ async def delete_agent(agent_id: str, user_id: str = Depends(get_current_user_id
         if agent['is_default']:
             raise HTTPException(status_code=400, detail="Cannot delete default agent")
         
-        if agent.get('metadata', {}).get('is_suna_default', False):
-            raise HTTPException(status_code=400, detail="Cannot delete Suna default agent")
+        if agent.get('metadata', {}).get('is_leakerflow_default', False):
+            raise HTTPException(status_code=400, detail="Cannot delete LeakerFlow default agent")
         
         delete_result = await client.table('agents').delete().eq('agent_id', agent_id).execute()
         
