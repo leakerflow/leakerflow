@@ -363,7 +363,7 @@ function PricingTier({
           if (currentIsMonthly && targetIsYearlyCommitment && targetAmount <= currentAmount) {
             buttonText = 'Upgrade';
             buttonVariant = tier.buttonColor as ButtonVariant;
-            buttonClassName = 'bg-primary hover:bg-primary/90 text-primary-foreground';
+            buttonClassName = 'bg-brand-gradient hover:opacity-90 text-white';
           } else if (currentIsMonthly && targetIsYearly && targetAmount <= currentAmount) {
             buttonText = 'Switch to Legacy Yearly';
             buttonVariant = 'default';
@@ -375,7 +375,7 @@ function PricingTier({
           } else {
             buttonText = 'Upgrade';
             buttonVariant = tier.buttonColor as ButtonVariant;
-            buttonClassName = 'bg-primary hover:bg-primary/90 text-primary-foreground';
+            buttonClassName = 'bg-brand-gradient hover:opacity-90 text-white';
           }
         } else if (targetAmount < currentAmount || isSameTierDowngradeToShorterTerm) {
           // Prevent downgrades and downgrades to shorter terms
@@ -386,7 +386,7 @@ function PricingTier({
         } else {
           buttonText = 'Select Plan';
           buttonVariant = tier.buttonColor as ButtonVariant;
-          buttonClassName = 'bg-primary hover:bg-primary/90 text-primary-foreground';
+          buttonClassName = 'bg-brand-gradient hover:opacity-90 text-white';
         }
       }
     }
@@ -400,8 +400,8 @@ function PricingTier({
     buttonVariant = tier.buttonColor as ButtonVariant;
     buttonClassName =
       tier.buttonColor === 'default'
-        ? 'bg-primary hover:bg-primary/90 text-white'
-        : 'bg-secondary hover:bg-secondary/90 text-white';
+        ? 'bg-brand-gradient hover:opacity-90 text-white'
+        : 'bg-brand-gradient hover:opacity-90 text-white';
   }
 
   return (
