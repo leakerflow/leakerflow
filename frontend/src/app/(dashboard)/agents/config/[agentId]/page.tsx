@@ -19,7 +19,7 @@ import { useAgentVersionStore } from '../../../../../lib/stores/agent-version-st
 
 import { cn } from '@/lib/utils';
 
-import { AgentHeader, VersionAlert, AgentBuilderTab, ConfigurationTab } from '@/components/agents/config';
+import { AgentHeader, VersionAlert, AgentBuilderTab, ConfigurationTab, WorkflowTab } from '@/components/agents/config';
 
 import { DEFAULT_AGENTPRESS_TOOLS } from '@/components/agents/tools';
 import { useExportAgent } from '@/hooks/react-query/agents/use-agent-export-import';
@@ -67,8 +67,8 @@ export default function AgentConfigurationPage() {
 
   const [originalData, setOriginalData] = useState<FormData>(formData);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  // Default to 'agent-builder' (Prompt to build) tab unless explicitly set to 'configuration'
-  const initialTab = tabParam === 'configuration' ? 'configuration' : 'agent-builder';
+  // Default to 'agent-builder' (Prompt to build) tab unless explicitly set to 'configuration' or 'workflows'
+  const initialTab = tabParam === 'configuration' ? 'configuration' : tabParam === 'workflows' ? 'workflows' : 'agent-builder';
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // Log the default tab selection for debugging
@@ -620,6 +620,12 @@ export default function AgentConfigurationPage() {
                       agentMetadata={agent?.metadata}
                     />
                   </TabsContent>
+                  <TabsContent value="workflows" className="flex-1 m-0 overflow-hidden">
+                    <WorkflowTab
+                      agentId={agentId}
+                      isViewingOldVersion={isViewingOldVersion}
+                    />
+                  </TabsContent>
                 </Tabs>
               )}
             </div>
@@ -737,4 +743,4 @@ export default function AgentConfigurationPage() {
       </div>
     </div>
   );
-} 
+}

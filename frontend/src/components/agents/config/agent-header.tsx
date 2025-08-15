@@ -1,5 +1,5 @@
 import React, { useState, useRef, KeyboardEvent } from 'react';
-import { Sparkles, Settings, Download, Image as ImageIcon } from 'lucide-react';
+import { Sparkles, Settings, Download, Image as ImageIcon, Workflow } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -258,4 +258,4 @@ export function AgentHeader({
     />
     </>
   );
-} 
+}

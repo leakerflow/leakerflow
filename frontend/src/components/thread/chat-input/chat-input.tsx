@@ -490,11 +490,11 @@ export const ChatInput = forwardRef<ChatInputHandles, ChatInputProps>(
                     <span className="text-xs font-medium">Triggers</span>
                   </button>
                   <button
-                    onClick={() => router.push(`/agents/config/${selectedAgentId}?tab=configuration&accordion=workflows`)}
+                    onClick={() => router.push(`/agents/config/${selectedAgentId}?tab=workflows`)}
                     className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-all duration-200 px-2.5 py-1.5 rounded-lg hover:bg-muted/50 border border-transparent hover:border-border/30 flex-shrink-0 cursor-pointer relative pointer-events-auto"
                   >
                     <Workflow className="h-3.5 w-3.5 flex-shrink-0" />
-                    <span className="text-xs font-medium">Playbooks</span>
+                    <span className="text-xs font-medium">Workflows</span>
                   </button>
                 </div>
               </div>

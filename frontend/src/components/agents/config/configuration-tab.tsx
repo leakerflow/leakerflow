@@ -4,9 +4,10 @@ import { ExpandableMarkdownEditor } from '@/components/ui/expandable-markdown-ed
 import { AgentToolsConfiguration } from '../agent-tools-configuration';
 import { AgentMCPConfiguration } from '../agent-mcp-configuration';
 import { AgentKnowledgeBaseManager } from '../knowledge-base/agent-knowledge-base-manager';
-import { AgentPlaybooksConfiguration } from '../playbooks/agent-playbooks-configuration';
+
 import { AgentTriggersConfiguration } from '../triggers/agent-triggers-configuration';
 import { AgentModelSelector } from './model-selector';
+import { WorkflowTab } from './workflow-tab';
 import { toast } from 'sonner';
 import { LeakerFlowLogo } from '../../sidebar/leakerflow-logo';
 
@@ -69,11 +70,10 @@ export function ConfigurationTab({
 
   const mapAccordion = (val?: string) => {
     if (val === 'instructions') return isLeakerFlowAgent ? 'integrations' : 'system';
-    if (val === 'workflows') return 'playbooks';
     if (isLeakerFlowAgent && (val === 'system' || val === 'tools')) {
       return 'integrations';
     }
-    if (['system', 'tools', 'integrations', 'knowledge', 'playbooks', 'triggers'].includes(val || '')) {
+    if (['system', 'tools', 'integrations', 'knowledge', 'triggers'].includes(val || '')) {
       return val!;
     }
     return isLeakerFlowAgent ? 'integrations' : 'system';
@@ -133,7 +133,7 @@ export function ConfigurationTab({
               </div>
               <p className="text-sm text-primary-700">
                 This is Leaker Flow's default agent with centrally managed system prompt and tools.
-                You can customize integrations, knowledge base, playbooks, and triggers to personalize your experience.
+                You can customize integrations, knowledge base, and triggers to personalize your experience.
               </p>
             </div>
           )}
@@ -352,7 +352,7 @@ export function ConfigurationTab({
             <div className="group overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/10">
               <button
                 className="w-full p-4 text-left group-hover:bg-muted/30 transition-all duration-300"
-                onClick={() => setOpenAccordion(openAccordion === 'playbooks' ? '' : 'playbooks')}
+                onClick={() => setOpenAccordion(openAccordion === 'workflows' ? '' : 'workflows')}
                 disabled={isLoading}
               >
                 <div className="flex items-center gap-4 w-full">
@@ -362,23 +362,23 @@ export function ConfigurationTab({
                     </div>
                   </div>
                   <div className="text-left flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-300">Playbooks</h4>
-                    <p className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors duration-300">Simple variable-driven runs</p>
+                    <h4 className="text-sm font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-300">Workflows</h4>
+                    <p className="text-xs text-muted-foreground group-hover:text-foreground/70 transition-colors duration-300">Create and manage automated workflows</p>
                   </div>
-                  <ChevronDown className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ease-out ${openAccordion === 'playbooks' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 flex-shrink-0 transition-transform duration-300 ease-out ${openAccordion === 'workflows' ? 'rotate-180' : ''}`} />
                 </div>
               </button>
               <div
-                className={`overflow-hidden transition-all duration-300 ease-out ${openAccordion === 'playbooks'
-                  ? 'max-h-[600px] opacity-100'
+                className={`overflow-hidden transition-all duration-300 ease-out ${openAccordion === 'workflows'
+                  ? 'max-h-[800px] opacity-100'
                   : 'max-h-0 opacity-0'
                   }`}
               >
                 <div className="px-6 pb-6 pt-2">
                   <div className="pt-4">
-                    <AgentPlaybooksConfiguration
+                    <WorkflowTab
                       agentId={agentId}
-                      agentName={displayData.name || 'Agent'}
+                      isViewingOldVersion={isViewingOldVersion}
                     />
                   </div>
                 </div>

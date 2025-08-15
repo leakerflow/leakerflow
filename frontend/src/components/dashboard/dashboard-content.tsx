@@ -219,7 +219,7 @@ export function DashboardContent() {
           <div className="min-h-full flex flex-col">
             {customAgentsEnabled && (
               <div className="flex justify-center px-4 pt-4 md:pt-8">
-                <ReleaseBadge text="Custom Agents, Playbooks, and more!" link="/agents?tab=my-agents" />
+                <ReleaseBadge text="Custom Agents, Workflows, and more!" link="/agents?tab=my-agents" />
               </div>
             )}
             <div className="flex-1 flex items-center justify-center px-4 py-8">
