@@ -24,25 +24,25 @@ export function SecondBentoAnimation() {
             speed={1}
           >
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" className="size-8" />
+              <img src="https://cdn.simpleicons.org/instagram" alt="Instagram" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" className="size-8" />
+              <img src="https://cdn.simpleicons.org/tiktok" alt="TikTok" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/x/000000" alt="X (Twitter)" className="size-8" />
+              <img src="https://cdn.simpleicons.org/x" alt="X (Twitter)" className="size-8" />
             </div>
           </OrbitingCircles>
 
           <OrbitingCircles index={1} iconSize={60} speed={0.5}>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" className="size-8" />
+              <img src="https://cdn.simpleicons.org/youtube" alt="YouTube" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" className="size-8" />
+              <img src="https://cdn.simpleicons.org/twitch" alt="Twitch" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/reddit/FF4500" alt="Reddit" className="size-8" />
+              <img src="https://cdn.simpleicons.org/reddit" alt="Reddit" className="size-8" />
             </div>
           </OrbitingCircles>
 
@@ -54,13 +54,13 @@ export function SecondBentoAnimation() {
             speed={0.5}
           >
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" className="size-8" />
+              <img src="https://cdn.simpleicons.org/discord" alt="Discord" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/rockstargames/FCAF17" alt="Rockstar Games" className="size-8" />
+              <img src="https://cdn.simpleicons.org/rockstargames" alt="Rockstar Games" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.simpleicons.org/ign/FF6600" alt="Gaming News" className="size-8" />
+              <img src="https://cdn.simpleicons.org/gamespot" alt="Gaming News" className="size-8" />
             </div>
           </OrbitingCircles>
         </div>

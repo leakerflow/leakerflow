@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -20,7 +20,11 @@ export function FooterSection() {
     setMounted(true);
   }, []);
 
-  const logoSrc = '/leakerflow.png';
+  const logoSrc = !mounted
+    ? '/leakerflow-logo.svg'
+    : resolvedTheme === 'dark'
+      ? '/leakerflow-logo-white.svg'
+      : '/leakerflow-logo.svg';
 
   return (
     <footer id="footer" className="w-full pb-0 px-6">
