@@ -41,7 +41,7 @@ export default function AppProfilesPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-4xl px-6 py-6">
+    <div className="container mx-auto max-w-7xl px-4 py-8">
       <div className="space-y-8">
         <PageHeader icon={Zap}>
           <span className="text-primary">App Credentials</span>
