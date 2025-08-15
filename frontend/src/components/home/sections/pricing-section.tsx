@@ -663,12 +663,14 @@ export function PricingSection({
         </div>
       </div>
       {showInfo && (
-        <div className="mt-4 p-4 border border-brand-purple-200 rounded-lg max-w-2xl mx-auto">
-          <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
-            <strong>What are AI tokens?</strong> Tokens are units of text that AI models process.
-            Your plan includes credits to spend on various AI models - the more complex the task,
-            the more tokens used.
-          </p>
+        <div className="mt-4 rounded-lg bg-brand-gradient p-0.5 shadow-sm transition-all max-w-2xl mx-auto">
+          <div className="rounded-[7px] bg-background p-4 h-full">
+            <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
+              <strong>What are AI tokens?</strong> Tokens are units of text that AI models process.
+              Your plan includes credits to spend on various AI models - the more complex the task,
+              the more tokens used.
+            </p>
+          </div>
         </div>
       )}
     </section>
