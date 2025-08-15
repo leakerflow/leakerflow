@@ -24,25 +24,25 @@ export function SecondBentoAnimation() {
             speed={1}
           >
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg" alt="Slack" className="size-8" />
+              <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg" alt="Google Docs" className="size-8" />
+              <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg" alt="Excel" className="size-8" />
+              <img src="https://cdn.simpleicons.org/x/000000" alt="X (Twitter)" className="size-8" />
             </div>
           </OrbitingCircles>
 
           <OrbitingCircles index={1} iconSize={60} speed={0.5}>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Calendar_icon_%282020%29.svg" alt="Google Calendar" className="size-8" />
+              <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" className="size-8" />
+              <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" alt="Notion" className="size-8" />
+              <img src="https://cdn.simpleicons.org/reddit/FF4500" alt="Reddit" className="size-8" />
             </div>
           </OrbitingCircles>
 
@@ -54,13 +54,13 @@ export function SecondBentoAnimation() {
             speed={0.5}
           >
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Microsoft_Office_Outlook_%282018%E2%80%93present%29.svg" alt="Outlook" className="size-8" />
+              <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Salesforce.com_logo.svg" alt="Salesforce" className="size-8" />
+              <img src="https://cdn.simpleicons.org/rockstargames/FCAF17" alt="Rockstar Games" className="size-8" />
             </div>
             <div className="size-12 bg-white rounded-full flex items-center justify-center shadow-lg border border-gray-100">
-              <img src="https://cdn.worldvectorlogo.com/logos/asana-logo.svg" alt="Asana" className="size-8" />
+              <img src="https://cdn.simpleicons.org/ign/FF6600" alt="Gaming News" className="size-8" />
             </div>
           </OrbitingCircles>
         </div>
