@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { FlickeringGrid } from '@/components/home/ui/flickering-grid';
+import { BackgroundBeams } from '@/components/home/ui/background-beams';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ArrowLeft } from 'lucide-react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
@@ -59,36 +59,9 @@ function LegalContent() {
     <main className="flex flex-col items-center justify-center min-h-screen w-full">
       <section className="w-full relative overflow-hidden pb-20">
         <div className="relative flex flex-col items-center w-full px-6 pt-10">
-          {/* Left side flickering grid with gradient fades - similar to hero section */}
-          <div className="absolute left-0 top-0 h-[600px] w-1/3 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background z-10" />
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={mounted && tablet ? 2 : 2.5}
-              gridGap={mounted && tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={0.4}
-              flickerChance={isScrolling ? 0.01 : 0.03}
-            />
-          </div>
-
-          {/* Right side flickering grid with gradient fades */}
-          <div className="absolute right-0 top-0 h-[600px] w-1/3 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-background z-10" />
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background via-background/90 to-transparent z-10" />
-            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/90 to-transparent z-10" />
-
-            <FlickeringGrid
-              className="h-full w-full"
-              squareSize={mounted && tablet ? 2 : 2.5}
-              gridGap={mounted && tablet ? 2 : 2.5}
-              color="var(--secondary)"
-              maxOpacity={0.4}
-              flickerChance={isScrolling ? 0.01 : 0.03}
-            />
+          {/* Background beams effect */}
+          <div className="absolute inset-0 h-[600px] -z-10 overflow-hidden">
+            <BackgroundBeams className="opacity-30" />
           </div>
 
           {/* Center content background with rounded bottom */}
@@ -107,7 +80,7 @@ function LegalContent() {
               </Link>
 
               <h1 className="text-3xl md:text-4xl font-medium tracking-tighter text-center">
-                Legal <span className="text-secondary">Information</span>
+                Legal <span className="text-brand-gradient">Information</span>
               </h1>
             </div>
 
@@ -117,7 +90,7 @@ function LegalContent() {
                   onClick={() => handleTabChange('terms')}
                   className={`pb-2 px-4 ${
                     activeTab === 'terms'
-                      ? 'border-b-2 border-secondary font-medium text-secondary'
+                      ? 'border-b-2 border-transparent bg-brand-gradient bg-clip-border font-medium text-brand-gradient'
                       : 'text-muted-foreground hover:text-primary/80 transition-colors'
                   }`}
                 >
@@ -127,7 +100,7 @@ function LegalContent() {
                   onClick={() => handleTabChange('privacy')}
                   className={`pb-2 px-4 ${
                     activeTab === 'privacy'
-                      ? 'border-b-2 border-secondary font-medium text-secondary'
+                      ? 'border-b-2 border-transparent bg-brand-gradient bg-clip-border font-medium text-brand-gradient'
                       : 'text-muted-foreground hover:text-primary/80 transition-colors'
                   }`}
                 >
@@ -136,8 +109,10 @@ function LegalContent() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-border bg-[#F3F4F6] dark:bg-[#F9FAFB]/[0.02] p-8 shadow-sm">
-              <div className="prose prose-sm max-w-none dark:prose-invert">
+            <div className="rounded-xl border border-border bg-[#F3F4F6] dark:bg-[#F9FAFB]/[0.02] p-8 shadow-sm relative overflow-hidden">
+              <div className="absolute inset-0 bg-brand-gradient opacity-[0.02] pointer-events-none"></div>
+              <div className="relative z-10">
+                <div className="prose prose-sm max-w-none dark:prose-invert">
                 {activeTab === 'terms' ? (
                   <div>
                     <h2 className="text-2xl font-medium tracking-tight mb-4">
@@ -360,7 +335,7 @@ function LegalContent() {
                         href="http://www.apache.org/licenses/LICENSE-2.0"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-secondary hover:underline"
+                        className="text-brand-gradient hover:underline"
                       >
                         http://www.apache.org/licenses/LICENSE-2.0
                       </a>
@@ -689,7 +664,7 @@ function LegalContent() {
                       by emailing us at{' '}
                       <a
                         href="mailto:legal@leakerflow.com"
-                        className="text-secondary hover:underline"
+                        className="text-brand-gradient hover:underline"
                       >
                         legal@leakerflow.com
                       </a>
@@ -913,7 +888,7 @@ function LegalContent() {
                       You can get in touch by emailing us at{' '}
                       <a
                         href="mailto:legal@leakerflow.com"
-                        className="text-secondary hover:underline"
+                        className="text-brand-gradient hover:underline"
                       >
                         legal@leakerflow.com
                       </a>
@@ -921,13 +896,14 @@ function LegalContent() {
                     </p>
                   </div>
                 )}
+                </div>
               </div>
             </div>
 
             <div className="mt-12 text-center pb-10">
               <Link
                 href="/"
-                className="group inline-flex h-10 items-center justify-center gap-2 text-sm font-medium tracking-wide rounded-full text-primary-foreground dark:text-secondary-foreground px-6 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] bg-primary hover:bg-primary/90 transition-all duration-200 w-fit"
+                className="group inline-flex h-10 items-center justify-center gap-2 text-sm font-medium tracking-wide rounded-full text-white px-6 shadow-[inset_0_1px_2px_rgba(255,255,255,0.25),0_3px_3px_-1.5px_rgba(16,24,40,0.06),0_1px_1px_rgba(16,24,40,0.08)] bg-brand-gradient hover:opacity-90 transition-all duration-200 w-fit"
               >
                 <span>Return to Home</span>
                 <span className="inline-flex items-center justify-center size-5 rounded-full bg-white/20 group-hover:bg-white/30 transition-colors duration-200">
