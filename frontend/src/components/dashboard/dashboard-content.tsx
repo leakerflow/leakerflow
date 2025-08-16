@@ -452,8 +452,6 @@ export function DashboardContent() {
     <>
       <ModalProviders />
       <div className="flex flex-col h-screen w-full overflow-hidden">
-        {/* Discover Header - Fixed at top */}
-        <DiscoverHeader activeTab={activeTab} onTabChange={handleTabChange} />
         
         {/* CTA Element - Directly below navigation */}
         {customAgentsEnabled && (
