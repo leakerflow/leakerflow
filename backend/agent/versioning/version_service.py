@@ -7,6 +7,7 @@ from enum import Enum
 
 from services.supabase import DBConnection
 from utils.logger import logger
+from utils.auth_utils import has_edit_access_to_agent
 
 
 class VersionStatus(Enum):
@@ -490,4 +491,4 @@ async def get_version_service() -> VersionService:
     global _version_service_instance
     if _version_service_instance is None:
         _version_service_instance = VersionService()
-    return _version_service_instance 
+    return _version_service_instance

@@ -405,6 +405,31 @@ async def verify_admin_api_key(x_admin_api_key: Optional[str] = Header(None)):
     
     return True
 
+async def has_edit_access_to_agent(agent_id: str, user_id: str) -> bool:
+    """
+    Check if a user has edit access to a specific agent based on ownership.
+    
+    Args:
+        agent_id: The agent ID to check access for
+        user_id: The user ID to check permissions for
+        
+    Returns:
+        bool: True if user has edit access, False otherwise
+    """
+    try:
+        db = DBConnection()
+        await db.initialize()
+        client = await db.client
+        
+        agent_result = await client.table('agents').select('account_id').eq('agent_id', agent_id).eq('account_id', user_id).execute()
+        
+        return bool(agent_result.data)
+        
+    except Exception as e:
+        structlog.error(f"Error checking edit access for agent {agent_id}, user {user_id}: {str(e)}")
+        return False
+
+
 async def verify_agent_access(client, agent_id: str, user_id: str) -> dict:
     """
     Verify that a user has access to a specific agent based on ownership.

@@ -1,6 +1,6 @@
 import os
 from typing import Optional
-from composio_client import Composio
+from composio import Composio
 from utils.logger import logger
 
 
@@ -26,4 +26,4 @@ class ComposioClient:
 
 
 def get_composio_client(api_key: Optional[str] = None) -> Composio:
-    return ComposioClient.get_client(api_key) 
+    return ComposioClient.get_client(api_key)

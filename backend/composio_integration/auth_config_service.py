@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any, Union
-from composio_client import Composio
+from composio import Composio
 from utils.logger import logger
 from pydantic import BaseModel
 
@@ -128,4 +128,4 @@ class AuthConfigService:
             
         except Exception as e:
             logger.error(f"Failed to list auth configs: {e}", exc_info=True)
-            raise 
+            raise

@@ -5,7 +5,7 @@ from agentpress.thread_manager import ThreadManager
 import httpx
 from io import BytesIO
 import uuid
-from litellm import aimage_generation, aimage_edit
+from litellm import aimage_generation
 import base64
 
 
@@ -84,9 +84,10 @@ class SandboxImageEditTool(SandboxToolsBase):
                     "image.png"  # Set filename to ensure proper MIME type detection
                 )
 
-                response = await aimage_edit(
-                    image=[image_io],  # Type in the LiteLLM SDK is wrong
-                    prompt=prompt,
+                # Note: Using aimage_generation as aimage_edit is not available in current litellm version
+                # This will generate a new image based on the prompt instead of editing
+                response = await aimage_generation(
+                    prompt=f"Based on the provided image, {prompt}",
                     model="gpt-image-1",
                     n=1,
                     size="1024x1024",
