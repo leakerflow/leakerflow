@@ -1,6 +1,6 @@
 import os
 from typing import Optional
-from composio import Composio
+from composio_client import Composio
 from utils.logger import logger
 
 

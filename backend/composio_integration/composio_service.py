@@ -1,6 +1,6 @@
 import os
 from typing import Optional, List, Dict, Any
-from composio import Composio
+from composio_client import Composio
 from utils.logger import logger
 from pydantic import BaseModel
 from services.supabase import DBConnection
