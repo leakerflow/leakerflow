@@ -142,6 +142,15 @@ class ToolManager:
         if safe_tool_check('article_creation_tool'):
             from agent.tools.article_creation_tool import ArticleCreationTool
             self.thread_manager.add_tool(ArticleCreationTool, project_id=self.project_id, thread_manager=self.thread_manager, agent_instance_id=self.agent_instance_id)
+        
+        # GTA 6 Specialized Tools
+        if safe_tool_check('gta6_validation_tool'):
+            from agent.tools.gta6_validation_tool import GTA6ValidationTool
+            self.thread_manager.add_tool(GTA6ValidationTool, project_id=self.project_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('gta6_demand_tool'):
+            from agent.tools.gta6_demand_tool import GTA6DemandTool
+            self.thread_manager.add_tool(GTA6DemandTool, project_id=self.project_id, thread_manager=self.thread_manager)
 
 
 class MCPManager:
