@@ -39,6 +39,10 @@ import {
 } from '@/components/discover';
 import type { ContentItem } from '@/components/discover/types';
 import { useArticles, useSaveArticle, useIncrementViews, useVoteOnArticle } from '@/hooks/react-query/articles/use-articles';
+import { useDraftArticles } from '@/hooks/react-query/articles/use-article-creation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Edit, ArrowRight } from 'lucide-react';
 
 // Tab categories mapping
 export const TAB_CATEGORIES = {
@@ -130,6 +134,10 @@ export function DashboardContent() {
     data: articlesData, 
     isLoading
   } = useArticles({ status: 'published' });
+  const { 
+    data: draftArticlesData, 
+    isLoading: isDraftLoading 
+  } = useDraftArticles();
   const saveArticleMutation = useSaveArticle();
   const incrementViewsMutation = useIncrementViews();
   const voteArticleMutation = useVoteOnArticle();
@@ -499,6 +507,77 @@ export function DashboardContent() {
               </div>
             )}
             
+            {/* Draft Articles Section */}
+            {!isDraftLoading && draftArticlesData?.articles && draftArticlesData.articles.length > 0 && (
+              <div className="w-full px-4 pb-4">
+                <div className="max-w-7xl mx-auto">
+                  <Card className="border-dashed border-2 border-primary/20 bg-primary/5">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <FileText className="h-5 w-5 text-primary" />
+                          <CardTitle className="text-lg">Your Draft Articles</CardTitle>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          asChild
+                          className="text-primary border-primary hover:bg-primary hover:text-primary-foreground"
+                        >
+                          <Link href="/discover/manage">
+                            Manage All
+                            <ArrowRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {draftArticlesData.articles.slice(0, 3).map((article) => (
+                          <div 
+                            key={article.id}
+                            className="p-4 rounded-lg border bg-background hover:bg-accent/50 transition-colors"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <h3 className="font-medium text-sm line-clamp-2 flex-1">
+                                {article.title}
+                              </h3>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                asChild
+                                className="ml-2 h-8 w-8 p-0"
+                              >
+                                <Link href={`/discover/create/${article.id}`}>
+                                  <Edit className="h-4 w-4" />
+                                </Link>
+                              </Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+                              {article.description || 'No description'}
+                            </p>
+                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                              <span>Draft</span>
+                              <span>{new Date(article.updated_at).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {draftArticlesData.articles.length > 3 && (
+                        <div className="mt-4 text-center">
+                          <Button variant="ghost" size="sm" asChild>
+                            <Link href="/discover/manage">
+                              View {draftArticlesData.articles.length - 3} more drafts
+                            </Link>
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            )}
+
             {/* Discover Section */}
             <div className="w-full px-4 pb-8">
               <div className="max-w-7xl mx-auto">

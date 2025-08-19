@@ -137,6 +137,10 @@ class ToolManager:
         if safe_tool_check('browser_tool'):
             from agent.tools.browser_tool import BrowserTool
             self.thread_manager.add_tool(BrowserTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('article_creation_tool'):
+            from agent.tools.article_creation_tool import ArticleCreationTool
+            self.thread_manager.add_tool(ArticleCreationTool, project_id=self.project_id, thread_manager=self.thread_manager)
 
 
 class MCPManager:

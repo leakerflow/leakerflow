@@ -7,5 +7,9 @@ export { ContentCard } from './content-card';
 export { VotingButtons } from './voting-buttons';
 export { ActiveUsersIndicator, ArticleActiveUsers } from './active-users-indicator';
 
+// Export article creation components
+export { ArticleEditor, ArticleList } from './article-creation';
+export type { ArticleEditorProps, ArticleListProps } from './article-creation';
+
 // Re-export types for convenience
 export type { ContentItem, Category, ContentResponse, ContentActions } from './types';

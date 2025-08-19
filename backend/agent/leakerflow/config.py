@@ -21,6 +21,7 @@ class LeakerFlowConfig:
         "data_providers_tool": True,
         "sb_sheets_tool": True,
         "sb_files_tool": True,
+        "article_creation_tool": True,
     }
     
     DEFAULT_MCPS = []
@@ -77,4 +78,4 @@ def enable_tool(tool_name: str):
 
 def disable_tool(tool_name: str):  
     if tool_name in LeakerFlowConfig.DEFAULT_TOOLS:
-        LeakerFlowConfig.DEFAULT_TOOLS[tool_name]["enabled"] = False 
+        LeakerFlowConfig.DEFAULT_TOOLS[tool_name]["enabled"] = False

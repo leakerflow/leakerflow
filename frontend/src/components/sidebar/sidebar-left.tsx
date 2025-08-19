@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Bot, Menu, Store, Plus, Zap, ChevronRight, Loader2 } from 'lucide-react';
+import { Bot, Menu, Store, Plus, Zap, ChevronRight, Loader2, Compass, Edit3 } from 'lucide-react';
 
 import { NavAgents } from '@/components/sidebar/nav-agents';
 import { NavUserWithTeams } from '@/components/sidebar/nav-user-with-teams';
@@ -183,6 +183,38 @@ export function SidebarLeft({
               <Plus className="h-4 w-4 mr-1" />
               <span className="flex items-center justify-between w-full">
                 New Task
+              </span>
+            </SidebarMenuButton>
+          </Link>
+          <Link href="/discover">
+            <SidebarMenuButton 
+              className={cn('touch-manipulation', {
+                'bg-accent text-accent-foreground font-medium': pathname === '/discover',
+              })} 
+              onClick={() => {
+                posthog.capture('discover_clicked');
+                if (isMobile) setOpenMobile(false);
+              }}
+            >
+              <Compass className="h-4 w-4 mr-1" />
+              <span className="flex items-center justify-between w-full">
+                Discover
+              </span>
+            </SidebarMenuButton>
+          </Link>
+          <Link href="/publish">
+            <SidebarMenuButton 
+              className={cn('touch-manipulation', {
+                'bg-accent text-accent-foreground font-medium': pathname === '/publicar',
+              })} 
+              onClick={() => {
+                posthog.capture('publicar_clicked');
+                if (isMobile) setOpenMobile(false);
+              }}
+            >
+              <Edit3 className="h-4 w-4 mr-1" />
+              <span className="flex items-center justify-between w-full">
+                Publicar
               </span>
             </SidebarMenuButton>
           </Link>

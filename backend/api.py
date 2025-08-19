@@ -29,6 +29,7 @@ import sys
 from services import email_api
 from triggers import api as triggers_api
 from services import api_keys_api
+from articles import api as articles_api
 
 
 if sys.platform == "win32":
@@ -73,6 +74,7 @@ async def lifespan(app: FastAPI):
         credentials_api.initialize(db)
         template_api.initialize(db)
         composio_api.initialize(db)
+        articles_api.initialize(db)
         
         yield
         
@@ -190,6 +192,8 @@ api_router.include_router(admin_api.router)
 
 from composio_integration import api as composio_api
 api_router.include_router(composio_api.router)
+
+api_router.include_router(articles_api.router, prefix="/articles")
 
 @api_router.get("/health")
 async def health_check():
