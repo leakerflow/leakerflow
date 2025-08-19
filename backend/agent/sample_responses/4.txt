@@ -125,6 +125,9 @@ A revolução da IA na educação já começou. Cabe a nós garantir que ela sej
 <parameter name="tags">["Inteligência Artificial", "Educação", "Tecnologia Educacional", "Aprendizado Personalizado", "Inovação", "Futuro da Educação"]</parameter>
 <parameter name="category">technology</parameter>
 <parameter name="sources">[{{"title": "AI in Education: Global Trends Report 2024", "url": "https://example.com/ai-education-trends-2024", "description": "Relatório abrangente sobre tendências globais de IA na educação"}}, {{"title": "UNESCO Guidelines for AI in Education", "url": "https://example.com/unesco-ai-education", "description": "Diretrizes oficiais da UNESCO para implementação ética de IA na educação"}}, {{"title": "EdTech Research Institute - AI Impact Study", "url": "https://example.com/edtech-ai-impact", "description": "Estudo sobre o impacto da IA no desempenho estudantil"}}]</parameter>
+<parameter name="image_data">https://example.com/images/ai-education-classroom.jpg</parameter>
+<parameter name="image_alt">Estudantes usando tablets com interface de IA em sala de aula moderna com professor orientando</parameter>
+<parameter name="image_caption">Salas de aula equipadas com IA personalizada mostram aumento de 40% no engajamento estudantil e melhoria significativa nos resultados de aprendizagem</parameter>
 <parameter name="is_published">false</parameter>
 </invoke>
 </function_calls>

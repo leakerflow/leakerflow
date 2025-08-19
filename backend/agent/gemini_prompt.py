@@ -555,10 +555,67 @@ The ArticleCreationTool provides comprehensive article management capabilities:
    <parameter name="tags">["relevant", "searchable", "tags"]</parameter>
    <parameter name="category">appropriate_category</parameter>
    <parameter name="sources">[{{"title": "Source Title", "url": "https://example.com", "description": "Brief description"}}]</parameter>
+   <parameter name="image_data">base64_encoded_image_data_or_url</parameter>
+   <parameter name="image_alt">Descriptive alternative text for accessibility</parameter>
+   <parameter name="image_caption">Optional caption describing the image context</parameter>
    <parameter name="is_published">false</parameter>
    </invoke>
    </function_calls>
    ```
+
+## Image Attachment Guidelines
+
+### Image Selection Criteria
+When selecting images for articles, prioritize:
+- **Relevance**: Images must directly relate to the article content
+- **Quality**: High-resolution, professional-looking images
+- **Accessibility**: Images that can be described meaningfully
+- **Copyright**: Only use royalty-free or properly licensed images
+- **Format**: Prefer JPEG for photos, PNG for graphics with transparency
+
+### Image Upload Methods
+1. **File Upload**: Convert image files to Base64 format
+2. **URL Method**: Provide direct URL to publicly accessible images
+
+### Technical Requirements
+- **File Size**: Maximum 5MB per image
+- **Dimensions**: Recommended minimum 800x600 pixels
+- **Formats**: JPEG, PNG, WebP, GIF
+- **Encoding**: Base64 for file uploads
+
+### Alternative Text (Alt Text) Best Practices
+- **Descriptive**: Clearly describe what the image shows
+- **Concise**: Keep under 125 characters when possible
+- **Context-aware**: Consider the image's role in the article
+- **Avoid redundancy**: Don't start with "Image of" or "Picture of"
+- **Examples**:
+  - Good: "Data scientist analyzing charts on multiple computer monitors"
+  - Poor: "Image showing a person working"
+
+### Caption Guidelines
+- **Optional but recommended** for complex images
+- **Provide context** that complements the article content
+- **Include relevant details** not covered in alt text
+- **Keep concise** but informative
+- **Examples**:
+  - "Market trends showing 40% growth in AI adoption across healthcare sectors"
+  - "The new sustainable packaging design reduces plastic waste by 60%"
+
+### Implementation Examples
+
+#### Example with File Upload:
+```
+<parameter name="image_data">data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD...</parameter>
+<parameter name="image_alt">Modern office workspace with employees collaborating on laptops</parameter>
+<parameter name="image_caption">Remote work has transformed traditional office dynamics, with 73% of teams now operating in hybrid models</parameter>
+```
+
+#### Example with URL:
+```
+<parameter name="image_data">https://example.com/images/ai-healthcare-chart.jpg</parameter>
+<parameter name="image_alt">Bar chart showing AI implementation rates across different medical specialties</parameter>
+<parameter name="image_caption">Radiology leads AI adoption with 89% implementation rate, followed by pathology at 67%</parameter>
+```
 
 2. **Content Structure Requirements**:
    - Use proper markdown formatting with headers (H1, H2, H3)
@@ -694,6 +751,9 @@ AI represents a transformative force in healthcare, offering the potential to im
 <parameter name="tags">["AI", "Healthcare", "Technology", "Medicine", "Innovation", "Digital Health"]</parameter>
 <parameter name="category">technology</parameter>
 <parameter name="sources">[{{"title": "AI in Healthcare Report 2024", "url": "https://example.com/ai-healthcare-2024", "description": "Comprehensive analysis of AI applications in modern healthcare"}}, {{"title": "Medical AI Research Journal", "url": "https://example.com/medical-ai-research", "description": "Latest research findings on AI implementation in medical settings"}}]</parameter>
+<parameter name="image_data">https://example.com/images/ai-healthcare-dashboard.jpg</parameter>
+<parameter name="image_alt">Medical professional using AI-powered diagnostic interface with patient data visualization</parameter>
+<parameter name="image_caption">AI-powered diagnostic tools are becoming integral to modern healthcare, improving accuracy and reducing diagnosis time by up to 50%</parameter>
 <parameter name="is_published">false</parameter>
 </invoke>
 </function_calls>
@@ -718,6 +778,24 @@ The shift to remote work has fundamentally changed how organizations operate, re
 ## Building Effective Remote Teams
 
 ### Communication Strategies
+- Establish clear communication protocols
+- Use collaborative tools effectively
+- Schedule regular team check-ins
+- Maintain work-life boundaries
+
+## Conclusion
+
+Successful remote teams require intentional strategies, proper tools, and strong leadership to thrive in distributed environments.</parameter>
+<parameter name="description">Learn how to build and manage effective remote teams in the modern workplace with proven strategies and best practices.</parameter>
+<parameter name="tags">["Remote Work", "Team Management", "Business", "Productivity", "Leadership"]</parameter>
+<parameter name="category">business</parameter>
+<parameter name="sources">[{{"title": "Remote Work Statistics 2024", "url": "https://example.com/remote-work-stats", "description": "Latest data on remote work trends and adoption"}}]</parameter>
+<parameter name="image_data">https://example.com/images/remote-team-collaboration.jpg</parameter>
+<parameter name="image_alt">Diverse team members participating in a video conference call from their home offices</parameter>
+<parameter name="image_caption">Remote teams that implement structured communication protocols report 35% higher engagement and productivity levels</parameter>
+<parameter name="is_published">false</parameter>
+</invoke>
+</function_calls>
 - Establish clear communication protocols
 - Use asynchronous communication tools
 - Schedule regular check-ins and team meetings

@@ -26,19 +26,26 @@ export interface ArticleCreateRequest {
   title: string;
   content: string;
   description?: string;
-  tags?: string[];
   category?: string;
+  tags?: string[];
   sources?: ArticleSource[];
+  image_data?: string;
+  image_alt?: string;
+  image_caption?: string;
   is_published?: boolean;
 }
 
 export interface ArticleUpdateRequest {
+  id: string;
   title?: string;
   content?: string;
   description?: string;
-  tags?: string[];
   category?: string;
+  tags?: string[];
   sources?: ArticleSource[];
+  image_data?: string;
+  image_alt?: string;
+  image_caption?: string;
   is_published?: boolean;
 }
 
@@ -151,6 +158,9 @@ export interface ArticleFormData {
   content: string;
   subtitle?: string;
   image_url?: string;
+  image_alt?: string;
+  image_caption?: string;
+  image_data?: string;
   source_url?: string;
   read_time?: number;
   category?: string;

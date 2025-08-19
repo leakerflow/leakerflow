@@ -6,6 +6,7 @@ from datetime import datetime
 
 from utils.logger import logger
 from utils.auth_utils import get_current_user_id_from_jwt
+from utils.security_audit import get_security_auditor
 from services.supabase import DBConnection
 
 router = APIRouter(tags=["articles"])
@@ -21,6 +22,9 @@ class ArticleCreateRequest(BaseModel):
     category: Optional[str] = "general"
     sources: Optional[List[Dict[str, str]]] = []
     status: Optional[str] = "draft"  # draft, published, archived
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    image_caption: Optional[str] = None
 
 
 class ArticleUpdateRequest(BaseModel):
@@ -31,16 +35,29 @@ class ArticleUpdateRequest(BaseModel):
     category: Optional[str] = None
     sources: Optional[List[Dict[str, str]]] = None
     status: Optional[str] = None  # draft, published, archived
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    image_caption: Optional[str] = None
+
+
+class ArticleSecurityInfo(BaseModel):
+    agent_id: Optional[str] = None
+    agent_version_id: Optional[str] = None
+    creation_method: Optional[str] = None
+    creation_context: Optional[Dict[str, Any]] = None
+    security_metadata: Optional[Dict[str, Any]] = None
+    creator_ip_hash: Optional[str] = None
+    audit_logged: Optional[bool] = False
 
 
 class ArticleResponse(BaseModel):
     id: str
     title: str
     content: str
-    description: str
-    tags: List[str]
-    category: str
-    sources: List[Dict[str, str]]
+    description: Optional[str] = ""
+    tags: Optional[List[str]] = []
+    category: Optional[str] = "general"
+    sources: Optional[List[Dict[str, str]]] = []
     status: str  # draft, published, archived
     author_id: str
     created_at: str
@@ -50,6 +67,10 @@ class ArticleResponse(BaseModel):
     like_count: Optional[int] = 0
     share_count: Optional[int] = 0
     featured: Optional[bool] = False
+    image_url: Optional[str] = None
+    image_alt: Optional[str] = None
+    image_caption: Optional[str] = None
+    security_info: Optional[ArticleSecurityInfo] = None
 
 
 class ArticleListResponse(BaseModel):
@@ -66,6 +87,13 @@ class ArticleMetricsResponse(BaseModel):
     upvotes: int
     downvotes: int
     save_count: int
+
+
+class ArticleSecurityResponse(BaseModel):
+    article_id: str
+    security_info: ArticleSecurityInfo
+    audit_trail: List[Dict[str, Any]]
+    security_summary: Dict[str, Any]
 
 
 def initialize(database: DBConnection):
@@ -92,6 +120,64 @@ async def validate_article_ownership(article_id: str, user_id: str) -> Dict[str,
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
+@router.get("/{article_id}/security", response_model=ArticleSecurityResponse)
+async def get_article_security(
+    article_id: str,
+    user_id: str = Depends(get_current_user_id_from_jwt)
+):
+    """Get detailed security information for an article."""
+    if not db:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    try:
+        logger.info(f"Retrieving security info for article: {article_id}")
+        
+        # Validate ownership
+        await validate_article_ownership(article_id, user_id)
+        
+        # Get article security data
+        client = await db.client
+        result = await client.table('articles').select('id, agent_id, agent_version_id, creation_method, creation_context, security_metadata, creator_ip_hash').eq('id', article_id).execute()
+        
+        if not result.data:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        article = result.data[0]
+        
+        # Build security info
+        security_info = ArticleSecurityInfo(
+            agent_id=article.get('agent_id'),
+            agent_version_id=article.get('agent_version_id'),
+            creation_method=article.get('creation_method'),
+            creation_context=article.get('creation_context'),
+            security_metadata=article.get('security_metadata'),
+            creator_ip_hash=article.get('creator_ip_hash'),
+            audit_logged=True
+        )
+        
+        # Get audit trail
+        auditor = get_security_auditor()
+        audit_trail = await auditor.get_audit_trail(article_id=article_id)
+        
+        # Get security summary
+        security_summary = await auditor.get_security_summary(article_id=article_id)
+        
+        logger.info(f"Successfully retrieved security info for article: {article_id}")
+        
+        return ArticleSecurityResponse(
+            article_id=article_id,
+            security_info=security_info,
+            audit_trail=audit_trail,
+            security_summary=security_summary
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrieving article security info: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
 @router.post("", response_model=ArticleResponse)
 async def create_article(
     request: ArticleCreateRequest,
@@ -113,7 +199,10 @@ async def create_article(
             'category': request.category or "general",
             'sources': request.sources or [],
             'status': request.status or "draft",
-            'author_id': user_id
+            'author_id': user_id,
+            'image_url': request.image_url,
+            'image_alt': request.image_alt,
+            'image_caption': request.image_caption
         }
         
         # Validate required fields
@@ -160,8 +249,8 @@ async def list_articles(
         # Get client instance
         client = await db.client
         
-        # Build query
-        query = client.table('articles').select('*')
+        # Build query with security fields
+        query = client.table('articles').select('*, agent_id, agent_version_id, creation_method, creation_context, security_metadata, creator_ip_hash')
         
         # Apply filters
         if category:
@@ -210,8 +299,40 @@ async def list_articles(
         
         logger.info(f"Retrieved {len(articles)} articles out of {total_count} total")
         
+        # Process articles with security info
+        processed_articles = []
+        for article in articles:
+            security_info = ArticleSecurityInfo(
+                agent_id=article.get('agent_id'),
+                agent_version_id=article.get('agent_version_id'),
+                creation_method=article.get('creation_method'),
+                creation_context=article.get('creation_context'),
+                security_metadata=article.get('security_metadata'),
+                creator_ip_hash=article.get('creator_ip_hash'),
+                audit_logged=True
+            )
+            
+            # Ensure None values are converted to defaults
+            article_data = {
+                **article,
+                'description': article.get('description') or "",
+                'tags': article.get('tags') or [],
+                'category': article.get('category') or "general",
+                'sources': article.get('sources') or [],
+                'view_count': article.get('view_count') or 0,
+                'like_count': article.get('like_count') or 0,
+                'share_count': article.get('share_count') or 0,
+                'featured': article.get('featured') or False,
+                'image_url': article.get('image_url'),
+                'image_alt': article.get('image_alt'),
+                'image_caption': article.get('image_caption'),
+                'security_info': security_info
+            }
+            
+            processed_articles.append(ArticleResponse(**article_data))
+        
         return ArticleListResponse(
-            articles=[ArticleResponse(**article) for article in articles],
+            articles=processed_articles,
             total_count=total_count,
             has_more=has_more,
             pagination={
@@ -239,14 +360,28 @@ async def get_article(
     try:
         logger.info(f"Retrieving article: {article_id}")
         
-        # Get article from database
+        # Get article from database with security fields
         client = await db.client
-        result = await client.table('articles').select('*').eq('id', article_id).execute()
+        result = await client.table('articles').select('*, agent_id, agent_version_id, creation_method, creation_context, security_metadata, creator_ip_hash').eq('id', article_id).execute()
         
         if not result.data:
             raise HTTPException(status_code=404, detail="Article not found")
         
         article = result.data[0]
+        
+        # Build security info
+        security_info = ArticleSecurityInfo(
+            agent_id=article.get('agent_id'),
+            agent_version_id=article.get('agent_version_id'),
+            creation_method=article.get('creation_method'),
+            creation_context=article.get('creation_context'),
+            security_metadata=article.get('security_metadata'),
+            creator_ip_hash=article.get('creator_ip_hash'),
+            audit_logged=True
+        )
+        
+        # Add security info to article data
+        article['security_info'] = security_info
         
         # Check if article is published or user is the author
         if article['status'] != 'published' and article['author_id'] != user_id:
@@ -296,6 +431,12 @@ async def update_article(
             update_data['sources'] = request.sources
         if request.status is not None:
             update_data['status'] = request.status
+        if request.image_url is not None:
+            update_data['image_url'] = request.image_url
+        if request.image_alt is not None:
+            update_data['image_alt'] = request.image_alt
+        if request.image_caption is not None:
+            update_data['image_caption'] = request.image_caption
         
         # Validate required fields if they're being updated
         if 'title' in update_data and not update_data['title']:
@@ -305,12 +446,38 @@ async def update_article(
         
         # Update article in database
         client = await db.client
-        result = await client.table('articles').update(update_data).eq('id', article_id).execute()
+        result = await client.table('articles').update(update_data).eq('id', article_id).select('*, agent_id, agent_version_id, creation_method, creation_context, security_metadata, creator_ip_hash').execute()
         
         if not result.data:
             raise HTTPException(status_code=500, detail="Failed to update article")
         
         updated_article = result.data[0]
+        
+        # Build security info
+        security_info = ArticleSecurityInfo(
+            agent_id=updated_article.get('agent_id'),
+            agent_version_id=updated_article.get('agent_version_id'),
+            creation_method=updated_article.get('creation_method'),
+            creation_context=updated_article.get('creation_context'),
+            security_metadata=updated_article.get('security_metadata'),
+            creator_ip_hash=updated_article.get('creator_ip_hash'),
+            audit_logged=True
+        )
+        
+        # Add security info to article data
+        updated_article['security_info'] = security_info
+        
+        # Log the update operation
+        auditor = get_security_auditor()
+        await auditor.log_article_operation(
+            article_id=article_id,
+            operation='update',
+            user_id=user_id,
+            agent_id=updated_article.get('agent_id'),
+            agent_version_id=updated_article.get('agent_version_id'),
+            metadata={'updated_fields': list(update_data.keys())}
+        )
+        
         logger.info(f"Successfully updated article: {article_id}")
         
         return ArticleResponse(**updated_article)
@@ -338,9 +505,25 @@ async def delete_article(
         article = await validate_article_ownership(article_id, user_id)
         article_title = article['title']
         
-        # Delete article from database
+        # Get article info before deletion for logging
         client = await db.client
+        article_result = await client.table('articles').select('agent_id, agent_version_id').eq('id', article_id).execute()
+        agent_id = article_result.data[0].get('agent_id') if article_result.data else None
+        agent_version_id = article_result.data[0].get('agent_version_id') if article_result.data else None
+        
+        # Delete article from database
         result = await client.table('articles').delete().eq('id', article_id).execute()
+        
+        # Log the delete operation
+        auditor = get_security_auditor()
+        await auditor.log_article_operation(
+            article_id=article_id,
+            operation='delete',
+            user_id=user_id,
+            agent_id=agent_id,
+            agent_version_id=agent_version_id,
+            metadata={'deletion_timestamp': datetime.utcnow().isoformat()}
+        )
         
         logger.info(f"Successfully deleted article: {article_title}")
         

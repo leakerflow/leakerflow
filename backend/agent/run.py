@@ -55,10 +55,11 @@ class AgentConfig:
 
 
 class ToolManager:
-    def __init__(self, thread_manager: ThreadManager, project_id: str, thread_id: str):
+    def __init__(self, thread_manager: ThreadManager, project_id: str, thread_id: str, agent_instance_id: Optional[str] = None):
         self.thread_manager = thread_manager
         self.project_id = project_id
         self.thread_id = thread_id
+        self.agent_instance_id = agent_instance_id
     
     def register_all_tools(self):
         self.thread_manager.add_tool(ExpandMessageTool, thread_id=self.thread_id, thread_manager=self.thread_manager)
@@ -140,7 +141,7 @@ class ToolManager:
         
         if safe_tool_check('article_creation_tool'):
             from agent.tools.article_creation_tool import ArticleCreationTool
-            self.thread_manager.add_tool(ArticleCreationTool, project_id=self.project_id, thread_manager=self.thread_manager)
+            self.thread_manager.add_tool(ArticleCreationTool, project_id=self.project_id, thread_manager=self.thread_manager, agent_instance_id=self.agent_instance_id)
 
 
 class MCPManager:
@@ -422,7 +423,13 @@ class AgentRunner:
             logger.info(f"No sandbox found for project {self.config.project_id}; will create lazily when needed")
     
     async def setup_tools(self):
-        tool_manager = ToolManager(self.thread_manager, self.config.project_id, self.config.thread_id)
+        # Get agent_instance_id from environment or generate one
+        agent_instance_id = os.getenv('AGENT_INSTANCE_ID')
+        if not agent_instance_id:
+            import uuid
+            agent_instance_id = str(uuid.uuid4())
+        
+        tool_manager = ToolManager(self.thread_manager, self.config.project_id, self.config.thread_id, agent_instance_id)
         
         if self.config.agent_config and self.config.agent_config.get('is_leakerflow_default', False):
             leakerflow_agent_id = self.config.agent_config['agent_id']

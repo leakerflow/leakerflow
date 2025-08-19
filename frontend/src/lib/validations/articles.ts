@@ -39,6 +39,22 @@ export const articleBaseSchema = z.object({
       'URL must point to a valid image file'
     ),
   
+  image_alt: z
+    .string()
+    .max(200, 'Alt text must be less than 200 characters')
+    .optional()
+    .or(z.literal('')),
+  
+  image_caption: z
+    .string()
+    .max(300, 'Caption must be less than 300 characters')
+    .optional()
+    .or(z.literal('')),
+  
+  image_data: z
+    .string()
+    .optional(),
+  
   source_url: z
     .string()
     .url('Please enter a valid source URL')

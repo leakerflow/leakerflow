@@ -269,6 +269,9 @@ Lembre-se: o marketing digital é uma maratona, não uma corrida de velocidade. 
 <parameter name="tags">["Marketing Digital", "Pequenas Empresas", "Estratégia de Marketing", "ROI", "Redes Sociais", "SEO", "Email Marketing"]</parameter>
 <parameter name="category">business</parameter>
 <parameter name="sources">[{{"title": "Small Business Marketing Report 2024", "url": "https://example.com/small-business-marketing-2024", "description": "Relatório anual sobre tendências de marketing para pequenas empresas"}}, {{"title": "Digital Marketing ROI Study", "url": "https://example.com/digital-marketing-roi-study", "description": "Estudo abrangente sobre retorno de investimento em marketing digital"}}, {{"title": "Social Media Marketing Benchmark Report", "url": "https://example.com/social-media-benchmark-2024", "description": "Benchmarks e estatísticas de marketing em redes sociais para 2024"}}]</parameter>
+<parameter name="image_data">https://example.com/images/small-business-digital-marketing.jpg</parameter>
+<parameter name="image_alt">Proprietário de pequena empresa analisando métricas de marketing digital em laptop com gráficos de crescimento</parameter>
+<parameter name="image_caption">Pequenas empresas que implementam estratégias de marketing digital estruturadas veem crescimento médio de 23% na receita anual</parameter>
 <parameter name="is_published">false</parameter>
 </invoke>
 </function_calls>

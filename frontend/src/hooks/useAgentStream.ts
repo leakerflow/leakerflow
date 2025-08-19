@@ -183,6 +183,10 @@ export function useAgentStream(
       const currentThreadId = threadIdRef.current; // Get current threadId from ref
       const currentSetMessages = setMessagesRef.current; // Get current setMessages from ref
 
+      // Reset reconnection tracking
+      reconnectAttemptsRef.current = 0;
+      lastErrorTimeRef.current = 0;
+
       if (streamCleanupRef.current) {
         streamCleanupRef.current();
         streamCleanupRef.current = null;
@@ -361,10 +365,18 @@ export function useAgentStream(
     ],
   );
 
+  // Track reconnection attempts to prevent infinite loops
+  const reconnectAttemptsRef = useRef(0);
+  const maxReconnectAttempts = 3;
+  const lastErrorTimeRef = useRef(0);
+  const errorDebounceMs = 2000; // 2 seconds
+
   const handleStreamError = useCallback(
     (err: Error | string | Event) => {
       if (!isMountedRef.current) return;
 
+      const now = Date.now();
+      
       // Extract error message
       let errorMessage = 'Unknown streaming error';
       if (typeof err === 'string') {
@@ -375,12 +387,38 @@ export function useAgentStream(
         // Standard EventSource errors don't have much detail, might need status check
         errorMessage = 'Stream connection error';
       }
-
-      console.error('[useAgentStream] Streaming error:', errorMessage, err);
+      
+      // Debounce rapid error events
+      if (now - lastErrorTimeRef.current < errorDebounceMs) {
+        console.log(`[useAgentStream] Debouncing error: ${errorMessage}`);
+        return;
+      }
+      
+      lastErrorTimeRef.current = now;
+      reconnectAttemptsRef.current++;
+      
+      console.error(`[useAgentStream] Streaming error (attempt ${reconnectAttemptsRef.current}/${maxReconnectAttempts}):`, errorMessage, err);
       setError(errorMessage);
       
-      // Show error toast with longer duration
-      toast.error(errorMessage, { duration: 15000 });
+      // If we've exceeded max reconnect attempts, finalize the stream
+      if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
+        console.warn(`[useAgentStream] Max reconnect attempts reached, finalizing stream`);
+        const runId = currentRunIdRef.current;
+        if (runId) {
+          finalizeStream('error', runId);
+        } else {
+          finalizeStream('error');
+        }
+        return;
+      }
+      
+      // Don't show toast for "not found" or "agent run is not running" errors
+      const isNotFoundError =
+        errorMessage.includes('not found') || errorMessage.includes('agent run is not running');
+      if (!isNotFoundError) {
+        // Show error toast with longer duration
+        toast.error(errorMessage, { duration: 15000 });
+      }
 
       const runId = currentRunIdRef.current;
       if (!runId) {
@@ -507,6 +545,10 @@ export function useAgentStream(
           return;
         }
 
+        // Reset reconnection attempts on successful connection
+        reconnectAttemptsRef.current = 0;
+        lastErrorTimeRef.current = 0;
+        
         // Agent is running, proceed to create the stream
         const cleanup = streamAgent(runId, {
           onMessage: (data) => {

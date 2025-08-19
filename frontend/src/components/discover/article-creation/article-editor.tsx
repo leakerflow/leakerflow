@@ -24,7 +24,9 @@ import {
   Clock,
   User,
   CheckCircle,
-  ChevronDown
+  ChevronDown,
+  Upload,
+  Trash2
 } from 'lucide-react';
 import { 
   useCreateArticle, 
@@ -101,11 +103,18 @@ export function ArticleEditor({
     subtitle: initialData?.subtitle || '',
     category: initialData?.category || 'general',
     tags: initialData?.tags || [],
-    image_url: initialData?.image_url || '',
+    image_url: initialData?.image_url || 'https://www.rockstargames.com/VI/_next/image?url=/VI/_next/static/media/background.247e2940.png&w=2048&q=100',
     source_url: initialData?.source_url || '',
     read_time: initialData?.read_time || 0,
     is_published: initialData?.is_published || false
   });
+  
+  // Image upload state
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(formData.image_url || null);
+  const [imageAlt, setImageAlt] = useState<string>('GTA 6 Official Screenshot - Vice City');
+  const [imageCaption, setImageCaption] = useState<string>('Screenshot oficial do Grand Theft Auto VI mostrando Vice City');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [fieldValidation, setFieldValidation] = useState<Record<string, { isValid: boolean; message?: string }>>({});
@@ -124,6 +133,7 @@ export function ArticleEditor({
     
     const timer = setTimeout(() => {
       autoSave({
+        id: articleId,
         title: formData.title,
         content: formData.content,
         description: formData.subtitle,
@@ -135,6 +145,55 @@ export function ArticleEditor({
     
     return () => clearTimeout(timer);
   }, [formData, hasUnsavedChanges, articleId, autoSave]);
+  
+  // Image upload handlers
+  const handleImageUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size must be less than 5MB');
+      return;
+    }
+    
+    setImageFile(file);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  }, []);
+  
+  const handleRemoveImage = useCallback(() => {
+    setImageFile(null);
+    setImagePreview(null);
+    setImageAlt('');
+    setImageCaption('');
+    handleInputChange('image_url', '');
+  }, []);
+  
+  const convertImageToBase64 = useCallback((file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        // Remove data URL prefix to get just the base64 data
+        const base64Data = result.split(',')[1];
+        resolve(base64Data);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }, []);
   
   // Real-time field validation
   const validateFieldRealTime = useCallback((fieldName: string, value: unknown) => {
@@ -246,15 +305,33 @@ export function ArticleEditor({
     }
     
     try {
+      setIsUploadingImage(true);
+      
+      let imageData = null;
+      if (imageFile) {
+        const base64Data = await convertImageToBase64(imageFile);
+        imageData = {
+          data: base64Data,
+          alt: imageAlt,
+          caption: imageCaption
+        };
+      }
+      
       // Convert form data to API format
       const apiData = {
+        ...(articleId && { id: articleId }),
         title: formData.title,
         content: formData.content,
         description: formData.subtitle || undefined,
         category: formData.category,
         tags: formData.tags,
         sources: formData.source_url ? [{ title: 'Source', url: formData.source_url }] : [],
-        is_published: false
+        is_published: false,
+        ...(imageData && { 
+          image_data: imageData.data,
+          image_alt: imageData.alt,
+          image_caption: imageData.caption
+        })
       };
       
       if (articleId) {
@@ -266,6 +343,15 @@ export function ArticleEditor({
         const newArticle = await createArticle.mutateAsync(apiData);
         router.push(`/discover/create/${newArticle.id}`);
       }
+      
+      // Reset image state after successful save
+      if (imageFile) {
+        setImageFile(null);
+        setImagePreview(null);
+        setImageAlt('');
+        setImageCaption('');
+      }
+      
       setHasUnsavedChanges(false);
       // Clear errors on successful save
       setErrors({});
@@ -277,6 +363,8 @@ export function ArticleEditor({
       console.error('Failed to save draft:', error);
       toast.error('Failed to save article');
       return false;
+    } finally {
+      setIsUploadingImage(false);
     }
   };
   
@@ -302,15 +390,33 @@ export function ArticleEditor({
     }
     
     try {
+      setIsUploadingImage(true);
+      
+      let imageData = null;
+      if (imageFile) {
+        const base64Data = await convertImageToBase64(imageFile);
+        imageData = {
+          data: base64Data,
+          alt: imageAlt,
+          caption: imageCaption
+        };
+      }
+      
       // Convert form data to API format
       const apiData = {
+        ...(articleId && { id: articleId }),
         title: formData.title,
         content: formData.content,
         description: formData.subtitle || undefined,
         category: formData.category,
         tags: formData.tags,
         sources: formData.source_url ? [{ title: 'Source', url: formData.source_url }] : [],
-        is_published: true
+        is_published: true,
+        ...(imageData && { 
+          image_data: imageData.data,
+          image_alt: imageData.alt,
+          image_caption: imageData.caption
+        })
       };
       
       if (articleId) {
@@ -325,6 +431,13 @@ export function ArticleEditor({
       // Clear errors on successful publish
       setErrors({});
       setFieldValidation({});
+      
+      // Reset image state after successful publish
+      setImageFile(null);
+      setImagePreview(null);
+      setImageAlt('');
+      setImageCaption('');
+      
       toast.success('Article published successfully!');
       router.push('/discover');
       return true;
@@ -332,6 +445,8 @@ export function ArticleEditor({
       console.error('Failed to publish article:', error);
       toast.error('Failed to publish article');
       return false;
+    } finally {
+      setIsUploadingImage(false);
     }
   };
   
@@ -670,6 +785,134 @@ export function ArticleEditor({
             </CardContent>
           </Card>
           
+          {/* Image Upload */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center">
+                <ImageIcon className="h-5 w-5 mr-2" />
+                Featured Image
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Image Upload */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Upload Image
+                </label>
+                {!imagePreview ? (
+                  <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label htmlFor="image-upload" className="cursor-pointer">
+                      <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">
+                        Click to upload an image
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Max 5MB • JPG, PNG, GIF
+                      </p>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={handleRemoveImage}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    {/* Image Alt Text */}
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-foreground">
+                        Alt Text
+                      </label>
+                      <Input
+                        value={imageAlt}
+                        onChange={(e) => setImageAlt(e.target.value)}
+                        placeholder="Describe the image for accessibility"
+                        className="text-sm"
+                      />
+                    </div>
+                    
+                    {/* Image Caption */}
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-foreground">
+                        Caption (Optional)
+                      </label>
+                      <Input
+                        value={imageCaption}
+                        onChange={(e) => setImageCaption(e.target.value)}
+                        placeholder="Image caption"
+                        className="text-sm"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Or Image URL */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1 h-px bg-border"></div>
+                  <span className="text-xs text-muted-foreground">OR</span>
+                  <div className="flex-1 h-px bg-border"></div>
+                </div>
+                <label className="text-sm font-medium text-foreground">
+                  Image URL
+                </label>
+                <div className="relative">
+                  <Input
+                    value={formData.image_url}
+                    onChange={(e) => {
+                      handleInputChange('image_url', e.target.value);
+                      if (e.target.value && !imageFile) {
+                        setImagePreview(e.target.value);
+                      }
+                    }}
+                    placeholder="https://example.com/image.jpg"
+                    className={cn(
+                      "pr-10",
+                      errors.image_url && "border-destructive focus:border-destructive",
+                      fieldValidation.image_url?.isValid === false && "border-destructive focus:border-destructive",
+                      fieldValidation.image_url?.isValid === true && "border-green-500 focus:border-green-500"
+                    )}
+                  />
+                  {fieldValidation.image_url?.isValid === true && (
+                    <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
+                  )}
+                  {(fieldValidation.image_url?.isValid === false || errors.image_url) && (
+                    <AlertTriangle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-destructive" />
+                  )}
+                </div>
+                {(errors.image_url || fieldValidation.image_url?.message) && (
+                  <p className="text-sm text-destructive flex items-center">
+                    <AlertTriangle className="h-4 w-4 mr-1" />
+                    {errors.image_url || fieldValidation.image_url?.message}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Direct link to an image file
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          
           {/* Sources */}
           <Card>
             <CardHeader>
@@ -722,24 +965,24 @@ export function ArticleEditor({
                   onClick={handleSaveDraft}
                   variant="outline"
                   className="w-full"
-                  disabled={createArticle.isPending || updateArticle.isPending}
+                  disabled={createArticle.isPending || updateArticle.isPending || isUploadingImage}
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save as Draft
+                  {isUploadingImage ? 'Uploading...' : 'Save as Draft'}
                 </Button>
                 
                 <Button
                   onClick={handlePublish}
                   className="w-full"
-                  disabled={createArticle.isPending || updateArticle.isPending || !formData.title.trim() || !formData.content.trim()}
+                  disabled={createArticle.isPending || updateArticle.isPending || isUploadingImage || !formData.title.trim() || !formData.content.trim()}
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  {articleId ? 'Update & Publish' : 'Publish Article'}
+                  {isUploadingImage ? 'Uploading...' : articleId ? 'Update & Publish' : 'Publish Article'}
                 </Button>
                 
-                {(createArticle.isPending || updateArticle.isPending) && (
+                {(createArticle.isPending || updateArticle.isPending || isUploadingImage) && (
                   <p className="text-sm text-muted-foreground text-center">
-                    {createArticle.isPending ? 'Creating article...' : 'Updating article...'}
+                    {isUploadingImage ? 'Processing image...' : createArticle.isPending ? 'Creating article...' : 'Updating article...'}
                   </p>
                 )}
               </div>

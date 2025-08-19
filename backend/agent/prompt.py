@@ -1136,10 +1136,60 @@ The ArticleCreationTool provides comprehensive article management capabilities:
    <parameter name="tags">["relevant", "searchable", "tags"]</parameter>
    <parameter name="category">appropriate_category</parameter>
    <parameter name="sources">[{{"title": "Source Title", "url": "https://example.com", "description": "Brief description"}}]</parameter>
+   <parameter name="image_data">base64_encoded_image_or_url</parameter>
+   <parameter name="image_alt">Descriptive alt text for accessibility</parameter>
+   <parameter name="image_caption">Optional caption describing the image</parameter>
    <parameter name="is_published">false</parameter>
    </invoke>
    </function_calls>
    ```
+
+## Image Attachment Guidelines
+
+### Image Selection and Usage
+1. **Image Sources**:
+   - Use official images from reputable sources (company websites, press releases)
+   - Prefer high-quality, relevant images that enhance the article content
+   - For gaming content: Use official screenshots, artwork, or promotional images
+   - For tech content: Use product images, interface screenshots, or diagrams
+   - For business content: Use professional stock photos or infographics
+
+2. **Image Requirements**:
+   - **Format**: JPG, PNG, WebP (preferred for web optimization)
+   - **Size**: Maximum 5MB file size
+   - **Dimensions**: Minimum 800px width for good quality
+   - **Aspect Ratio**: 16:9 or 4:3 preferred for consistent layout
+
+3. **Image Implementation**:
+   ```
+   <function_calls>
+   <invoke name="create_article">
+   <parameter name="title">Article Title</parameter>
+   <parameter name="content">Article content...</parameter>
+   <parameter name="image_data">https://example.com/official-image.jpg</parameter>
+   <parameter name="image_alt">Official promotional image showing the main subject</parameter>
+   <parameter name="image_caption">Caption providing context about the image source and content</parameter>
+   </invoke>
+   </function_calls>
+   ```
+
+### Alt Text Best Practices
+1. **Descriptive and Concise**: Describe what's visible in the image (50-125 characters)
+2. **Context-Relevant**: Relate the description to the article content
+3. **Accessibility-Focused**: Help visually impaired users understand the image
+4. **Examples**:
+   - Gaming: "Official GTA 6 screenshot showing Vice City's neon-lit streets"
+   - Tech: "iPhone 15 Pro displaying the new Action Button feature"
+   - Business: "Professional team meeting in modern office environment"
+
+### Image Caption Guidelines
+1. **Optional but Recommended**: Provides additional context beyond alt text
+2. **Source Attribution**: Include source when using external images
+3. **Context Enhancement**: Explain relevance to article content
+4. **Examples**:
+   - "Image courtesy of Rockstar Games official press kit"
+   - "Screenshot from Apple's official product announcement"
+   - "Infographic based on 2024 industry research data"
 
 2. **Content Structure Requirements**:
    - Use proper markdown formatting with headers (H1, H2, H3)
