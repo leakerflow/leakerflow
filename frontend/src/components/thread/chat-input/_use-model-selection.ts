@@ -76,6 +76,12 @@ export const MODELS = {
     recommended: false,
     lowQuality: false
   },
+  'google/gemini-2.5-flash': { 
+    tier: 'premium', 
+    priority: 96,
+    recommended: false,
+    lowQuality: false
+  },
   'sonnet-3.5': { 
     tier: 'premium', 
     priority: 90,

@@ -12,6 +12,20 @@ class TaskStatus(str, Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
 
+class CredibilityLevel(str, Enum):
+    """Credibility classification system for GTA 6 information"""
+    CONFIRMED = "CONFIRMED"      # Official Rockstar/Take-Two source
+    PROBABLE = "PROBABLE"        # Multiple reliable sources
+    RUMOR = "RUMOR"              # Reliable insider + evidence
+    SPECULATION = "SPECULATION"  # Community theories without basis
+
+class ResearchPriority(str, Enum):
+    """Research priorities based on community demand"""
+    HIGH_DEMAND = "HIGH_DEMAND"        # ⭐⭐⭐⭐⭐ - Confirmed hot topics
+    MEDIUM_DEMAND = "MEDIUM_DEMAND"    # ⭐⭐⭐⭐ - Moderate community interest
+    LOW_DEMAND = "LOW_DEMAND"          # ⭐⭐⭐ - Specific niche
+    SPECULATIVE = "SPECULATIVE"        # ⭐⭐ - Theories and speculation
+
 class Section(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
@@ -21,6 +35,13 @@ class Task(BaseModel):
     content: str
     status: TaskStatus = TaskStatus.PENDING
     section_id: str  # Reference to section ID instead of section name
+    credibility: Optional[CredibilityLevel] = None  # Information credibility level
+    research_priority: Optional[ResearchPriority] = None  # Research priority
+    sources: Optional[List[str]] = Field(default_factory=list)  # Information sources
+    keywords: Optional[List[str]] = Field(default_factory=list)  # Keywords for SEO
+    content_type: Optional[str] = None  # Content type (article, video, thread, etc.)
+    target_audience: Optional[str] = None  # Target audience
+    estimated_engagement: Optional[str] = None  # Engagement estimation
 
 class TaskListTool(SandboxToolsBase):
     """Task management system for organizing and tracking tasks. It contains the action plan for the agent to follow.

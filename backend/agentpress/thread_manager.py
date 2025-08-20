@@ -68,6 +68,10 @@ class ThreadManager:
     def add_tool(self, tool_class: Type[Tool], function_names: Optional[List[str]] = None, **kwargs):
         """Add a tool to the ThreadManager."""
         self.tool_registry.register_tool(tool_class, function_names, **kwargs)
+    
+    def get_tools(self) -> Dict[str, Any]:
+        """Get all registered tools."""
+        return self.tool_registry.tools
 
     async def create_thread(
         self,

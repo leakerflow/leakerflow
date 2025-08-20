@@ -1,7 +1,7 @@
-fastapi==0.115.12
-uvicorn==0.34.0
+fastapi==0.116.1
+uvicorn==0.35.0
 pyautogui==0.9.54
-pillow==10.2.0
-pydantic==2.6.1
+pillow==11.3.0
+pydantic==2.11.7
 pytesseract==0.3.13
-pandas==2.3.0
+pandas==2.3.1

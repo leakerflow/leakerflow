@@ -1,74 +1,132 @@
 #!/usr/bin/env python3
 """
-Ferramenta de Validação GTA 6
-Integra o sistema de validação de informações no framework do agente
+GTA 6 Information Validation Tool
+Integrates validation and credibility classification system into the agent framework
 """
 
 import json
 from typing import Dict, Any, List, Optional
-from agentpress.tool import Tool, SchemaType
+from agentpress.tool import Tool, ToolResult, openapi_schema, usage_example
 from agent.gta6_validation_system import (
-    GTA6ValidationSystem, 
-    CredibilityLevel, 
-    SourceType, 
+    GTA6ValidationSystem,
+    CredibilityLevel,
+    SourceType,
     GTA6Information
 )
 from datetime import datetime
 
 class GTA6ValidationTool(Tool):
     """
-    Ferramenta para validar informações sobre GTA 6 usando o sistema de credibilidade
+    Tool for GTA 6 information validation and credibility classification
     """
-    
-    name = "gta6_validation"
-    description = "Valida informações sobre GTA 6 usando sistema de credibilidade (CONFIRMADO/PROVÁVEL/RUMOR/ESPECULAÇÃO)"
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.validation_system = GTA6ValidationSystem()
     
-    @property
-    def parameters(self) -> SchemaType:
-        return {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "type": "string",
-                    "enum": ["validate_info", "classify_source", "get_confirmed_info", "generate_report"],
-                    "description": "Ação a ser executada pelo sistema de validação"
-                },
-                "information": {
-                    "type": "object",
-                    "properties": {
-                        "title": {"type": "string", "description": "Título da informação"},
-                        "content": {"type": "string", "description": "Conteúdo da informação"},
-                        "source_name": {"type": "string", "description": "Nome da fonte"},
-                        "source_type": {
-                            "type": "string",
-                            "enum": ["OFICIAL", "INSIDER", "MIDIA", "COMUNIDADE", "VAZAMENTO"],
-                            "description": "Tipo da fonte"
-                        },
-                        "date_published": {"type": "string", "description": "Data de publicação (YYYY-MM-DD)"},
-                        "url": {"type": "string", "description": "URL da fonte (opcional)"}
-                    },
-                    "required": ["title", "content", "source_name", "source_type"],
-                    "description": "Informação a ser validada (necessário para validate_info)"
-                },
-                "source_name": {
-                    "type": "string",
-                    "description": "Nome da fonte para classificação (necessário para classify_source)"
-                },
-                "topic_filter": {
-                    "type": "string",
-                    "description": "Filtro por tópico para buscar informações confirmadas (opcional)"
-                }
-            },
-            "required": ["action"]
-        }
+    def validate_information(self, **kwargs) -> Dict[str, Any]:
+        """Validate GTA 6 information - compatibility method for validation."""
+        return self.validate_gta6_info(action="validate_info", **kwargs)
     
-    async def execute(self, **kwargs) -> Dict[str, Any]:
+    def get_confirmed_info(self, **kwargs) -> Dict[str, Any]:
+        """Get confirmed GTA 6 information - compatibility method for validation."""
+        return self.validate_gta6_info(action="get_confirmed_info", **kwargs)
+    
+    @openapi_schema({
+        "type": "function",
+        "function": {
+            "name": "validate_gta6_info",
+            "description": "Validates and classifies credibility of GTA 6 information based on sources and evidence. Critical for maintaining information accuracy and credibility standards.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "enum": [
+                            "validate_info", 
+                            "classify_source", 
+                            "get_confirmed_info",
+                            "generate_report"
+                        ],
+                        "description": "Action to be executed by the validation system"
+                    },
+                    "information": {
+                        "type": "string",
+                        "description": "Information to be validated (required for validate_info)"
+                    },
+                    "source_name": {
+                        "type": "string",
+                        "description": "Name of the information source"
+                    },
+                    "source_type": {
+                        "type": "string",
+                        "enum": [
+                            "official_rockstar", "gaming_media", "insider_leak", 
+                            "social_media", "community_forum", "data_mining",
+                            "patent_filing", "job_listing", "financial_report"
+                        ],
+                        "description": "Type of the information source"
+                    },
+                    "info_type": {
+                        "type": "string",
+                        "enum": [
+                            "release_date", "gameplay_feature", "map_location", 
+                            "character_info", "vehicle_info", "technical_spec",
+                            "business_info", "development_update"
+                        ],
+                        "description": "Type of information being validated"
+                    },
+                    "publication_date": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Date when the information was published (YYYY-MM-DD)"
+                    },
+                    "evidence_links": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Links to supporting evidence (optional)"
+                    }
+                },
+                "required": ["action"]
+            }
+        }
+    })
+    @usage_example('''
+        <!-- Validate specific GTA 6 information -->
+        <function_calls>
+        <invoke name="validate_gta6_info">
+        <parameter name="action">validate_info</parameter>
+        <parameter name="information">GTA 6 will be released in Fall 2025</parameter>
+        <parameter name="source_name">Rockstar Games</parameter>
+        <parameter name="source_type">official_rockstar</parameter>
+        <parameter name="info_type">release_date</parameter>
+        <parameter name="publication_date">2024-12-05</parameter>
+        </invoke>
+        </function_calls>
+        
+        <!-- Classify source credibility -->
+        <function_calls>
+        <invoke name="validate_gta6_info">
+        <parameter name="action">classify_source</parameter>
+        <parameter name="source_name">Jason Schreier</parameter>
+        <parameter name="source_type">gaming_media</parameter>
+        </invoke>
+        </function_calls>
+        
+        <!-- Get confirmed information report -->
+        <function_calls>
+        <invoke name="validate_gta6_info">
+        <parameter name="action">get_confirmed_info</parameter>
+        <parameter name="info_type">release_date</parameter>
+        </invoke>
+        </function_calls>
+        ''')
+    async def validate_gta6_info(self, action: str, information: Optional[str] = None,
+                                source_name: Optional[str] = None, source_type: Optional[str] = None,
+                                info_type: Optional[str] = None, publication_date: Optional[str] = None,
+                                evidence_links: Optional[List[str]] = None) -> ToolResult:
         """
-        Executa a validação de informações GTA 6
+        Executes GTA 6 information validation
         """
         try:
             action = kwargs.get("action")
@@ -84,24 +142,24 @@ class GTA6ValidationTool(Tool):
             else:
                 return {
                     "success": False,
-                    "error": f"Ação não reconhecida: {action}"
+                    "error": f"Unrecognized action: {action}"
                 }
                 
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Erro na validação: {str(e)}"
+                "error": f"Validation error: {str(e)}"
             }
     
     async def _validate_information(self, info_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Valida uma informação específica sobre GTA 6
+        Validates specific information about GTA 6
         """
         try:
-            # Converte dados para objeto GTA6Information
-            source_type = SourceType(info_data.get("source_type", "COMUNIDADE"))
+            # Convert data to GTA6Information object
+            source_type = SourceType(info_data.get("source_type", "COMMUNITY"))
             
-            # Parse da data
+            # Parse date
             date_published = None
             if info_data.get("date_published"):
                 try:
@@ -120,10 +178,10 @@ class GTA6ValidationTool(Tool):
                 url=info_data.get("url")
             )
             
-            # Classifica a informação
+            # Classify the information
             classified_info = self.validation_system.classify_information(gta6_info)
             
-            # Valida contra dados confirmados
+            # Validates against confirmed data
             validation_result = self.validation_system.validate_against_confirmed(classified_info)
             
             return {
@@ -144,12 +202,12 @@ class GTA6ValidationTool(Tool):
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Erro na validação da informação: {str(e)}"
+                "error": f"Information validation error: {str(e)}"
             }
     
     async def _classify_source(self, source_name: str) -> Dict[str, Any]:
         """
-        Classifica a confiabilidade de uma fonte
+        Classifies the reliability of a source
         """
         try:
             reliability = self.validation_system.get_source_reliability(source_name)
@@ -167,18 +225,18 @@ class GTA6ValidationTool(Tool):
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Erro na classificação da fonte: {str(e)}"
+                "error": f"Source classification error: {str(e)}"
             }
     
     async def _get_confirmed_info(self, topic_filter: Optional[str] = None) -> Dict[str, Any]:
         """
-        Retorna informações confirmadas sobre GTA 6
+        Returns confirmed information about GTA 6
         """
         try:
             confirmed_info = self.validation_system.confirmed_information
             
             if topic_filter:
-                # Filtra por tópico
+                # Filter by topic
                 filtered_info = {
                     key: value for key, value in confirmed_info.items()
                     if topic_filter.lower() in key.lower() or topic_filter.lower() in value.lower()
@@ -198,19 +256,19 @@ class GTA6ValidationTool(Tool):
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Erro ao buscar informações confirmadas: {str(e)}"
+                "error": f"Error searching confirmed information: {str(e)}"
             }
     
     async def _generate_validation_report(self) -> Dict[str, Any]:
         """
-        Gera relatório de validação
+        Generates validation report
         """
         try:
-            # Simula algumas informações para o relatório
+            # Simulate some information for the report
             sample_info = GTA6Information(
-                title="Análise de Credibilidade GTA 6",
-                content="Relatório de validação do sistema",
-                source_name="Sistema de Validação",
+                title="GTA 6 Credibility Analysis",
+                content="System validation report",
+                source_name="Validation System",
                 source_type=SourceType.OFICIAL,
                 date_published=datetime.now()
             )
@@ -226,10 +284,10 @@ class GTA6ValidationTool(Tool):
                     "total_sources": len(self.validation_system.source_reliability),
                     "confirmed_facts": len(self.validation_system.confirmed_information),
                     "credibility_levels": {
-                        level.value: f"Nível {level.value}" for level in CredibilityLevel
+                        level.value: f"Level {level.value}" for level in CredibilityLevel
                     },
                     "source_types": {
-                        source_type.value: f"Tipo {source_type.value}" for source_type in SourceType
+                        source_type.value: f"Type {source_type.value}" for source_type in SourceType
                     },
                     "sample_report": report
                 }
@@ -238,55 +296,55 @@ class GTA6ValidationTool(Tool):
         except Exception as e:
             return {
                 "success": False,
-                "error": f"Erro na geração do relatório: {str(e)}"
+                "error": f"Report generation error: {str(e)}"
             }
     
     def _get_reliability_classification(self, score: float) -> str:
         """
-        Classifica a confiabilidade baseada no score
+        Classifies reliability based on score
         """
         if score >= 0.9:
-            return "MUITO_CONFIÁVEL"
+            return "VERY_RELIABLE"
         elif score >= 0.7:
-            return "CONFIÁVEL"
+            return "RELIABLE"
         elif score >= 0.5:
-            return "MODERADAMENTE_CONFIÁVEL"
+            return "MODERATELY_RELIABLE"
         elif score >= 0.3:
-            return "POUCO_CONFIÁVEL"
+            return "LESS_RELIABLE"
         else:
-            return "NÃO_CONFIÁVEL"
+            return "UNRELIABLE"
     
     def _get_source_recommendations(self, score: float) -> List[str]:
         """
-        Retorna recomendações baseadas no score de confiabilidade
+        Returns recommendations based on credibility score
         """
         if score >= 0.9:
             return [
-                "Fonte altamente confiável",
-                "Pode ser usada como referência principal",
-                "Informações podem ser publicadas com confiança"
+                "Highly reliable source",
+                "Can be used as primary reference",
+                "Information can be published with confidence"
             ]
         elif score >= 0.7:
             return [
-                "Fonte confiável",
-                "Recomenda-se verificação cruzada",
-                "Adequada para artigos informativos"
+                "Reliable source",
+                "Cross-verification recommended",
+                "Suitable for informative articles"
             ]
         elif score >= 0.5:
             return [
-                "Fonte moderadamente confiável",
-                "Necessária verificação com múltiplas fontes",
-                "Use com cautela em artigos"
+                "Moderately reliable source",
+                "Verification with multiple sources required",
+                "Use with caution in articles"
             ]
         elif score >= 0.3:
             return [
-                "Fonte pouco confiável",
-                "Requer verificação extensiva",
-                "Marque claramente como rumor/especulação"
+                "Less reliable source",
+                "Requires extensive verification",
+                "Clearly mark as rumor/speculation"
             ]
         else:
             return [
-                "Fonte não confiável",
-                "Não recomendada para publicação",
-                "Use apenas como ponto de partida para investigação"
+                "Unreliable source",
+                "Not recommended for publication",
+                "Use only as starting point for investigation"
             ]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Sistema de Análise de Demanda e Tendências GTA 6
-Analisa tendências de busca, demanda de conteúdo e interesse da comunidade
+GTA 6 Demand and Trends Analysis System
+Analyzes search trends, content demand and community interest
 """
 
 from enum import Enum
@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 import json
 
 class ContentType(Enum):
-    """Tipos de conteúdo sobre GTA 6"""
+    """GTA 6 content types"""
     BREAKING_NEWS = "breaking_news"
     DEEP_ANALYSIS = "deep_analysis"
     TUTORIAL_GUIDE = "tutorial_guide"
@@ -22,7 +22,7 @@ class ContentType(Enum):
     COMPARISON = "comparison"
 
 class TrendingTopic(Enum):
-    """Tópicos em alta sobre GTA 6"""
+    """Trending topics about GTA 6"""
     RELEASE_DATE = "release_date"
     GAMEPLAY_MECHANICS = "gameplay_mechanics"
     MAP_SIZE = "map_size"
@@ -38,7 +38,7 @@ class TrendingTopic(Enum):
 
 @dataclass
 class DemandMetrics:
-    """Métricas de demanda para conteúdo"""
+    """Content demand metrics"""
     topic: str
     search_volume: int
     trend_direction: str  # "rising", "stable", "declining"
@@ -51,7 +51,7 @@ class DemandMetrics:
 
 @dataclass
 class ContentOpportunity:
-    """Oportunidade de conteúdo identificada"""
+    """Identified content opportunity"""
     title: str
     content_type: ContentType
     trending_topics: List[TrendingTopic]
@@ -65,7 +65,7 @@ class ContentOpportunity:
     target_audience: str
 
 class GTA6DemandAnalyzer:
-    """Analisador principal de demanda e tendências GTA 6"""
+    """Main GTA 6 demand and trends analyzer"""
     
     def __init__(self):
         self.trending_keywords = self._load_trending_keywords()
@@ -73,7 +73,7 @@ class GTA6DemandAnalyzer:
         self.community_interests = self._load_community_interests()
         
     def _load_trending_keywords(self) -> Dict[str, DemandMetrics]:
-        """Carrega palavras-chave em alta relacionadas a GTA 6"""
+        """Loads trending keywords related to GTA 6"""
         return {
             "gta 6 release date": DemandMetrics(
                 topic="gta 6 release date",
@@ -166,7 +166,7 @@ class GTA6DemandAnalyzer:
         }
     
     def _load_community_interests(self) -> Dict[str, float]:
-        """Carrega interesses atuais da comunidade GTA 6"""
+        """Loads current GTA 6 community interests"""
         return {
             "vice_city_recreation": 0.95,
             "character_customization": 0.90,
@@ -181,7 +181,7 @@ class GTA6DemandAnalyzer:
         }
     
     def calculate_opportunity_score(self, demand: DemandMetrics) -> float:
-        """Calcula score de oportunidade baseado em demanda e competição"""
+        """Calculates opportunity score based on demand and competition"""
         # Fórmula: (demanda * gap_de_conteúdo * urgência) / (competição + 1)
         demand_factor = (demand.search_volume / 100000) * demand.content_gap_score * demand.urgency_score
         competition_factor = demand.keyword_difficulty + 0.1  # Evita divisão por zero
@@ -189,7 +189,7 @@ class GTA6DemandAnalyzer:
         return min(demand_factor / competition_factor, 1.0)
     
     def identify_content_opportunities(self) -> List[ContentOpportunity]:
-        """Identifica oportunidades de conteúdo baseadas na demanda atual"""
+        """Identifies content opportunities based on current demand"""
         opportunities = []
         
         for keyword, metrics in self.trending_keywords.items():
@@ -221,7 +221,7 @@ class GTA6DemandAnalyzer:
         return sorted(opportunities, key=lambda x: x.opportunity_score, reverse=True)
     
     def _determine_content_type(self, keyword: str) -> ContentType:
-        """Determina o tipo de conteúdo mais adequado para a palavra-chave"""
+        """Determines the most suitable content type for the keyword"""
         if "release date" in keyword or "news" in keyword:
             return ContentType.BREAKING_NEWS
         elif "analysis" in keyword or "comparison" in keyword:
@@ -236,7 +236,7 @@ class GTA6DemandAnalyzer:
             return ContentType.DEEP_ANALYSIS
     
     def _calculate_priority(self, opportunity_score: float, urgency_score: float) -> str:
-        """Calcula nível de prioridade"""
+        """Calculates priority level"""
         combined_score = (opportunity_score + urgency_score) / 2
         
         if combined_score >= 0.8:
@@ -247,7 +247,7 @@ class GTA6DemandAnalyzer:
             return "LOW"
     
     def _calculate_urgency(self, urgency_score: float) -> str:
-        """Calcula urgência de criação"""
+        """Calculates creation urgency"""
         if urgency_score >= 0.8:
             return "IMMEDIATE"
         elif urgency_score >= 0.6:
@@ -256,20 +256,20 @@ class GTA6DemandAnalyzer:
             return "THIS_MONTH"
     
     def _generate_title_suggestion(self, keyword: str, content_type: ContentType) -> str:
-        """Gera sugestão de título baseada na palavra-chave e tipo de conteúdo"""
+        """Generates title suggestion based on keyword and content type"""
         templates = {
-            ContentType.BREAKING_NEWS: "BREAKING: {keyword} - Últimas Atualizações",
-            ContentType.DEEP_ANALYSIS: "Análise Completa: {keyword} em GTA 6",
-            ContentType.TUTORIAL_GUIDE: "Guia Definitivo: {keyword} em GTA 6",
-            ContentType.THEORY_SPECULATION: "Teoria: {keyword} - O Que Esperar em GTA 6",
-            ContentType.TECHNICAL_REVIEW: "Review Técnico: {keyword} em GTA 6"
+            ContentType.BREAKING_NEWS: "BREAKING: {keyword} - Latest Updates",
+            ContentType.DEEP_ANALYSIS: "Complete Analysis: {keyword} in GTA 6",
+            ContentType.TUTORIAL_GUIDE: "Definitive Guide: {keyword} in GTA 6",
+            ContentType.THEORY_SPECULATION: "Theory: {keyword} - What to Expect in GTA 6",
+            ContentType.TECHNICAL_REVIEW: "Technical Review: {keyword} in GTA 6"
         }
         
         template = templates.get(content_type, "GTA 6: {keyword}")
         return template.format(keyword=keyword.title())
     
     def _extract_trending_topics(self, keyword: str) -> List[TrendingTopic]:
-        """Extrai tópicos em alta relacionados à palavra-chave"""
+        """Extracts trending topics related to the keyword"""
         topic_mapping = {
             "release date": [TrendingTopic.RELEASE_DATE],
             "gameplay": [TrendingTopic.GAMEPLAY_MECHANICS],
@@ -288,13 +288,13 @@ class GTA6DemandAnalyzer:
         return topics if topics else [TrendingTopic.RUMORS]
     
     def _generate_related_keywords(self, main_keyword: str) -> List[str]:
-        """Gera palavras-chave relacionadas"""
+        """Generates related keywords"""
         base_keywords = [
             "gta 6", "grand theft auto 6", "gta vi", "rockstar games",
             "vice city", "leonida", "jason lucia", "gta 6 2025"
         ]
         
-        # Adiciona variações específicas baseadas na palavra-chave principal
+        # Add specific variations based on the main keyword
         if "release date" in main_keyword:
             base_keywords.extend(["gta 6 launch", "when gta 6 release", "gta 6 coming out"])
         elif "gameplay" in main_keyword:
@@ -302,23 +302,23 @@ class GTA6DemandAnalyzer:
         elif "map" in main_keyword:
             base_keywords.extend(["gta 6 world size", "vice city map", "gta 6 locations"])
         
-        return base_keywords[:10]  # Limita a 10 keywords
+        return base_keywords[:10]  # Limit to 10 keywords
     
     def _identify_target_audience(self, keyword: str) -> str:
-        """Identifica audiência-alvo baseada na palavra-chave"""
+        """Identifies target audience based on keyword"""
         if "system requirements" in keyword or "specs" in keyword:
-            return "PC Gamers e Entusiastas de Hardware"
+            return "PC Gamers and Hardware Enthusiasts"
         elif "release date" in keyword:
-            return "Fãs Casuais e Hardcore de GTA"
+            return "Casual and Hardcore GTA Fans"
         elif "analysis" in keyword or "comparison" in keyword:
-            return "Gamers Hardcore e Criadores de Conteúdo"
+            return "Hardcore Gamers and Content Creators"
         elif "guide" in keyword:
-            return "Novos Jogadores e Comunidade Geral"
+            return "New Players and General Community"
         else:
-            return "Comunidade Geral de GTA"
+            return "General GTA Community"
     
     def generate_content_calendar(self, days: int = 30) -> List[Dict]:
-        """Gera calendário de conteúdo baseado nas oportunidades identificadas"""
+        """Generates content calendar based on identified opportunities"""
         opportunities = self.identify_content_opportunities()
         calendar = []
         
@@ -342,7 +342,7 @@ class GTA6DemandAnalyzer:
         return calendar
     
     def get_trending_report(self) -> Dict:
-        """Gera relatório de tendências atuais"""
+        """Generates current trends report"""
         opportunities = self.identify_content_opportunities()
         
         return {
@@ -367,16 +367,16 @@ class GTA6DemandAnalyzer:
 if __name__ == "__main__":
     analyzer = GTA6DemandAnalyzer()
     
-    # Identifica oportunidades
+    # Identifies opportunities
     opportunities = analyzer.identify_content_opportunities()
-    print(f"Encontradas {len(opportunities)} oportunidades de conteúdo")
+    print(f"Found {len(opportunities)} content opportunities")
     
-    # Gera calendário
+    # Generates calendar
     calendar = analyzer.generate_content_calendar(7)
-    print(f"\nCalendário para próximos 7 dias:")
+    print(f"\nCalendar for next 7 days:")
     for entry in calendar:
-        print(f"- {entry['date']}: {entry['title']} (Prioridade: {entry['priority']})")
+        print(f"- {entry['date']}: {entry['title']} (Priority: {entry['priority']})")
     
-    # Relatório de tendências
+    # Trends report
     report = analyzer.get_trending_report()
-    print(f"\nRelatório de tendências: {json.dumps(report, indent=2)}")
+    print(f"\nTrends report: {json.dumps(report, indent=2)}")

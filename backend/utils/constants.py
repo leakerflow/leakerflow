@@ -68,6 +68,14 @@ MODELS = {
         },
         "tier_availability": ["paid"]
     },
+    "gemini/gemini-2.5-flash": {
+        "aliases": ["google/gemini-2.5-flash"],
+        "pricing": {
+            "input_cost_per_million_tokens": 0.30,
+            "output_cost_per_million_tokens": 2.50
+        },
+        "tier_availability": ["free", "paid"]
+    },
     # "openai/gpt-4o": {
     #     "aliases": ["gpt-4o"],
     #     "pricing": {

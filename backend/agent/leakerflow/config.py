@@ -11,17 +11,36 @@ class LeakerFlowConfig:
     SYSTEM_PROMPT = SYSTEM_PROMPT
 
     DEFAULT_TOOLS = {
+        # Core mandatory tools
+        "task_list_tool": True,
+        "message_tool": True,
+        "expand_msg_tool": True,
+        
+        # GTA 6 specialized tools
+        "gta6_demand_tool": True,
+        "gta6_validation_tool": True,
+        
+        # Content creation tools
+        "article_creation_tool": True,
+        "web_search_tool": True,
+        
+        # Sandbox tools
         "sb_shell_tool": True,
-        "browser_tool": True,
+        "sb_browser_tool": True,
         "sb_deploy_tool": True,
         "sb_expose_tool": True,
-        "web_search_tool": True,
         "sb_vision_tool": True,
         "sb_image_edit_tool": True,
-        "data_providers_tool": True,
         "sb_sheets_tool": True,
         "sb_files_tool": True,
-        "article_creation_tool": True,
+        "sb_templates_tool": True,
+        "sb_web_dev_tool": True,
+        
+        # Advanced tools
+        "browser_tool": True,
+        "computer_use_tool": True,
+        "data_providers_tool": True,
+        "mcp_tool_wrapper": True,
     }
     
     DEFAULT_MCPS = []

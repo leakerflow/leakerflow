@@ -74,15 +74,39 @@ class ToolManager:
         self.thread_manager.add_tool(SandboxImageEditTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
         self.thread_manager.add_tool(TaskListTool, project_id=self.project_id, thread_manager=self.thread_manager, thread_id=self.thread_id)
         self.thread_manager.add_tool(SandboxSheetsTool, project_id=self.project_id, thread_manager=self.thread_manager)
-        # self.thread_manager.add_tool(SandboxWebDevTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        self.thread_manager.add_tool(SandboxWebDevTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
         if config.RAPID_API_KEY:
             self.thread_manager.add_tool(DataProvidersTool)
-        
-
         
         # Add Browser Tool
         from agent.tools.browser_tool import BrowserTool
         self.thread_manager.add_tool(BrowserTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        # Add Sandbox Browser Tool
+        from agent.tools.sb_browser_tool import SandboxBrowserTool
+        self.thread_manager.add_tool(SandboxBrowserTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        # Add Sandbox Templates Tool
+        from agent.tools.sb_templates_tool import SandboxTemplatesTool
+        self.thread_manager.add_tool(SandboxTemplatesTool, project_id=self.project_id, thread_manager=self.thread_manager)
+        
+        # Add Computer Use Tool
+        from agent.tools.computer_use_tool import ComputerUseTool
+        self.thread_manager.add_tool(ComputerUseTool, project_id=self.project_id, thread_manager=self.thread_manager)
+        
+        # Add Article Creation Tool
+        from agent.tools.article_creation_tool import ArticleCreationTool
+        self.thread_manager.add_tool(ArticleCreationTool, project_id=self.project_id, thread_manager=self.thread_manager, agent_instance_id=self.agent_instance_id)
+        
+        # Add MCP Tool Wrapper
+        from agent.tools.mcp_tool_wrapper import MCPToolWrapper
+        self.thread_manager.add_tool(MCPToolWrapper)
+        
+        # Add GTA 6 specific tools
+        from agent.tools.gta6_demand_tool import GTA6DemandTool
+        from agent.tools.gta6_validation_tool import GTA6ValidationTool
+        self.thread_manager.add_tool(GTA6DemandTool)
+        self.thread_manager.add_tool(GTA6ValidationTool)
     
     def register_agent_builder_tools(self, agent_id: str):
         from agent.tools.agent_builder_tools.agent_config_tool import AgentConfigTool
@@ -146,11 +170,36 @@ class ToolManager:
         # GTA 6 Specialized Tools
         if safe_tool_check('gta6_validation_tool'):
             from agent.tools.gta6_validation_tool import GTA6ValidationTool
-            self.thread_manager.add_tool(GTA6ValidationTool, project_id=self.project_id, thread_manager=self.thread_manager)
+            self.thread_manager.add_tool(GTA6ValidationTool)
         
         if safe_tool_check('gta6_demand_tool'):
             from agent.tools.gta6_demand_tool import GTA6DemandTool
-            self.thread_manager.add_tool(GTA6DemandTool, project_id=self.project_id, thread_manager=self.thread_manager)
+            self.thread_manager.add_tool(GTA6DemandTool)
+        
+        # Additional Sandbox Tools
+        if safe_tool_check('sb_browser_tool'):
+            from agent.tools.sb_browser_tool import SandboxBrowserTool
+            self.thread_manager.add_tool(SandboxBrowserTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('sb_image_edit_tool'):
+            self.thread_manager.add_tool(SandboxImageEditTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('sb_templates_tool'):
+            from agent.tools.sb_templates_tool import SandboxTemplatesTool
+            self.thread_manager.add_tool(SandboxTemplatesTool, project_id=self.project_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('sb_web_dev_tool'):
+            from agent.tools.sb_web_dev_tool import SandboxWebDevTool
+            self.thread_manager.add_tool(SandboxWebDevTool, project_id=self.project_id, thread_id=self.thread_id, thread_manager=self.thread_manager)
+        
+        # Advanced Tools
+        if safe_tool_check('computer_use_tool'):
+            from agent.tools.computer_use_tool import ComputerUseTool
+            self.thread_manager.add_tool(ComputerUseTool, project_id=self.project_id, thread_manager=self.thread_manager)
+        
+        if safe_tool_check('mcp_tool_wrapper'):
+            from agent.tools.mcp_tool_wrapper import MCPToolWrapper
+            self.thread_manager.add_tool(MCPToolWrapper)
 
 
 class MCPManager:

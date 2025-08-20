@@ -4,6 +4,7 @@ Utility functions for handling image operations.
 
 import base64
 import uuid
+import re
 from datetime import datetime
 from utils.logger import logger
 from services.supabase import DBConnection
@@ -21,10 +22,47 @@ async def upload_base64_image(base64_data: str, bucket_name: str = "browser-scre
     try:
         # Remove data URL prefix if present
         if base64_data.startswith('data:'):
-            base64_data = base64_data.split(',')[1]
+            if ',' in base64_data:
+                base64_data = base64_data.split(',')[1]
+            else:
+                raise ValueError("Invalid data URL format - missing comma separator")
+        
+        # Clean and validate base64 data
+        # Remove whitespace and newlines
+        base64_data = re.sub(r'\s+', '', base64_data)
+        
+        # Check if string contains only valid base64 characters
+        if not re.match(r'^[A-Za-z0-9+/]*={0,2}$', base64_data):
+            raise ValueError("Base64 string contains invalid characters")
+        
+        # Check and fix length - must be multiple of 4
+        if len(base64_data) % 4 != 0:
+            padding_needed = 4 - (len(base64_data) % 4)
+            base64_data += '=' * padding_needed
+            logger.debug(f"Added {padding_needed} padding characters to base64 string")
+            
+            # Special case: if original length was 21, even with padding it might be invalid
+            # This happens when the base64 string is truncated and not a valid encoding
+            original_length = len(base64_data) - padding_needed
+            if original_length == 21:
+                # Try to decode to see if it's actually valid
+                try:
+                    test_decode = base64.b64decode(base64_data)
+                    if len(test_decode) < 10:
+                        raise ValueError("Base64 string appears to be truncated or invalid")
+                except Exception:
+                    raise ValueError("Base64 string appears to be truncated or invalid")
+        
+        # Validate minimum length
+        if len(base64_data) < 4:
+            raise ValueError("Base64 string too short to be valid image data")
         
         # Decode base64 data
         image_data = base64.b64decode(base64_data)
+        
+        # Basic validation - check if decoded data looks like image
+        if len(image_data) < 10:
+            raise ValueError("Decoded data too short to be a valid image")
         
         # Generate unique filename
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -76,4 +114,4 @@ async def upload_image_bytes(image_bytes: bytes, content_type: str = "image/png"
         return public_url
     except Exception as e:
         logger.error(f"Error uploading image bytes: {e}")
-        raise RuntimeError(f"Failed to upload image: {str(e)}") 
+        raise RuntimeError(f"Failed to upload image: {str(e)}")

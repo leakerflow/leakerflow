@@ -320,16 +320,14 @@ class ArticleCreationTool(SandboxToolsBase):
                     # Upload image to Supabase Storage
                     image_url = await upload_base64_image(
                         image_data, 
-                        bucket_name="articles",
-                        file_prefix="article_images"
+                        bucket_name="articles"
                     )
                     logger.info(f"Image uploaded successfully: {image_url}")
                 except Exception as e:
                     logger.error(f"Failed to upload image: {str(e)}")
                     return ToolResult(
                         success=False,
-                        error=f"Failed to upload image: {str(e)}",
-                        data=None
+                        output=f"Failed to upload image: {str(e)}"
                     )
             
             # Prepare article data
@@ -586,16 +584,14 @@ class ArticleCreationTool(SandboxToolsBase):
                     # Upload image to Supabase Storage
                     image_url = await upload_base64_image(
                         image_data, 
-                        bucket_name="articles",
-                        file_prefix="article_images"
+                        bucket_name="articles"
                     )
                     logger.info(f"Image uploaded successfully: {image_url}")
                 except Exception as e:
                     logger.error(f"Failed to upload image: {str(e)}")
                     return ToolResult(
                         success=False,
-                        error=f"Failed to upload image: {str(e)}",
-                        data=None
+                        output=f"Failed to upload image: {str(e)}"
                     )
             
             # Prepare update data
